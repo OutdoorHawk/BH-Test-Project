@@ -32,7 +32,7 @@ namespace BH_Test_Project.Code.Player
             _cameraFollow.Init(_playerInput, _playerData, transform);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _playerMovement.Tick();
         }
