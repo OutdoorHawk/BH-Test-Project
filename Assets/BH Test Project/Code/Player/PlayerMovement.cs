@@ -18,6 +18,7 @@ namespace BH_Test_Project.Code.Player
 
         private const float MIN_MOVE_VALUE = 0.001f;
         private const float SMOOTH_TIME = 0.075f;
+        private const float LERP_RATE = 50f;
 
         public void Init(IPlayerInput playerInput, PlayerData playerData, CharacterController characterController,
             Transform playerTransform)
@@ -59,14 +60,15 @@ namespace BH_Test_Project.Code.Player
         {
             Vector3 nextMovementVector = _cameraTransform.TransformDirection(_inputVector);
             nextMovementVector.Normalize();
-
-            _movementVector =
-                Vector3.SmoothDamp(_movementVector, nextMovementVector, ref _smoothVelocity, SMOOTH_TIME);
+            
+            _movementVector = Vector3.Lerp(_movementVector, nextMovementVector, Time.deltaTime * LERP_RATE);
+            //Vector3.SmoothDamp(_movementVector, nextMovementVector, ref _smoothVelocity, SMOOTH_TIME);
             _movementVector.y = 0;
 
-            _movementVector += Physics.gravity;
             if (nextMovementVector != Vector3.zero)
                 _playerTransform.forward = _movementVector;
+
+            _movementVector += Physics.gravity;
         }
 
         private void ApplyMovement() =>

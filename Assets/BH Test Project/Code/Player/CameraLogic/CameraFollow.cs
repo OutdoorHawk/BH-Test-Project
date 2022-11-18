@@ -9,7 +9,7 @@ namespace BH_Test_Project.Code.Player.CameraLogic
         [SerializeField] private float _cameraHeight;
         [SerializeField] private float _cameraDistance;
         [SerializeField] private float _smoothTime = 3;
-        [SerializeField] private float _lerpRate =10f;
+        [SerializeField] private float _lerpRate = 10f;
         [SerializeField] private Vector2 _yClamp;
 
         private Transform _cachedTransform;
@@ -45,8 +45,8 @@ namespace BH_Test_Project.Code.Player.CameraLogic
         {
             Vector3 targetPosition = _followTarget.position;
             Vector3 resultPosition = new Vector3(targetPosition.x,
-                targetPosition.y + _cameraHeight, targetPosition.z);
-            _currentPosition = resultPosition - _cachedTransform.forward * _cameraDistance;
+                targetPosition.y + _cameraHeight, targetPosition.z) - _cachedTransform.forward * _cameraDistance;
+            _currentPosition = Vector3.Lerp(_currentPosition, resultPosition, Time.deltaTime * _lerpRate);
         }
 
         private void CalculateCameraRotation()
@@ -69,7 +69,7 @@ namespace BH_Test_Project.Code.Player.CameraLogic
         private void ApplyCameraTransformValues()
         {
             _cachedTransform.localEulerAngles = _currentRotation;
-            _cachedTransform.localPosition = Vector3.Lerp(_cachedTransform.localPosition,_currentPosition,Time.deltaTime * _lerpRate);
+            _cachedTransform.localPosition = _currentPosition;
         }
     }
 }
