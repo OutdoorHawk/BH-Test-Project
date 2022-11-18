@@ -26,7 +26,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void Init()
         {
-            CreateSystems();
+            if (isClient && isLocalPlayer)
+                CreateSystems();
             InitSystems();
             _playerInput.EnableInput();
         }
@@ -35,7 +36,6 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             Animator animator = GetComponent<Animator>();
             CharacterController characterController = GetComponent<CharacterController>();
-
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
