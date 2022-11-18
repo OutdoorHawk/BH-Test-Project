@@ -11,8 +11,8 @@ namespace BH_Test_Project.Code.Player
         private Transform _playerTransform;
 
         private PlayerData _playerData;
+        private Vector3 _inputVector;
         private Vector3 _movementVector;
-        private Vector2 _inputVector;
 
         private const float MIN_MOVE_VALUE = 0.001f;
 
@@ -28,19 +28,36 @@ namespace BH_Test_Project.Code.Player
 
         public void Tick()
         {
-            _inputVector = _playerInput.Movement.ReadValue<Vector2>();
+            ReadCurrentInput();
 
-            if (_inputVector.sqrMagnitude > MIN_MOVE_VALUE)
-            {
-                _movementVector = _cameraTransform.TransformDirection(_inputVector);
-                _movementVector.y = 0;
-                _movementVector.Normalize();
-                _playerTransform.forward = _movementVector;
-                
-                _movementVector += Physics.gravity;
-                _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
-            }
-
+            if (!InputMoreThanMinValue()) 
+                return;
+            
+            CalculateMovementVector();
+            ApplyMovement();
         }
+
+        private void ReadCurrentInput()
+        {
+            Vector2 input = _playerInput.Movement.ReadValue<Vector2>();
+            _inputVector.Set(input.x, 0, input.y);
+        }
+
+        private bool InputMoreThanMinValue() => 
+            _inputVector.sqrMagnitude > MIN_MOVE_VALUE;
+
+        private void CalculateMovementVector()
+        {
+            _movementVector = _cameraTransform.TransformDirection(_inputVector);
+            _movementVector.Normalize();
+
+            if (_movementVector != Vector3.zero)
+                _playerTransform.forward = _movementVector;
+
+            _movementVector += Physics.gravity;
+        }
+
+        private void ApplyMovement() => 
+            _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
     }
 }
