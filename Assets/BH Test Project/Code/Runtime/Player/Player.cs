@@ -35,7 +35,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             Animator animator = GetComponent<Animator>();
             CharacterController characterController = GetComponent<CharacterController>();
-            
+
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
@@ -52,6 +52,11 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void Update()
         {
             _playerMovement.Tick();
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(_cameraFollow);
         }
     }
 }
