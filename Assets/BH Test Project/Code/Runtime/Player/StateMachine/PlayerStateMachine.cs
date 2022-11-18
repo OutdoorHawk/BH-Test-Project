@@ -1,24 +1,25 @@
 using System;
 using System.Collections.Generic;
+using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
+using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 {
     public class PlayerStateMachine : IPlayerStateMachine
     {
-        private readonly IPlayerInput _playerInput;
         private readonly Dictionary<Type, IState> _states;
 
         #region Init
 
-        public PlayerStateMachine(IPlayerInput playerInput)
+        public PlayerStateMachine(PlayerMovement playerMovement, PlayerInput playerInput,
+            PlayerAnimator playerAnimator)
         {
-            _playerInput = playerInput;
             _states = new Dictionary<Type, IState>
             {
-                [typeof(BasicMovementState)] = new BasicMovementState(_playerInput),
-                [typeof(DashState)] = new DashState(_playerInput)
+                [typeof(BasicMovementState)] = new BasicMovementState(this, playerMovement, playerInput),
+                [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator)
             };
         }
 

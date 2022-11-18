@@ -1,14 +1,13 @@
+using System;
 using System.Collections;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
-using BH_Test_Project.Code.Runtime.Player.Input;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player.Movement
 {
     public class PlayerMovement
     {
-        private readonly IPlayerInput _playerInput;
         private readonly CharacterController _characterController;
         private readonly Transform _cameraTransform;
         private readonly Transform _playerPlayerTransform;
@@ -19,7 +18,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
-        public PlayerMovement(PlayerInput playerInput, PlayerData playerData,
+        public PlayerMovement(PlayerData playerData,
             CharacterController characterController, Transform playerTransform, PlayerAnimator playerAnimator,
             CameraFollow cameraFollow, MonoBehaviour mono)
         {
@@ -27,22 +26,26 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             _playerPlayerTransform = playerTransform;
             _playerAnimator = playerAnimator;
             _characterController = characterController;
-            _playerInput = playerInput;
             _playerData = playerData;
             _cameraTransform = cameraFollow.transform;
-            _playerInput.OnDashPressed += PerformDash;
         }
 
         private const float MIN_MOVE_VALUE = 0.01f;
         private const float SMOOTH_TIME = 0.075f;
         private const float LERP_RATE = 50f;
 
-        public void Tick()
+        public void Tick(Vector2 movementInput)
         {
-            ReadCurrentInput();
+            ReadCurrentInput(movementInput);
             SetPlayerSpeedToAnimator();
             CalculateMovementVector();
             ApplyMovement();
+        }
+
+        private void ReadCurrentInput(Vector2 input)
+        {
+            //Vector2 input = _playerInput.Movement.ReadValue<Vector2>();
+            _inputVector.Set(input.x, 0, input.y);
         }
 
         private void SetPlayerSpeedToAnimator()
@@ -51,15 +54,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
                 new Vector3(_characterController.velocity.x, 0, _characterController.velocity.y);
             _playerAnimator.SetPlayerSpeed(playerVelocity.normalized.magnitude);
         }
-
-        private void ReadCurrentInput()
-        {
-            Vector2 input = _playerInput.Movement.ReadValue<Vector2>();
-            _inputVector.Set(input.x, 0, input.y);
-        }
-
-        private bool InputMoreThanMinValue() =>
-            _inputVector.sqrMagnitude > MIN_MOVE_VALUE;
 
         private void CalculateMovementVector()
         {
@@ -70,6 +64,9 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
             _movementVector += Physics.gravity;
         }
+
+        private bool InputMoreThanMinValue() =>
+            _inputVector.sqrMagnitude > MIN_MOVE_VALUE;
 
         private void ApplyToCurrentVector()
         {
@@ -91,15 +88,14 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private void ApplyMovement() =>
             _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
 
-        private void PerformDash()
+        public void PerformDash(Action OnDashFinished)
         {
-            _mono.StartCoroutine(Dashing());
+            _mono.StartCoroutine(Dashing(OnDashFinished));
         }
 
-        private IEnumerator Dashing()
+        private IEnumerator Dashing(Action OnDashFinished)
         {
             Vector3 dashVector = _movementVector;
-            _playerInput.DisableAllInput();
             float t = _playerData.DashTime;
             do
             {
@@ -107,13 +103,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
                 _characterController.Move(dashVector * (Time.deltaTime * _playerData.DashPower));
                 yield return new WaitForSeconds(Time.deltaTime);
             } while (t > 0);
-            
-            _playerInput.EnableAllInput();
-        }
 
-        public void Cleanup()
-        {
-            _playerInput.OnDashPressed -= PerformDash;
+            OnDashFinished?.Invoke();
         }
     }
 }

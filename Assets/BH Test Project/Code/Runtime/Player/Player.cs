@@ -3,6 +3,7 @@ using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine;
+using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
 using Mirror;
 using UnityEngine;
 
@@ -41,20 +42,20 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
-            _playerMovement = new PlayerMovement(_playerInput, _playerData,
+            _playerMovement = new PlayerMovement(_playerData,
                 characterController, transform, _animator, _cameraFollow, this);
-            _playerStateMachine = new PlayerStateMachine(_playerInput);
+            _playerStateMachine = new PlayerStateMachine(_playerMovement, _playerInput, _animator);
         }
 
         private void InitSystems()
         {
             _playerInput.Init();
             _cameraFollow.Init(_playerInput, _playerData, transform);
+            _playerStateMachine.Enter<BasicMovementState>();
         }
 
         private void Update()
         {
-            _playerMovement.Tick();
             _playerStateMachine.Tick();
         }
 
@@ -66,7 +67,6 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void DisposeSystems()
         {
             Destroy(_cameraFollow);
-            _playerMovement.Cleanup();
         }
     }
 }
