@@ -27,7 +27,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             _cameraTransform = Camera.main?.transform;
         }
 
-        private const float MIN_MOVE_VALUE = 0.001f;
+        private const float MIN_MOVE_VALUE = 0.01f;
         private const float SMOOTH_TIME = 0.075f;
         private const float LERP_RATE = 50f;
 
