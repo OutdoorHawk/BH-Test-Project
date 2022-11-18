@@ -50,6 +50,7 @@ namespace BH_Test_Project.Code.Player
         {
             _movementVector = _cameraTransform.TransformDirection(_inputVector);
             _movementVector.Normalize();
+            _movementVector.y = 0;
 
             if (_movementVector != Vector3.zero)
                 _playerTransform.forward = _movementVector;

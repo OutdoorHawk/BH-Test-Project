@@ -1,4 +1,4 @@
-using System;
+using BH_Test_Project.Code.Player.CameraLogic;
 using BH_Test_Project.Code.Player.Input;
 using UnityEngine;
 
@@ -8,6 +8,7 @@ namespace BH_Test_Project.Code.Player
     public class Player : MonoBehaviour
     {
         [SerializeField] private PlayerData _playerData;
+        [SerializeField] private CameraFollow _cameraFollow;
         private PlayerInput _playerInput;
         private PlayerMovement _playerMovement;
 
@@ -28,6 +29,7 @@ namespace BH_Test_Project.Code.Player
         {
             _playerInput.Init();
             _playerMovement.Init(_playerInput, _playerData, GetComponent<CharacterController>(), transform);
+            _cameraFollow.Init(_playerInput, _playerData, transform);
         }
 
         private void Update()
