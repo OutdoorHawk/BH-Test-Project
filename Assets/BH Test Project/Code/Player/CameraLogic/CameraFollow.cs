@@ -1,4 +1,4 @@
-using System;
+using BH_Test_Project.Code.Player.Input;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Player.CameraLogic
@@ -6,25 +6,29 @@ namespace BH_Test_Project.Code.Player.CameraLogic
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform _followTarget;
-        [SerializeField] private Vector3 _cameraOffset;
-        [SerializeField] private float _distance;
-
-        [SerializeField] private float _rotationAngleX;
-        [SerializeField] private float _rotationAngleY;
-        [SerializeField] private float _rotationAngleZ;
+        [SerializeField] private float _cameraHeight;
+        [SerializeField] private float _cameraDistance;
+        [SerializeField] private float _smoothTime = 3;
+        [SerializeField] private float _lerpRate = 10f;
+        [SerializeField] private Vector2 _yClamp;
 
         private Transform _cachedTransform;
-        private Quaternion _rotation;
-        private Vector3 _position;
+        private IPlayerInput _playerInput;
+        private Vector3 _currentPosition;
+        private Vector3 _currentRotation;
+        private PlayerData _playerData;
+        private Vector2 _mouseAxis;
+        private Vector3 _smoothVelocity = Vector3.zero;
 
-        private void Awake()
-        {
-            _cachedTransform = transform;
-        }
+        private float xRotation;
+        private float yRotation;
 
-        public void FollowTarget(Transform target)
+        public void Init(IPlayerInput playerInput, PlayerData playerData, Transform target)
         {
+            _playerData = playerData;
+            _playerInput = playerInput;
             _followTarget = target;
+            _cachedTransform = transform;
         }
 
         private void LateUpdate()
@@ -33,19 +37,39 @@ namespace BH_Test_Project.Code.Player.CameraLogic
                 return;
 
             CalculateCameraPosition();
-            ApplyCameraPosition();
+            CalculateCameraRotation();
+            ApplyCameraTransformValues();
         }
 
         private void CalculateCameraPosition()
         {
-            //_rotation = Quaternion.Euler(_rotationAngleX, _rotationAngleY, _rotationAngleZ);
-            _position = _rotation * _cameraOffset + _followTarget.position;
+            Vector3 targetPosition = _followTarget.position;
+            Vector3 resultPosition = new Vector3(targetPosition.x,
+                targetPosition.y + _cameraHeight, targetPosition.z) - _cachedTransform.forward * _cameraDistance;
+            _currentPosition = Vector3.Lerp(_currentPosition, resultPosition, Time.deltaTime * _lerpRate);
         }
 
-        private void ApplyCameraPosition()
+        private void CalculateCameraRotation()
         {
-            _cachedTransform.position = _position;
-            _cachedTransform.rotation = _rotation;
+            _mouseAxis = _playerInput.MouseAxis.ReadValue<Vector2>();
+
+            float mouseX = _mouseAxis.x;
+            float mouseY = _mouseAxis.y;
+
+            yRotation += mouseX;
+            xRotation -= mouseY;
+
+            xRotation = Mathf.Clamp(xRotation, _yClamp.x, _yClamp.y);
+
+            Vector3 nextRotation = new Vector3(xRotation, yRotation);
+            _currentRotation =
+                Vector3.SmoothDamp(_currentRotation, nextRotation, ref _smoothVelocity, _smoothTime);
+        }
+
+        private void ApplyCameraTransformValues()
+        {
+            _cachedTransform.localEulerAngles = _currentRotation;
+            _cachedTransform.localPosition = _currentPosition;
         }
     }
 }

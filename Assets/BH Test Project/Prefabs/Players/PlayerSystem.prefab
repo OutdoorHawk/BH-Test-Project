@@ -97,12 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98e896520cfca542b6cbc2f4300028b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _followTarget: {fileID: 2496709988879019598}
-  _cameraOffset: {x: 0, y: 2.5, z: -2.75}
-  _distance: 0
-  _rotationAngleX: 10
-  _rotationAngleY: 10
-  _rotationAngleZ: 10
+  _followTarget: {fileID: 0}
+  _cameraHeight: 1
+  _cameraDistance: 3
+  _smoothTime: 0.1
+  _yClamp: {x: -5, y: 85}
 --- !u!1 &2643854957285250960
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +142,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4433707496527102803}
     m_Modifications:
+    - target: {fileID: 3071353538543572075, guid: a47cdd3023deab24b982fff74fb9481e, type: 3}
+      propertyPath: _cameraFollow
+      value: 
+      objectReference: {fileID: 9172590322087813351}
     - target: {fileID: 9096557284072044366, guid: a47cdd3023deab24b982fff74fb9481e, type: 3}
       propertyPath: m_RootOrder
       value: 1

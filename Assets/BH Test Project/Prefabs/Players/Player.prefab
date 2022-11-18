@@ -5951,9 +5951,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerData:
-    MovementSpeed: 5
-    MouseSensitivity: 0
+    MovementSpeed: 2.5
+    MouseSensitivity: 1.25
     DashPower: 0
+  _cameraFollow: {fileID: 0}
 --- !u!143 &3129976508013750515
 CharacterController:
   m_ObjectHideFlags: 0
@@ -5971,7 +5972,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1.05, z: 0}
 --- !u!95 &9096557284072044353
 Animator:
   serializedVersion: 4
