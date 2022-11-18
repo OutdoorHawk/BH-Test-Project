@@ -1,4 +1,5 @@
 using BH_Test_Project.Code.Runtime.Animation;
+using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using UnityEngine;
 
@@ -17,14 +18,15 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private Vector3 _movementVector;
 
         public PlayerMovement(PlayerInput playerInput, PlayerData playerData,
-            CharacterController characterController, Transform playerTransform, PlayerAnimator playerAnimator)
+            CharacterController characterController, Transform playerTransform, PlayerAnimator playerAnimator,
+            CameraFollow cameraFollow)
         {
             _playerPlayerTransform = playerTransform;
             _playerAnimator = playerAnimator;
             _characterController = characterController;
             _playerInput = playerInput;
             _playerData = playerData;
-            _cameraTransform = Camera.main?.transform;
+            _cameraTransform = cameraFollow.transform;
         }
 
         private const float MIN_MOVE_VALUE = 0.01f;
