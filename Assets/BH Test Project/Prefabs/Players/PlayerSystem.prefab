@@ -98,10 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _followTarget: {fileID: 2496709988879019598}
-  _cameraOffset: {x: 0, y: 2.5, z: -2.75}
-  _smoothFactor: 1
-  _yClamp: {x: 10, y: 85}
-  _lookOffset: 1
+  _cameraHeight: 0
+  _cameraDistance: 3
+  _smoothFactor: 0.5
+  _yClamp: {x: -5, y: 85}
 --- !u!1 &2643854957285250960
 GameObject:
   m_ObjectHideFlags: 0

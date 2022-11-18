@@ -6,20 +6,21 @@ namespace BH_Test_Project.Code.Player.CameraLogic
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform _followTarget;
-        [SerializeField] private Vector3 _cameraOffset;
-        [SerializeField] private float _smoothFactor;
+        [SerializeField] private float _cameraHeight;
+        [SerializeField] private float _cameraDistance;
+        [SerializeField] private float _smoothTime = 3;
         [SerializeField] private Vector2 _yClamp;
-        [SerializeField] private float _lookOffset;
 
         private Transform _cachedTransform;
         private IPlayerInput _playerInput;
-        private Vector3 _cameraPosition;
-        private Quaternion _cameraRotation;
+        private Vector3 _currentPosition;
+        private Vector3 _currentRotation;
         private PlayerData _playerData;
         private Vector2 _mouseAxis;
+        private Vector3 _smoothVelocity = Vector3.zero;
 
-        private float yRotation;
         private float xRotation;
+        private float yRotation;
 
         public void Init(IPlayerInput playerInput, PlayerData playerData, Transform target)
         {
@@ -35,27 +36,39 @@ namespace BH_Test_Project.Code.Player.CameraLogic
                 return;
 
             CalculateCameraPosition();
-            ApplyCameraPosition();
+            CalculateCameraRotation();
+            ApplyCameraTransformValues();
         }
 
         private void CalculateCameraPosition()
         {
+            Vector3 targetPosition = _followTarget.position;
+            Vector3 resultPosition = new Vector3(targetPosition.x,
+                targetPosition.y + _cameraHeight, targetPosition.z);
+            _currentPosition = resultPosition - _cachedTransform.forward * _cameraDistance;
+        }
+
+        private void CalculateCameraRotation()
+        {
             _mouseAxis = _playerInput.MouseAxis.ReadValue<Vector2>();
- 
+
             float mouseX = _mouseAxis.x;
             float mouseY = _mouseAxis.y;
 
-            _cameraRotation.y += mouseX;
-            _cameraRotation.x -= mouseY;
+            yRotation += mouseX;
+            xRotation -= mouseY;
 
-            _cameraRotation.x = Mathf.Clamp(_cameraRotation.x, _yClamp.x, _yClamp.y);
-            _cameraPosition = _followTarget.position - _cachedTransform.forward * 3;
+            xRotation = Mathf.Clamp(xRotation, _yClamp.x, _yClamp.y);
+
+            Vector3 nextRotation = new Vector3(xRotation, yRotation);
+            _currentRotation =
+                Vector3.SmoothDamp(_currentRotation, nextRotation, ref _smoothVelocity, _smoothTime);
         }
 
-        private void ApplyCameraPosition()
+        private void ApplyCameraTransformValues()
         {
-            _cachedTransform.position = _cameraPosition;
-            _cachedTransform.eulerAngles = new Vector3(_cameraRotation.x, _cameraRotation.y, 0);
+            _cachedTransform.position = _currentPosition;
+            _cachedTransform.localEulerAngles = _currentRotation;
         }
     }
 }
