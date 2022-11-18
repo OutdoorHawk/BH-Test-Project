@@ -21,14 +21,14 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
             _playerInput.Player.Dash.started += (c) => OnDashPressed?.Invoke();
         }
 
-        public void EnableInput()
+        public void EnableAllInput()
         {
             _playerInput.Player.Movement.Enable();
             _playerInput.Player.Dash.Enable();
             _playerInput.Player.MouseAxis.Enable();
         }
 
-        public void DisableInput()
+        public void DisableAllInput()
         {
             _playerInput.Player.Movement.Disable();
             _playerInput.Player.Dash.Disable();

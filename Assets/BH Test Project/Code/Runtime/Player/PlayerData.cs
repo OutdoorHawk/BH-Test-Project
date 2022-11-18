@@ -8,5 +8,6 @@ namespace BH_Test_Project.Code.Runtime.Player
         public float MovementSpeed;
         public float MouseSensitivity;
         public float DashPower;
+        public float DashTime;
     }
 }

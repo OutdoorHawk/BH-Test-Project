@@ -2,6 +2,7 @@ using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
+using BH_Test_Project.Code.Runtime.Player.StateMachine;
 using Mirror;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerInput _playerInput;
         private PlayerMovement _playerMovement;
         private PlayerAnimator _animator;
+        private IPlayerStateMachine _playerStateMachine;
 
         private void Start()
         {
@@ -29,7 +31,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             if (isClient && isLocalPlayer)
                 CreateSystems();
             InitSystems();
-            _playerInput.EnableInput();
+            _playerInput.EnableAllInput();
         }
 
         private void CreateSystems()
@@ -40,7 +42,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement = new PlayerMovement(_playerInput, _playerData,
-                characterController, transform, _animator, _cameraFollow);
+                characterController, transform, _animator, _cameraFollow, this);
+            _playerStateMachine = new PlayerStateMachine(_playerInput);
         }
 
         private void InitSystems()
@@ -52,11 +55,18 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void Update()
         {
             _playerMovement.Tick();
+            _playerStateMachine.Tick();
         }
 
         private void OnDestroy()
         {
+            DisposeSystems();
+        }
+
+        private void DisposeSystems()
+        {
             Destroy(_cameraFollow);
+            _playerMovement.Cleanup();
         }
     }
 }

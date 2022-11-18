@@ -1,3 +1,4 @@
+using System.Collections;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
@@ -12,6 +13,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private readonly Transform _cameraTransform;
         private readonly Transform _playerPlayerTransform;
         private readonly PlayerAnimator _playerAnimator;
+        private readonly MonoBehaviour _mono;
 
         private readonly PlayerData _playerData;
         private Vector3 _inputVector;
@@ -19,14 +21,16 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         public PlayerMovement(PlayerInput playerInput, PlayerData playerData,
             CharacterController characterController, Transform playerTransform, PlayerAnimator playerAnimator,
-            CameraFollow cameraFollow)
+            CameraFollow cameraFollow, MonoBehaviour mono)
         {
+            _mono = mono;
             _playerPlayerTransform = playerTransform;
             _playerAnimator = playerAnimator;
             _characterController = characterController;
             _playerInput = playerInput;
             _playerData = playerData;
             _cameraTransform = cameraFollow.transform;
+            _playerInput.OnDashPressed += PerformDash;
         }
 
         private const float MIN_MOVE_VALUE = 0.01f;
@@ -86,5 +90,30 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private void ApplyMovement() =>
             _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
+
+        private void PerformDash()
+        {
+            _mono.StartCoroutine(Dashing());
+        }
+
+        private IEnumerator Dashing()
+        {
+            Vector3 dashVector = _movementVector;
+            _playerInput.DisableAllInput();
+            float t = _playerData.DashTime;
+            do
+            {
+                t -= Time.deltaTime;
+                _characterController.Move(dashVector * (Time.deltaTime * _playerData.DashPower));
+                yield return new WaitForSeconds(Time.deltaTime);
+            } while (t > 0);
+            
+            _playerInput.EnableAllInput();
+        }
+
+        public void Cleanup()
+        {
+            _playerInput.OnDashPressed -= PerformDash;
+        }
     }
 }
