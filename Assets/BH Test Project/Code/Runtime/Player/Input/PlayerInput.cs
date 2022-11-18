@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.InputSystem;
 
-namespace BH_Test_Project.Code.Player.Input
+namespace BH_Test_Project.Code.Runtime.Player.Input
 {
     public class PlayerInput : IPlayerInput
     {

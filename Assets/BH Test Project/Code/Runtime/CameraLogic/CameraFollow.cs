@@ -1,7 +1,8 @@
-using BH_Test_Project.Code.Player.Input;
+using BH_Test_Project.Code.Runtime.Player;
+using BH_Test_Project.Code.Runtime.Player.Input;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Player.CameraLogic
+namespace BH_Test_Project.Code.Runtime.CameraLogic
 {
     public class CameraFollow : MonoBehaviour
     {

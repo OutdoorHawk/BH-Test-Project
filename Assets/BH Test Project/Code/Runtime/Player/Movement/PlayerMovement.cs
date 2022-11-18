@@ -1,7 +1,7 @@
-using BH_Test_Project.Code.Player.Input;
+using BH_Test_Project.Code.Runtime.Player.Input;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Player
+namespace BH_Test_Project.Code.Runtime.Player.Movement
 {
     public class PlayerMovement
     {

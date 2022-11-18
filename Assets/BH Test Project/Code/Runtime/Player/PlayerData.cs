@@ -1,6 +1,6 @@
 using System;
 
-namespace BH_Test_Project.Code.Player
+namespace BH_Test_Project.Code.Runtime.Player
 {
     [Serializable]
     public struct PlayerData

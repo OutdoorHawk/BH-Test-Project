@@ -1,9 +1,9 @@
-using System;
-using BH_Test_Project.Code.Player.CameraLogic;
-using BH_Test_Project.Code.Player.Input;
+using BH_Test_Project.Code.Runtime.CameraLogic;
+using BH_Test_Project.Code.Runtime.Player.Input;
+using BH_Test_Project.Code.Runtime.Player.Movement;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Player
+namespace BH_Test_Project.Code.Runtime.Player
 {
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour
