@@ -46,6 +46,7 @@ namespace BH_Test_Project.Code.Player.CameraLogic
             Vector3 resultPosition = new Vector3(targetPosition.x,
                 targetPosition.y + _cameraHeight, targetPosition.z);
             _currentPosition = resultPosition - _cachedTransform.forward * _cameraDistance;
+            
         }
 
         private void CalculateCameraRotation()
@@ -67,8 +68,8 @@ namespace BH_Test_Project.Code.Player.CameraLogic
 
         private void ApplyCameraTransformValues()
         {
-            _cachedTransform.position = _currentPosition;
             _cachedTransform.localEulerAngles = _currentRotation;
+            _cachedTransform.localPosition = _currentPosition;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace BH_Test_Project.Code.Player
         private Vector3 _smoothVelocity = Vector3.zero;
 
         private const float MIN_MOVE_VALUE = 0.001f;
-        private const float SMOOTH_TIME = 0.1f;
+        private const float SMOOTH_TIME = 0.075f;
 
         public void Init(IPlayerInput playerInput, PlayerData playerData, CharacterController characterController,
             Transform playerTransform)
@@ -37,6 +37,10 @@ namespace BH_Test_Project.Code.Player
                 return;
 
             CalculateMovementVector();
+        }
+
+        public void FixedTick()
+        {
             ApplyMovement();
         }
 

@@ -1,3 +1,4 @@
+using System;
 using BH_Test_Project.Code.Player.CameraLogic;
 using BH_Test_Project.Code.Player.Input;
 using UnityEngine;
@@ -32,9 +33,14 @@ namespace BH_Test_Project.Code.Player
             _cameraFollow.Init(_playerInput, _playerData, transform);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             _playerMovement.Tick();
+        }
+
+        private void FixedUpdate()
+        {
+            _playerMovement.FixedTick();
         }
     }
 }
