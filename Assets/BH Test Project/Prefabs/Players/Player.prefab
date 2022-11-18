@@ -5951,7 +5951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerData:
-    MovementSpeed: 5
+    MovementSpeed: 2.5
     MouseSensitivity: 1.25
     DashPower: 0
   _cameraFollow: {fileID: 0}

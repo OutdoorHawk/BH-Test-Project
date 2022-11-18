@@ -37,11 +37,13 @@ namespace BH_Test_Project.Code.Player
                 return;
 
             CalculateMovementVector();
+            ApplyMovement();
         }
 
         public void FixedTick()
         {
-            ApplyMovement();
+            if (!InputMoreThanMinValue())
+                return;
         }
 
         private void ReadCurrentInput()
@@ -62,12 +64,12 @@ namespace BH_Test_Project.Code.Player
                 Vector3.SmoothDamp(_movementVector, nextMovementVector, ref _smoothVelocity, SMOOTH_TIME);
             _movementVector.y = 0;
 
-            nextMovementVector += Physics.gravity;
+            _movementVector += Physics.gravity;
             if (nextMovementVector != Vector3.zero)
                 _playerTransform.forward = _movementVector;
         }
 
         private void ApplyMovement() =>
-            _characterController.Move(_movementVector * (Time.fixedDeltaTime * _playerData.MovementSpeed));
+            _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
     }
 }

@@ -97,10 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98e896520cfca542b6cbc2f4300028b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _followTarget: {fileID: 2496709988879019598}
-  _cameraHeight: 0
+  _followTarget: {fileID: 0}
+  _cameraHeight: 1
   _cameraDistance: 3
-  _smoothFactor: 0.5
+  _smoothTime: 0.1
   _yClamp: {x: -5, y: 85}
 --- !u!1 &2643854957285250960
 GameObject:
