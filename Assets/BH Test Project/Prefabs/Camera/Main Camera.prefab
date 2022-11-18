@@ -102,6 +102,7 @@ MonoBehaviour:
   _cameraHeight: 1
   _cameraDistance: 3
   _smoothTime: 0.1
+  _lerpRate: 50
   _yClamp: {x: -5, y: 85}
 --- !u!54 &8715015995978264390
 Rigidbody:

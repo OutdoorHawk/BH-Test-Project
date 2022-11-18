@@ -516,6 +516,10 @@ PrefabInstance:
       propertyPath: _playerData.RotateSmoothTime
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 9096557284072044353, guid: a47cdd3023deab24b982fff74fb9481e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9096557284072044366, guid: a47cdd3023deab24b982fff74fb9481e, type: 3}
       propertyPath: m_RootOrder
       value: 4
