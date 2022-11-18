@@ -35,15 +35,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         {
             ReadCurrentInput();
             SetPlayerSpeedToAnimator();
-            
-            if (!InputMoreThanMinValue())
-            {
-                _characterController.Move(Vector3.zero);
-                return;
-            }
-            
-            ApplyMovement();
             CalculateMovementVector();
+            ApplyMovement();
         }
 
         private void SetPlayerSpeedToAnimator()
@@ -64,16 +57,29 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private void CalculateMovementVector()
         {
+            if (InputMoreThanMinValue())
+                ApplyToCurrentVector();
+            else
+                LerpToNewMovementVector(Vector3.zero);
+
+            _movementVector += Physics.gravity;
+        }
+
+        private void ApplyToCurrentVector()
+        {
             Vector3 nextMovementVector = _cameraTransform.TransformDirection(_inputVector);
             nextMovementVector.Normalize();
 
-            _movementVector = Vector3.Lerp(_movementVector, nextMovementVector, Time.deltaTime * LERP_RATE);
+            LerpToNewMovementVector(nextMovementVector);
             _movementVector.y = 0;
 
             if (nextMovementVector != Vector3.zero)
                 _playerPlayerTransform.forward = _movementVector;
+        }
 
-            _movementVector += Physics.gravity;
+        private void LerpToNewMovementVector(Vector3 nextVector)
+        {
+            _movementVector = Vector3.Lerp(_movementVector, nextVector, Time.deltaTime * LERP_RATE);
         }
 
         private void ApplyMovement() =>
