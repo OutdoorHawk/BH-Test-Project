@@ -60,7 +60,7 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             CalculateCameraPosition();
             CalculateCameraRotation();
             ApplyCameraTransformValues();
-          //  CheckCameraCollision();
+          // CheckCameraCollision();
         }
 
         private void CheckCameraCollision()
