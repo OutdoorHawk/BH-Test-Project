@@ -22,21 +22,21 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _playerPrefab = playerPrefab;
             _spawnPoints = spawnPoints;
-            NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreateCharacter);
+           // NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
         }
         
         public void SpawnNewPlayer()
         {
-            CreatePlayerMessage createPlayerMessage = new CreatePlayerMessage()
+            SpawnPlayerMessage spawnPlayerMessage = new SpawnPlayerMessage()
             {
                 SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position,
                 Id = ++_currentPlayerId
             };
 
-            NetworkClient.Send(createPlayerMessage);
+            NetworkClient.Send(spawnPlayerMessage);
         }
 
-        private void OnCreateCharacter(NetworkConnectionToClient conn, CreatePlayerMessage message)
+        private void OnCreateCharacter(NetworkConnectionToClient conn, SpawnPlayerMessage message)
         {
             GameObject go = Object.Instantiate(_playerPrefab, message.SpawnPosition, Quaternion.identity);
             NetworkServer.AddPlayerForConnection(conn, go);

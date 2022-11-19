@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
 using Mirror;
 using UnityEngine;
 
@@ -10,51 +11,42 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private NetworkSpawnSystem _spawnSystem;
         private NetworkPlayerSystem _playerSystem;
-
-        public override void OnStartHost()
-        {
-            base.OnStartHost();
-            CreateSystems();
-            Subscribe();
-            Debug.Log("OnStartHost");
-        }
+        private int _playerID;
 
         public override void OnStartServer()
         {
             base.OnStartServer();
-            Debug.Log("OnStartServer");
+            CreateSystems();
+            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
         }
 
-        [Server]
         private void CreateSystems()
         {
             _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
             _playerSystem = new NetworkPlayerSystem();
-            Debug.Log("createSystems");
         }
 
-        [Server]
-        private void Subscribe()
-        {
-            _spawnSystem.OnPlayerSpawned += _playerSystem.AddNewPlayerToList;
-        }
-
-        [Server]
-        private void CleanUp()
-        {
-            _spawnSystem.OnPlayerSpawned -= _playerSystem.AddNewPlayerToList;
-        }
 
         public override void OnClientConnect()
         {
             base.OnClientConnect();
-            _spawnSystem.SpawnNewPlayer();
+            SpawnNewPlayer();
         }
 
-        public override void OnStopServer()
+        private void SpawnNewPlayer()
         {
-            base.OnStopServer();
-            CleanUp();
+            SpawnPlayerMessage spawnPlayerMessage = new SpawnPlayerMessage
+            {
+                SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position
+            };
+
+            NetworkClient.Send(spawnPlayerMessage);
+        }
+
+        private void OnCreateCharacter(NetworkConnectionToClient conn, SpawnPlayerMessage message)
+        {
+            GameObject go = Instantiate(playerPrefab, message.SpawnPosition, Quaternion.identity);
+            NetworkServer.AddPlayerForConnection(conn, go);
         }
 
         public override void OnClientDisconnect()

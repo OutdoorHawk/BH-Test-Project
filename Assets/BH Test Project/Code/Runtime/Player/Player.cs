@@ -31,6 +31,7 @@ namespace BH_Test_Project.Code.Runtime.Player
                 Init();
         }
 
+        [Client]
         private void Init()
         {
             CreateSystems();
@@ -63,13 +64,13 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void Update()
         {
-            if (isLocalPlayer)
+            if (isClient && isLocalPlayer)
                 _playerStateMachine.Tick();
         }
 
         public void HitPlayer()
         {
-            if (isLocalPlayer)
+            if (isClient && isLocalPlayer)
                 _playerGameStatus.PlayerHit();
         }
 
@@ -87,10 +88,9 @@ namespace BH_Test_Project.Code.Runtime.Player
             }
         }
 
-
         private void OnDestroy()
         {
-            if (isClient)
+            if (isClient && isLocalPlayer)
                 DisposeSystems();
         }
 
