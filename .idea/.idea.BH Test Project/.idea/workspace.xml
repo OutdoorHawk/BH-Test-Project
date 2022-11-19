@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IGameStateMachine.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IGameStateMachine.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/IPlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/IPlayerStateMachine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/DashState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/DashState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/IState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/IState.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,11 +24,12 @@
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkSystem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/AnimationControlComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimationParameter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/ITickableState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/ITickableState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionReference.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -104,7 +101,7 @@
       <option name="presentableId" value="Default" />
       <updated>1668768525658</updated>
       <workItem from="1668768540755" duration="18095000" />
-      <workItem from="1668870507619" duration="1721000" />
+      <workItem from="1668870507619" duration="2116000" />
     </task>
     <servers />
   </component>

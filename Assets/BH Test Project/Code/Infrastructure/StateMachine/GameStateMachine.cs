@@ -4,7 +4,7 @@ using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
-    public class GameStateMachine
+    public class GameStateMachine : IGameStateMachine
     {
         private readonly Dictionary<Type, IExitableState> _states;
 
@@ -13,12 +13,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(),
-                [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator)
+                [typeof(GameLoopState)] = new GameLoopState()
             };
         }
 
         public IExitableState ActiveState { get; private set; }
-
 
         public void Enter<TState>() where TState : class, IState
         {
