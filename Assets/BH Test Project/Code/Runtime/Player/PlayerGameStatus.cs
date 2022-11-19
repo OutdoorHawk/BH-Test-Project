@@ -23,9 +23,11 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private IEnumerator PlayerHitRoutine()
         {
+            Debug.Log("Color change");
             _colorChanger.SetPlayerHitColor();
             yield return new WaitForSeconds(_playerData.HitTime);
             _colorChanger.SetPlayerDefaultColor();
+            Debug.Log("Color back");
         }
     }
 }

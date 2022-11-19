@@ -63,14 +63,16 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void Update()
         {
-            _playerStateMachine.Tick();
+            if (isLocalPlayer)
+                _playerStateMachine.Tick();
         }
 
         public void HitPlayer()
         {
-            _playerGameStatus.PlayerHit();
+            if (isLocalPlayer) 
+                _playerGameStatus.PlayerHit();
         }
-        
+
         private void ChangeCursorSettings()
         {
             if (Cursor.lockState == CursorLockMode.Locked)
@@ -87,7 +89,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void OnDestroy()
         {
-            DisposeSystems();
+            if (isLocalPlayer)
+                DisposeSystems();
         }
 
         private void DisposeSystems()
