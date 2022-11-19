@@ -30,23 +30,27 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private const float SMOOTH_TIME = 0.075f;
         private const float LERP_RATE = 50f;
 
-        public void Tick(Vector2 movementInput)
+        public void UpdateInput(Vector2 movementInput)
         {
             ReadCurrentInput(movementInput);
             CalculateMovementVector();
             ApplyMovement();
         }
 
-        private void ReadCurrentInput(Vector2 input)
+        public void Tick()
         {
-            //Vector2 input = _playerInput.Movement.ReadValue<Vector2>();
-            _inputVector.Set(input.x, 0, input.y);
+            ApplyMovement();
         }
 
         public float GetPlayerSpeed()
         {
             return new Vector3(_characterController.velocity.x, 0, _characterController.velocity.y)
                 .normalized.magnitude;
+        }
+
+        private void ReadCurrentInput(Vector2 input)
+        {
+            _inputVector.Set(input.x, 0, input.y);
         }
 
         private void CalculateMovementVector()

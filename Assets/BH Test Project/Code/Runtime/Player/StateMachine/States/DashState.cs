@@ -20,12 +20,13 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         public void Enter()
         {
             _playerMovement.PerformDash(OnDashFinished);
+            _playerAnimator.SetPlayerSpeed(0);
             _playerAnimator.PlayDashAnimation();
         }
 
         public void Tick()
         {
-           // _playerMovement.Tick();
+           _playerMovement.Tick();
         }
 
         private void OnDashFinished()

@@ -30,7 +30,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         public void Tick()
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
-            _playerMovement.Tick(currentInput);
+            _playerMovement.UpdateInput(currentInput);
             _playerAnimator.SetPlayerSpeed(_playerMovement.GetPlayerSpeed());
         }
 
