@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BH_Test_Project.Code.Runtime.Player.Input
@@ -11,6 +12,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
         public InputAction MouseAxis { get; private set; }
 
         public event Action OnDashPressed;
+        public event Action OnEscapePressed;
 
         public void Init()
         {
@@ -19,20 +21,27 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
             MouseAxis = _playerInput.Player.MouseAxis;
 
             _playerInput.Player.Dash.started += (c) => OnDashPressed?.Invoke();
+            _playerInput.Player.Escape.started += (c) => OnEscapePressed?.Invoke();
         }
 
-        public void EnableInput()
+        public void EnableAllInput()
         {
             _playerInput.Player.Movement.Enable();
             _playerInput.Player.Dash.Enable();
-            _playerInput.Player.MouseAxis.Enable();
+            MouseAxis.Enable();
         }
 
-        public void DisableInput()
+        public void DisableAllInput()
         {
             _playerInput.Player.Movement.Disable();
             _playerInput.Player.Dash.Disable();
-            _playerInput.Player.MouseAxis.Disable();
+            MouseAxis.Disable();
+        }
+
+        public void DisableMovementInput()
+        {
+            _playerInput.Player.Movement.Disable();
+            _playerInput.Player.Dash.Disable();
         }
     }
 }

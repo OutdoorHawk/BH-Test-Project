@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="" />
+    <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,8 +20,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f391b866413f4e668a73b3209d3d8b8626e00/ff/b7f45bd2/Animator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/Data/SpawnPositionMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkSystem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/AnimationControlComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimationParameter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/ITickableState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionReference.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -89,6 +99,7 @@
       <option name="presentableId" value="Default" />
       <updated>1668768525658</updated>
       <workItem from="1668768540755" duration="18095000" />
+      <workItem from="1668870507619" duration="12997000" />
     </task>
     <servers />
   </component>

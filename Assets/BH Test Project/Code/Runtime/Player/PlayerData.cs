@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player
 {
@@ -7,6 +8,10 @@ namespace BH_Test_Project.Code.Runtime.Player
     {
         public float MovementSpeed;
         public float MouseSensitivity;
-        public float DashPower;
+        public float DashPower; //TODO Change to distance
+        public float DashTime;
+        public float HitTime;
+        public LayerMask PlayerCollisionMask;
+        public Color32 PlayerHitColor;
     }
 }
