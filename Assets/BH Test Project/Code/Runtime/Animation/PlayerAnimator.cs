@@ -4,14 +4,12 @@ namespace BH_Test_Project.Code.Runtime.Animation
 {
     public class PlayerAnimator
     {
-        private readonly Animator _animator;
         private readonly AnimationControlComponent<PlayerAnimationParameter> _animationControlComponent;
 
         public PlayerAnimator(Animator animator)
         {
-            _animator = animator;
             _animationControlComponent = new AnimationControlComponent<PlayerAnimationParameter>();
-            _animationControlComponent.Initialize(_animator);
+            _animationControlComponent.Initialize(animator);
         }
 
         public void SetPlayerSpeed(float speed)

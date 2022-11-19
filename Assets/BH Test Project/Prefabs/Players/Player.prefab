@@ -5959,7 +5959,7 @@ MonoBehaviour:
   _playerData:
     MovementSpeed: 4
     MouseSensitivity: 0.45
-    DashPower: 30
+    DashPower: 10
     DashTime: 0.5
   _cameraFollowPrefab: {fileID: 6814131064994553984, guid: f78c4ba29b958ce499dbd0ad575d88fb, type: 3}
 --- !u!143 &3129976508013750515

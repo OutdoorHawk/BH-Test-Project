@@ -43,8 +43,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
-            _playerMovement = new PlayerMovement(_playerData,
-                characterController, transform, _animator, _cameraFollow, this);
+            _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
             _playerStateMachine = new PlayerStateMachine(_playerMovement, _playerInput, _animator);
         }
 

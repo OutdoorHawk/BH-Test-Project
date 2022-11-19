@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private readonly CharacterController _characterController;
         private readonly Transform _cameraTransform;
         private readonly Transform _playerPlayerTransform;
-        private readonly PlayerAnimator _playerAnimator;
         private readonly MonoBehaviour _mono;
 
         private readonly PlayerData _playerData;
@@ -19,12 +17,10 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private Vector3 _movementVector;
 
         public PlayerMovement(PlayerData playerData, CharacterController characterController,
-            Transform playerTransform, PlayerAnimator playerAnimator,
-            CameraFollow cameraFollow, MonoBehaviour mono)
+            Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
         {
             _mono = mono;
             _playerPlayerTransform = playerTransform;
-            _playerAnimator = playerAnimator;
             _characterController = characterController;
             _playerData = playerData;
             _cameraTransform = cameraFollow.transform;
@@ -37,7 +33,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         public void Tick(Vector2 movementInput)
         {
             ReadCurrentInput(movementInput);
-            SetPlayerSpeedToAnimator();
             CalculateMovementVector();
             ApplyMovement();
         }
@@ -48,11 +43,10 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             _inputVector.Set(input.x, 0, input.y);
         }
 
-        private void SetPlayerSpeedToAnimator()
+        public float GetPlayerSpeed()
         {
-            Vector3 playerVelocity =
-                new Vector3(_characterController.velocity.x, 0, _characterController.velocity.y);
-            _playerAnimator.SetPlayerSpeed(playerVelocity.normalized.magnitude);
+            return new Vector3(_characterController.velocity.x, 0, _characterController.velocity.y)
+                .normalized.magnitude;
         }
 
         private void CalculateMovementVector()
@@ -90,17 +84,18 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         public void PerformDash(Action OnDashFinished)
         {
+            _movementVector = Vector3.zero;
             _mono.StartCoroutine(Dashing(OnDashFinished));
         }
 
         private IEnumerator Dashing(Action OnDashFinished)
         {
-            Vector3 dashVector = _movementVector;
+            Vector3 dashVector = _playerPlayerTransform.forward * _playerData.DashPower;
             float t = _playerData.DashTime;
             do
             {
                 t -= Time.deltaTime;
-                _characterController.Move(dashVector * (Time.deltaTime * _playerData.DashPower));
+                LerpToNewMovementVector(dashVector);
                 yield return new WaitForSeconds(Time.deltaTime);
             } while (t > 0);
 

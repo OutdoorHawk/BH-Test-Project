@@ -1,4 +1,4 @@
-using BH_Test_Project.Code.Infrastructure.StateMachine;
+using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using UnityEngine;
@@ -10,17 +10,20 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         private readonly IPlayerInput _playerInput;
         private readonly PlayerStateMachine _stateMachine;
         private readonly PlayerMovement _playerMovement;
+        private readonly PlayerAnimator _playerAnimator;
 
         public BasicMovementState(PlayerStateMachine stateMachine, PlayerMovement playerMovement,
-            PlayerInput playerInput)
+            PlayerAnimator playerAnimator, PlayerInput playerInput)
         {
             _stateMachine = stateMachine;
             _playerMovement = playerMovement;
+            _playerAnimator = playerAnimator;
             _playerInput = playerInput;
         }
 
         public void Enter()
         {
+            _playerInput.EnableAllInput();
             _playerInput.OnDashPressed += ActivateDash;
         }
 
@@ -28,6 +31,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
             _playerMovement.Tick(currentInput);
+            _playerAnimator.SetPlayerSpeed(_playerMovement.GetPlayerSpeed());
         }
 
         private void ActivateDash()
@@ -38,6 +42,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         public void Exit()
         {
             _playerInput.OnDashPressed -= ActivateDash;
+            _playerInput.DisableMovementInput();
         }
     }
 }

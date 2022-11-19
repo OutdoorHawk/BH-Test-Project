@@ -1,9 +1,5 @@
-using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Animation;
-using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 {
@@ -11,22 +7,25 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
     {
         private readonly PlayerStateMachine _stateMachine;
         private readonly PlayerMovement _playerMovement;
+        private readonly PlayerAnimator _playerAnimator;
 
         public DashState(PlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator)
         {
             _playerMovement = playerMovement;
+            _playerAnimator = playerAnimator;
             _stateMachine = stateMachine;
         }
 
         public void Enter()
         {
             _playerMovement.PerformDash(OnDashFinished);
+            _playerAnimator.PlayDashAnimation();
         }
 
         public void Tick()
         {
-   
+           // _playerMovement.Tick();
         }
 
         private void OnDashFinished()
@@ -36,7 +35,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         public void Exit()
         {
-           
+            _playerAnimator.StopDashAnimation();
         }
     }
 }

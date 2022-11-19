@@ -11,5 +11,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
         event Action OnDashPressed;
         void EnableAllInput();
         void DisableAllInput();
+        void DisableMovementInput();
     }
 }

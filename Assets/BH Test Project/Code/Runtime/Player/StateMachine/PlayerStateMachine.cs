@@ -17,7 +17,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         {
             _states = new Dictionary<Type, ITickableState>
             {
-                [typeof(BasicMovementState)] = new BasicMovementState(this, playerMovement, playerInput),
+                [typeof(BasicMovementState)] = new BasicMovementState(this, playerMovement, playerAnimator,playerInput),
                 [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator)
             };
         }
