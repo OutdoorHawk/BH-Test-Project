@@ -18,8 +18,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
-        public PlayerMovement(PlayerData playerData,
-            CharacterController characterController, Transform playerTransform, PlayerAnimator playerAnimator,
+        public PlayerMovement(PlayerData playerData, CharacterController characterController,
+            Transform playerTransform, PlayerAnimator playerAnimator,
             CameraFollow cameraFollow, MonoBehaviour mono)
         {
             _mono = mono;
@@ -58,7 +58,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private void CalculateMovementVector()
         {
             if (InputMoreThanMinValue())
-                ApplyToCurrentVector();
+                ApplyToCurrentMovementVector();
             else
                 LerpToNewMovementVector(Vector3.zero);
 
@@ -68,7 +68,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private bool InputMoreThanMinValue() =>
             _inputVector.sqrMagnitude > MIN_MOVE_VALUE;
 
-        private void ApplyToCurrentVector()
+        private void ApplyToCurrentMovementVector()
         {
             Vector3 nextMovementVector = _cameraTransform.TransformDirection(_inputVector);
             nextMovementVector.Normalize();

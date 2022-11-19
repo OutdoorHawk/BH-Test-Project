@@ -1,6 +1,7 @@
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
@@ -29,7 +30,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         private void OnDashFinished()
         {
-            _stateMachine.ChangeState<BasicMovementState>();
+            _stateMachine.Enter<BasicMovementState>();
         }
 
         public void Exit()
