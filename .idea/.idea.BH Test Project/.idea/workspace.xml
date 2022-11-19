@@ -5,19 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/ColorChanger.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/ColorChanger.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerCollisionDetector.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerCollisionDetector.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Input/PlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Input/PlayerInput.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/DashState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/DashState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.inputactions" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Players/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Players/Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/DownloadedAssets/3D/Characters/LowPoly/Demo_FREE_LowPolyCharacter/LowPolyHumanAnimator.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DownloadedAssets/3D/Characters/LowPoly/Demo_FREE_LowPolyCharacter/LowPolyHumanAnimator.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/DownloadedAssets/3D/Characters/LowPoly/FREE_HumanLowPoly/Materials_Humans/Body.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DownloadedAssets/3D/Characters/LowPoly/FREE_HumanLowPoly/Materials_Humans/Body.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +105,7 @@
       <option name="presentableId" value="Default" />
       <updated>1668768525658</updated>
       <workItem from="1668768540755" duration="18095000" />
-      <workItem from="1668870507619" duration="9875000" />
+      <workItem from="1668870507619" duration="11932000" />
     </task>
     <servers />
   </component>

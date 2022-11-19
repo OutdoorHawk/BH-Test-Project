@@ -5962,9 +5962,13 @@ MonoBehaviour:
     MouseSensitivity: 0.45
     DashPower: 5
     DashTime: 0.4
+    HitTime: 3
     PlayerCollisionMask:
       serializedVersion: 2
       m_Bits: 64
+    PlayerHitColor:
+      serializedVersion: 2
+      rgba: 4278848192
   _cameraFollowPrefab: {fileID: 6814131064994553984, guid: f78c4ba29b958ce499dbd0ad575d88fb, type: 3}
 --- !u!143 &3129976508013750515
 CharacterController:

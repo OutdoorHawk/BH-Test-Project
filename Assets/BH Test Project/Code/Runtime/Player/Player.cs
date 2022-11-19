@@ -1,4 +1,3 @@
-using System;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
@@ -25,19 +24,19 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-        
+
         private void Start()
         {
-            Init();
-            Cursor.lockState = CursorLockMode.Locked;
+            if (isClient && isLocalPlayer)
+                Init();
         }
 
         private void Init()
         {
-            if (isClient && isLocalPlayer)
-                CreateSystems();
+            CreateSystems();
             InitSystems();
             _playerInput.EnableAllInput();
+            _playerInput.OnEscapePressed += ChangeCursorSettings;
         }
 
         private void CreateSystems()
@@ -49,7 +48,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
-            _playerStateMachine = new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector);
+            _playerStateMachine =
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector);
             _playerGameStatus = new PlayerGameStatus(_playerData, this);
         }
 
@@ -70,6 +70,20 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             _playerGameStatus.PlayerHit();
         }
+        
+        private void ChangeCursorSettings()
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                _playerInput.DisableAllInput();
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                _playerInput.EnableAllInput();
+            }
+        }
 
         private void OnDestroy()
         {
@@ -79,6 +93,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void DisposeSystems()
         {
             _playerStateMachine.CleanUp();
+            _playerInput.OnEscapePressed -= ChangeCursorSettings;
             Destroy(_cameraFollow);
         }
     }

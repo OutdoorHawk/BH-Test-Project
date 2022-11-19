@@ -39,6 +39,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
             if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out Player player))
             {
                 _currentGameObject = hit.gameObject;
+                player.HitPlayer();
             }
         }
 
