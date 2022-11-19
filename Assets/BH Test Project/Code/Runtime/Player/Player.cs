@@ -69,7 +69,7 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         public void HitPlayer()
         {
-            if (isLocalPlayer) 
+            if (isLocalPlayer)
                 _playerGameStatus.PlayerHit();
         }
 
@@ -87,17 +87,18 @@ namespace BH_Test_Project.Code.Runtime.Player
             }
         }
 
+
         private void OnDestroy()
         {
-            if (isLocalPlayer)
+            if (isClient)
                 DisposeSystems();
         }
 
         private void DisposeSystems()
         {
+            Debug.Log("Dispose");
             _playerStateMachine.CleanUp();
             _playerInput.OnEscapePressed -= ChangeCursorSettings;
-            Destroy(_cameraFollow);
         }
     }
 }

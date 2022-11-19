@@ -55,7 +55,10 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         private void LateUpdate()
         {
             if (_followTarget == null)
+            {
+                Destroy(gameObject);
                 return;
+            }
 
             CalculateCameraPosition();
             CalculateCameraRotation();

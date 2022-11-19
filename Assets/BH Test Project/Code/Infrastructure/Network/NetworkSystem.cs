@@ -1,4 +1,4 @@
-using BH_Test_Project.Code.Infrastructure.Network.Data;
+using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
@@ -6,27 +6,61 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSystem : NetworkManager
     {
-        private NetworkConnection _connection;
-        private bool _playerSpawned;
-        private bool _playerConnected;
+        [SerializeField] private List<Transform> _spawnPoints;
 
-        public void OnCreateCharacter(NetworkConnectionToClient connection, SpawnPositionMessage spawnPosition)
+        private NetworkSpawnSystem _spawnSystem;
+        private NetworkPlayerSystem _playerSystem;
+
+        public override void OnStartHost()
         {
-            GameObject go = Instantiate(playerPrefab, spawnPosition.Vector3, Quaternion.identity);
-            NetworkServer.AddPlayerForConnection(connection, go);
+            base.OnStartHost();
+            CreateSystems();
+            Subscribe();
+            Debug.Log("OnStartHost");
         }
 
         public override void OnStartServer()
         {
             base.OnStartServer();
-            //NetworkServer.RegisterHandler<SpawnPositionMessage>(OnCreateCharacter);
+            Debug.Log("OnStartServer");
         }
-        
-        /*public override void OnClientConnect()
+
+        [Server]
+        private void CreateSystems()
+        {
+            _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
+            _playerSystem = new NetworkPlayerSystem();
+            Debug.Log("createSystems");
+        }
+
+        [Server]
+        private void Subscribe()
+        {
+            _spawnSystem.OnPlayerSpawned += _playerSystem.AddNewPlayerToList;
+        }
+
+        [Server]
+        private void CleanUp()
+        {
+            _spawnSystem.OnPlayerSpawned -= _playerSystem.AddNewPlayerToList;
+        }
+
+        public override void OnClientConnect()
         {
             base.OnClientConnect();
-            SpawnPositionMessage m = new SpawnPositionMessage() { Vector3 = _secondSpawn.position };
-            _connection.Send(m);
-        }*/
+            _spawnSystem.SpawnNewPlayer();
+        }
+
+        public override void OnStopServer()
+        {
+            base.OnStopServer();
+            CleanUp();
+        }
+
+        public override void OnClientDisconnect()
+        {
+            base.OnClientDisconnect();
+            _playerSystem?.CheckPlayersLeft();
+        }
     }
 }
