@@ -4,42 +4,35 @@ using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
+using IState = BH_Test_Project.Code.Infrastructure.StateMachine.IState;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 {
     public class PlayerStateMachine : IPlayerStateMachine
     {
-        private readonly Dictionary<Type, IState> _states;
-
-        #region Init
+        private readonly Dictionary<Type, ITickableState> _states;
+        
 
         public PlayerStateMachine(PlayerMovement playerMovement, PlayerInput playerInput,
             PlayerAnimator playerAnimator)
         {
-            _states = new Dictionary<Type, IState>
+            _states = new Dictionary<Type, ITickableState>
             {
                 [typeof(BasicMovementState)] = new BasicMovementState(this, playerMovement, playerInput),
                 [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator)
             };
         }
 
-        public IState ActiveState { get; private set; }
+        public ITickableState ActiveState { get; private set; }
+        
 
-        #endregion
-
-        #region Suscribe/Unsubscribe
-
-        #endregion
-
-        #region StateMachine
-
-        public void Enter<TState>() where TState : class, IState
+        public void Enter<TState>() where TState : class, ITickableState
         {
             IState state = ChangeState<TState>();
             state.Enter();
         }
 
-        public TState ChangeState<TState>() where TState : class, IState
+        public TState ChangeState<TState>() where TState : class, ITickableState
         {
             ActiveState?.Exit();
 
@@ -49,7 +42,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
             return state;
         }
 
-        public TState GetState<TState>() where TState : class, IState
+        public TState GetState<TState>() where TState : class, ITickableState
         {
             return _states[typeof(TState)] as TState;
         }
@@ -58,8 +51,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         {
             ActiveState?.Tick();
         }
-
-        #endregion
+        
 
         public void CleanUp()
         {

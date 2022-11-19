@@ -1,10 +1,11 @@
+using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 {
-    public class BasicMovementState : IState
+    public class BasicMovementState : ITickableState
     {
         private readonly IPlayerInput _playerInput;
         private readonly PlayerStateMachine _stateMachine;

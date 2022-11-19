@@ -25,6 +25,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void Start()
         {
             Init();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void Init()
@@ -66,6 +67,7 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void DisposeSystems()
         {
+            _playerStateMachine.CleanUp();
             Destroy(_cameraFollow);
         }
     }

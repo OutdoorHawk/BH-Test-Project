@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
@@ -6,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 {
-    public class DashState : IState
+    public class DashState : ITickableState
     {
         private readonly PlayerStateMachine _stateMachine;
         private readonly PlayerMovement _playerMovement;
