@@ -20,8 +20,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _playerPrefab = playerPrefab;
             _spawnPoints = spawnPoints;
-            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
         }
+
+        [ServerCallback]
+        public void RegisterHandlers() =>
+            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
 
         public void SpawnNewPlayer()
         {

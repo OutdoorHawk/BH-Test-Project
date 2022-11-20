@@ -13,11 +13,16 @@ namespace BH_Test_Project.Code.Runtime.UI
 
         private readonly List<ScoreElement> _scoreElements = new();
 
-        [Server]
-        public void RpcAddPlayerToScoreTable(PlayerOnServer playerOnServer)
+        public void Init()
+        {
+            //NetworkClient.RegisterPrefab(_scoreElementPrefab.gameObject);
+        }
+
+        [ClientRpc]
+        public void RpcAddPlayerToScoreTable(string playerName, uint netID)
         {
             ScoreElement element = Instantiate(_scoreElementPrefab, _layoutParent);
-            element.Init(playerOnServer.Name, playerOnServer.NetID);
+            element.Init(playerName, netID);
             _scoreElements.Add(element);
         }
 

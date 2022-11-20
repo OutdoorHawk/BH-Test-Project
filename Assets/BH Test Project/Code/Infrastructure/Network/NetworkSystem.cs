@@ -35,6 +35,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
             _playerSystem = new NetworkPlayerSystem(_playerUI);
+            _spawnSystem.RegisterHandlers();
+            _playerSystem.RegisterHandlers();
         }
 
         public override void OnClientConnect()

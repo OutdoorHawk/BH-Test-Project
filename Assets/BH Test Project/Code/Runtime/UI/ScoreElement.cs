@@ -1,9 +1,10 @@
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.UI
 {
-    public class ScoreElement : MonoBehaviour
+    public class ScoreElement : NetworkBehaviour
     {
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _scoreText;
