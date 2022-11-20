@@ -90,13 +90,24 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void OnDestroy()
         {
-            if (isClient && isLocalPlayer)
-                DisposeSystems();
+            /*if (isClient && isLocalPlayer)
+                DisposeSystems();*/
         }
 
-        private void DisposeSystems()
+        public override void OnStopLocalPlayer()
         {
-            Debug.Log("Dispose");
+            base.OnStopLocalPlayer();
+            DisposePlayer();
+        }
+
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+        }
+
+        public void DisposePlayer()
+        {
+            Debug.Log("PlayerDispose" + _playerStateMachine);
             _playerStateMachine.CleanUp();
             _playerInput.OnEscapePressed -= ChangeCursorSettings;
         }

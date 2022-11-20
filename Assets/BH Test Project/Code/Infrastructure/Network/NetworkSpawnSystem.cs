@@ -15,6 +15,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
+        private NetworkConnection _connection;
 
         private int _currentPlayerId;
 
@@ -22,18 +23,19 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _playerPrefab = playerPrefab;
             _spawnPoints = spawnPoints;
-           // NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
+            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
         }
         
-        public void SpawnNewPlayer()
+        public void SpawnNewPlayer(NetworkConnectionToClient conn)
         {
-            SpawnPlayerMessage spawnPlayerMessage = new SpawnPlayerMessage()
+            _connection = conn;
+            SpawnPlayerMessage message = new SpawnPlayerMessage()
             {
                 SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position,
                 Id = ++_currentPlayerId
             };
-
-            NetworkClient.Send(spawnPlayerMessage);
+            
+            NetworkClient.Send(message);
         }
 
         private void OnCreateCharacter(NetworkConnectionToClient conn, SpawnPlayerMessage message)
