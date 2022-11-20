@@ -11,13 +11,13 @@ namespace BH_Test_Project.Code.Runtime.Player
         
         private readonly PlayerData _playerData;
         private readonly MonoBehaviour _mono;
-        private readonly ColorChangerComponent _colorChangerComponent;
+        private readonly ColorChangeComponent _colorChangeComponent;
 
-        public PlayerGameStatus(PlayerData playerData, MonoBehaviour mono, ColorChangerComponent changerComponent)
+        public PlayerGameStatus(PlayerData playerData, MonoBehaviour mono, ColorChangeComponent changeComponent)
         {
             _playerData = playerData;
             _mono = mono;
-            _colorChangerComponent = changerComponent;
+            _colorChangeComponent = changeComponent;
         }
         
         [TargetRpc]
@@ -29,9 +29,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         private IEnumerator RpcPlayerHitRoutine()
         {
-            _colorChangerComponent.CmdSetPlayerHitColor();
+            _colorChangeComponent.CmdSetPlayerHitColor();
             yield return new WaitForSeconds(_playerData.HitTime);
-            _colorChangerComponent.CmdSetPlayerDefaultColor();
+            _colorChangeComponent.CmdSetPlayerDefaultColor();
             OnHitEnded?.Invoke();
         }
     }

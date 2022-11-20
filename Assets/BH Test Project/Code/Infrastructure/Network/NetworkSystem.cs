@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BH_Test_Project.Code.Runtime.UI;
 using Mirror;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     public class NetworkSystem : NetworkManager
     {
         [SerializeField] private List<Transform> _spawnPoints;
+        [SerializeField] private PlayerGameUI _playerUI;
 
         private NetworkSpawnSystem _spawnSystem;
         private NetworkPlayerSystem _playerSystem;
@@ -32,7 +34,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void CreateSystems()
         {
             _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
-            _playerSystem = new NetworkPlayerSystem();
+            _playerSystem = new NetworkPlayerSystem(_playerUI);
         }
 
         public override void OnClientConnect()

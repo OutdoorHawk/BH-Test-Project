@@ -1,5 +1,6 @@
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
+using BH_Test_Project.Code.Runtime.UI;
 using Mirror;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
@@ -7,9 +8,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     public class NetworkPlayerSystem
     {
         private readonly SyncList<PlayerOnServer> _players;
+        private readonly PlayerGameUI _playerGameUI;
 
-        public NetworkPlayerSystem()
+        public NetworkPlayerSystem(PlayerGameUI playerGameUI)
         {
+            _playerGameUI = playerGameUI;
             _players = new SyncList<PlayerOnServer>();
             NetworkServer.RegisterHandler<PlayerHitMessage>(OnPlayerHit);
         }
@@ -18,7 +21,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void OnPlayerHit(NetworkConnection connection, PlayerHitMessage message)
         {
             HitPlayer(message.HurtPlayerNetId);
-            // message.Behaviour.GetComponent<Player>().HitPlayer();
         }
 
         [Server]
@@ -33,7 +35,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public void AddNewPlayer(Player player, NetworkConnectionToClient conn)
         {
-            _players.Add(new PlayerOnServer(player, conn));
+            PlayerOnServer playerOnServer = new PlayerOnServer(player, conn);
+            _players.Add(playerOnServer);
+            _playerGameUI.AddPlayerToScoreTable(playerOnServer);
         }
 
         public void RemovePlayer(NetworkConnectionToClient conn)
