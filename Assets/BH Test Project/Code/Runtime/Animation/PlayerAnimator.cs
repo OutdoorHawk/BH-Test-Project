@@ -26,5 +26,10 @@ namespace BH_Test_Project.Code.Runtime.Animation
         {
             _animationControlComponent.SetBool(PlayerAnimationParameter.Dash, false);
         }
+
+        public void PlayHitAnimation()
+        {
+            _animationControlComponent.SetTrigger(PlayerAnimationParameter.Hit);
+        }
     }
 }

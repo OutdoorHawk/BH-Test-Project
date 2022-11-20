@@ -8,11 +8,11 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
     public class BasicMovementState : ITickableState
     {
         private readonly IPlayerInput _playerInput;
-        private readonly PlayerStateMachine _stateMachine;
+        private readonly IPlayerStateMachine _stateMachine;
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerAnimator _playerAnimator;
 
-        public BasicMovementState(PlayerStateMachine stateMachine, PlayerMovement playerMovement,
+        public BasicMovementState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator, PlayerInput playerInput)
         {
             _stateMachine = stateMachine;
@@ -31,6 +31,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
             _playerMovement.UpdateInput(currentInput);
+            _playerMovement.Tick();
             _playerAnimator.SetPlayerSpeed(_playerMovement.GetPlayerSpeed());
         }
 

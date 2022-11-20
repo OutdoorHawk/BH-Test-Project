@@ -12,6 +12,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
+    [RequireComponent(typeof(ColorChangerComponent))]
     public class Player : NetworkBehaviour
     {
         [SerializeField] private PlayerData _playerData;
@@ -25,9 +26,10 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
 
-        private void Start()
+        public override void OnStartClient()
         {
-            if (isClient && isLocalPlayer)
+            base.OnStartClient();
+            if (isOwned)
                 Init();
         }
 
@@ -43,14 +45,16 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             Animator animator = GetComponent<Animator>();
             CharacterController characterController = GetComponent<CharacterController>();
+            ColorChangerComponent changerComponent = GetComponent<ColorChangerComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
+            _playerGameStatus = new PlayerGameStatus(_playerData, this, changerComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector);
-            _playerGameStatus = new PlayerGameStatus(_playerData, this);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId,
+                    _playerGameStatus);
         }
 
         private void InitSystems()
@@ -63,41 +67,41 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void Update()
         {
-            if (isLocalPlayer)
+            if (isClient && isLocalPlayer)
                 _playerStateMachine.Tick();
         }
 
-        public void HitPlayer()
+        [TargetRpc]
+        public void RpcHitPlayer()
         {
-            if (isLocalPlayer) 
-                _playerGameStatus.PlayerHit();
+            if (_playerStateMachine.ActiveState is not HitState) 
+                _playerStateMachine.Enter<HitState>();
         }
 
         private void ChangeCursorSettings()
         {
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                _playerInput.DisableAllInput();
-            }
-            else
+            if (Cursor.lockState != CursorLockMode.Locked)
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 _playerInput.EnableAllInput();
             }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                _playerInput.DisableAllInput();
+            }
         }
 
-        private void OnDestroy()
+        public override void OnStopLocalPlayer()
         {
-            if (isLocalPlayer)
-                DisposeSystems();
+            base.OnStopLocalPlayer();
+            DisposePlayer();
         }
 
-        private void DisposeSystems()
+        private void DisposePlayer()
         {
             _playerStateMachine.CleanUp();
             _playerInput.OnEscapePressed -= ChangeCursorSettings;
-            Destroy(_cameraFollow);
         }
     }
 }

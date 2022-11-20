@@ -13,6 +13,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
 
         public event Action OnDashPressed;
         public event Action OnEscapePressed;
+        public event Action OnSpacePressed;
 
         public void Init()
         {
@@ -22,12 +23,15 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
 
             _playerInput.Player.Dash.started += (c) => OnDashPressed?.Invoke();
             _playerInput.Player.Escape.started += (c) => OnEscapePressed?.Invoke();
+            _playerInput.Player.Space.started += (c) => OnSpacePressed?.Invoke();
         }
 
         public void EnableAllInput()
         {
             _playerInput.Player.Movement.Enable();
             _playerInput.Player.Dash.Enable();
+            _playerInput.Player.Escape.Enable();
+            _playerInput.Player.Space.Enable();
             MouseAxis.Enable();
         }
 

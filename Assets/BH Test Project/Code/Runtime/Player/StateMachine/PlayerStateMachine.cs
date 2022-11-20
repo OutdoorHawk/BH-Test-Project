@@ -13,12 +13,17 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         private readonly Dictionary<Type, ITickableState> _states;
 
         public PlayerStateMachine(PlayerMovement playerMovement, PlayerInput playerInput,
-            PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector)
+            PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector, uint netId,
+            PlayerGameStatus playerGameStatus)
         {
             _states = new Dictionary<Type, ITickableState>
             {
-                [typeof(BasicMovementState)] = new BasicMovementState(this, playerMovement, playerAnimator,playerInput),
-                [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator,playerCollisionDetector)
+                [typeof(BasicMovementState)] =
+                    new BasicMovementState(this, playerMovement, playerAnimator, playerInput),
+                [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator, playerCollisionDetector,
+                    netId),
+                [typeof(HitState)] =
+                    new HitState(this, playerMovement, playerAnimator, playerGameStatus, playerInput)
             };
         }
 
@@ -49,7 +54,6 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         {
             ActiveState?.Tick();
         }
-
 
         public void CleanUp()
         {

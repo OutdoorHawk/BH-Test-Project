@@ -1,4 +1,4 @@
-using BH_Test_Project.Code.Infrastructure.Network.Data;
+using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
@@ -6,27 +6,51 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSystem : NetworkManager
     {
-        private NetworkConnection _connection;
-        private bool _playerSpawned;
-        private bool _playerConnected;
+        [SerializeField] private List<Transform> _spawnPoints;
 
-        public void OnCreateCharacter(NetworkConnectionToClient connection, SpawnPositionMessage spawnPosition)
+        private NetworkSpawnSystem _spawnSystem;
+        private NetworkPlayerSystem _playerSystem;
+        private int _playerID;
+
+        public override void Start()
         {
-            GameObject go = Instantiate(playerPrefab, spawnPosition.Vector3, Quaternion.identity);
-            NetworkServer.AddPlayerForConnection(connection, go);
+            base.Start();
+            CreateSystems();
+            Subscribe();
         }
 
-        public override void OnStartServer()
+        private void Subscribe()
         {
-            base.OnStartServer();
-            //NetworkServer.RegisterHandler<SpawnPositionMessage>(OnCreateCharacter);
+            _spawnSystem.OnPlayerSpawned += _playerSystem.AddNewPlayer;
         }
-        
-        /*public override void OnClientConnect()
+
+        private void CleanUp()
+        {
+            _spawnSystem.OnPlayerSpawned -= _playerSystem.AddNewPlayer;
+        }
+
+        private void CreateSystems()
+        {
+            _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
+            _playerSystem = new NetworkPlayerSystem();
+        }
+
+        public override void OnClientConnect()
         {
             base.OnClientConnect();
-            SpawnPositionMessage m = new SpawnPositionMessage() { Vector3 = _secondSpawn.position };
-            _connection.Send(m);
-        }*/
+            _spawnSystem.SpawnNewPlayer();
+        }
+
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
+        {
+            base.OnServerDisconnect(conn);
+            _playerSystem.RemovePlayer(conn);
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            CleanUp();
+        }
     }
 }
