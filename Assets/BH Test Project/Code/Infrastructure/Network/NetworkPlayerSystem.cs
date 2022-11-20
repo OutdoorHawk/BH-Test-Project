@@ -33,11 +33,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
+        [Server]
         public void AddNewPlayer(Player player, NetworkConnectionToClient conn)
         {
             PlayerOnServer playerOnServer = new PlayerOnServer(player, conn);
             _players.Add(playerOnServer);
-            _playerGameUI.AddPlayerToScoreTable(playerOnServer);
+            _playerGameUI.RpcAddPlayerToScoreTable(playerOnServer);
         }
 
         public void RemovePlayer(NetworkConnectionToClient conn)

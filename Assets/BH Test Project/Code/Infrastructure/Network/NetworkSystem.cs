@@ -14,9 +14,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private NetworkPlayerSystem _playerSystem;
         private int _playerID;
 
-        public override void Start()
+        public override void OnStartClient()
         {
-            base.Start();
+            base.OnStartClient();
             CreateSystems();
             Subscribe();
         }
@@ -49,9 +49,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerSystem.RemovePlayer(conn);
         }
 
-        public override void OnDestroy()
+        public override void OnStopServer()
         {
-            base.OnDestroy();
+            base.OnStopServer();
             CleanUp();
         }
     }

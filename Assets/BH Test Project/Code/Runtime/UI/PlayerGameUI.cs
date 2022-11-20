@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network;
+using Mirror;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.UI
 {
-    public class PlayerGameUI : MonoBehaviour
+    public class PlayerGameUI : NetworkBehaviour
     {
         [SerializeField] private Transform _layoutParent;
         [SerializeField] private ScoreElement _scoreElementPrefab;
 
         private readonly List<ScoreElement> _scoreElements = new();
 
-        public void AddPlayerToScoreTable(PlayerOnServer playerOnServer)
+        [Server]
+        public void RpcAddPlayerToScoreTable(PlayerOnServer playerOnServer)
         {
             ScoreElement element = Instantiate(_scoreElementPrefab, _layoutParent);
             element.Init(playerOnServer.Name, playerOnServer.NetID);

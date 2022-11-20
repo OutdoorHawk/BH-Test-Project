@@ -15,7 +15,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
-        
 
         public NetworkSpawnSystem(GameObject playerPrefab, List<Transform> spawnPoints)
         {
