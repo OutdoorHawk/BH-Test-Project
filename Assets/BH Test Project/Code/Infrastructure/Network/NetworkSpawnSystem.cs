@@ -11,11 +11,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSpawnSystem
     {
-        public event Action<Player> OnPlayerSpawned;
+        public event Action<Player,NetworkConnectionToClient> OnPlayerSpawned;
 
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
-        private NetworkConnection _connection;
 
         private int _currentPlayerId;
 
@@ -26,9 +25,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
         }
         
-        public void SpawnNewPlayer(NetworkConnectionToClient conn)
+        public void SpawnNewPlayer()
         {
-            _connection = conn;
             SpawnPlayerMessage message = new SpawnPlayerMessage()
             {
                 SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position,
@@ -42,7 +40,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             GameObject go = Object.Instantiate(_playerPrefab, message.SpawnPosition, Quaternion.identity);
             NetworkServer.AddPlayerForConnection(conn, go);
-            OnPlayerSpawned?.Invoke(go.GetComponent<Player>());
+            OnPlayerSpawned?.Invoke(go.GetComponent<Player>(), conn);
         }
     }
 }
