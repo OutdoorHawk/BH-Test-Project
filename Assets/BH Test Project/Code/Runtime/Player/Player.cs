@@ -32,7 +32,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             if (isOwned)
                 Init();
         }
-        
+
         private void Init()
         {
             CreateSystems();
@@ -40,7 +40,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _playerInput.OnEscapePressed += ChangeCursorSettings;
         }
-        
+
         private void CreateSystems()
         {
             Animator animator = GetComponent<Animator>();
@@ -51,11 +51,12 @@ namespace BH_Test_Project.Code.Runtime.Player
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
-            _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId);
             _playerGameStatus = new PlayerGameStatus(_playerData, this, changerComponent);
+            _playerStateMachine =
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId,
+                    _playerGameStatus);
         }
-        
+
         private void InitSystems()
         {
             _playerInput.Init();
@@ -73,7 +74,8 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void RpcHitPlayer()
         {
-            _playerGameStatus.RpcPlayerHit();
+            if (_playerStateMachine.ActiveState is not HitState) 
+                _playerStateMachine.Enter<HitState>();
         }
 
         private void ChangeCursorSettings()

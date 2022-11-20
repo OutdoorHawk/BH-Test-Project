@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Mirror;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 {
     public class PlayerGameStatus
     {
+        public event Action OnHitEnded;
+        
         private readonly PlayerData _playerData;
         private readonly MonoBehaviour _mono;
         private readonly ColorChangerComponent _colorChangerComponent;
@@ -29,6 +32,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             _colorChangerComponent.CmdSetPlayerHitColor();
             yield return new WaitForSeconds(_playerData.HitTime);
             _colorChangerComponent.CmdSetPlayerDefaultColor();
+            OnHitEnded?.Invoke();
         }
     }
 }

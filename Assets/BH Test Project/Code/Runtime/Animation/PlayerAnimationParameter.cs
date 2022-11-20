@@ -4,6 +4,7 @@ namespace BH_Test_Project.Code.Runtime.Animation
     {
         Idle,
         Speed,
-        Dash
+        Dash,
+        Hit
     }
 }

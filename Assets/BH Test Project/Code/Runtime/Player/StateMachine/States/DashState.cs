@@ -8,14 +8,14 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 {
     public class DashState : ITickableState
     {
-        private readonly PlayerStateMachine _stateMachine;
+        private readonly IPlayerStateMachine _stateMachine;
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerAnimator _playerAnimator;
         private readonly PlayerCollisionDetector _playerCollisionDetector;
         private GameObject _currentGameObject;
         private uint _netId;
 
-        public DashState(PlayerStateMachine stateMachine, PlayerMovement playerMovement,
+        public DashState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector, uint netId)
         {
             _playerMovement = playerMovement;
