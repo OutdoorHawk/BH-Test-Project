@@ -31,6 +31,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
             _playerMovement.UpdateInput(currentInput);
+            _playerMovement.Tick();
             _playerAnimator.SetPlayerSpeed(_playerMovement.GetPlayerSpeed());
         }
 

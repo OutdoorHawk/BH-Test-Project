@@ -34,7 +34,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         {
             ReadCurrentInput(movementInput);
             CalculateMovementVector();
-            ApplyMovement();
         }
 
         public void Tick()

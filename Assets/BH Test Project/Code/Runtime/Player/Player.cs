@@ -12,6 +12,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
+    [RequireComponent(typeof(ColorChangerComponent))]
     public class Player : NetworkBehaviour
     {
         [SerializeField] private PlayerData _playerData;
@@ -25,13 +26,13 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
 
-        private void Start()
+        public override void OnStartClient()
         {
-            if (isClient && isLocalPlayer)
+            base.OnStartClient();
+            if (isOwned)
                 Init();
         }
-
-        [Client]
+        
         private void Init()
         {
             CreateSystems();
@@ -39,21 +40,22 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _playerInput.OnEscapePressed += ChangeCursorSettings;
         }
-
+        
         private void CreateSystems()
         {
             Animator animator = GetComponent<Animator>();
             CharacterController characterController = GetComponent<CharacterController>();
+            ColorChangerComponent changerComponent = GetComponent<ColorChangerComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector);
-            _playerGameStatus = new PlayerGameStatus(_playerData, this);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId);
+            _playerGameStatus = new PlayerGameStatus(_playerData, this, changerComponent);
         }
-
+        
         private void InitSystems()
         {
             _playerInput.Init();
@@ -68,30 +70,24 @@ namespace BH_Test_Project.Code.Runtime.Player
                 _playerStateMachine.Tick();
         }
 
-        public void HitPlayer()
+        [TargetRpc]
+        public void RpcHitPlayer()
         {
-            if (isClient && isLocalPlayer)
-                _playerGameStatus.PlayerHit();
+            _playerGameStatus.RpcPlayerHit();
         }
 
         private void ChangeCursorSettings()
         {
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                _playerInput.DisableAllInput();
-            }
-            else
+            if (Cursor.lockState != CursorLockMode.Locked)
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 _playerInput.EnableAllInput();
             }
-        }
-
-        private void OnDestroy()
-        {
-            /*if (isClient && isLocalPlayer)
-                DisposeSystems();*/
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                _playerInput.DisableAllInput();
+            }
         }
 
         public override void OnStopLocalPlayer()
@@ -100,14 +96,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             DisposePlayer();
         }
 
-        public override void OnStopClient()
+        private void DisposePlayer()
         {
-            base.OnStopClient();
-        }
-
-        public void DisposePlayer()
-        {
-            Debug.Log("PlayerDispose" + _playerStateMachine);
             _playerStateMachine.CleanUp();
             _playerInput.OnEscapePressed -= ChangeCursorSettings;
         }

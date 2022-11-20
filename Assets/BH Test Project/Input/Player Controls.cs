@@ -71,6 +71,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Space"",
+                    ""type"": ""Button"",
+                    ""id"": ""73d5c623-2192-4b4c-b510-911167aac123"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -183,6 +192,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6dd830b9-e1f0-4811-bf35-bded98daa55f"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -196,6 +216,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
+        m_Player_Space = m_Player.FindAction("Space", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -260,6 +281,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_Menu;
+    private readonly InputAction m_Player_Space;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -269,6 +291,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @Menu => m_Wrapper.m_Player_Menu;
+        public InputAction @Space => m_Wrapper.m_Player_Space;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -293,6 +316,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Menu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
                 @Menu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
                 @Menu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Space.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpace;
+                @Space.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpace;
+                @Space.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpace;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -312,6 +338,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Menu.started += instance.OnMenu;
                 @Menu.performed += instance.OnMenu;
                 @Menu.canceled += instance.OnMenu;
+                @Space.started += instance.OnSpace;
+                @Space.performed += instance.OnSpace;
+                @Space.canceled += instance.OnSpace;
             }
         }
     }
@@ -323,5 +352,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnMenu(InputAction.CallbackContext context);
+        void OnSpace(InputAction.CallbackContext context);
     }
 }

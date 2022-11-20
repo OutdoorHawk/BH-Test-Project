@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Mirror;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player
@@ -7,27 +8,27 @@ namespace BH_Test_Project.Code.Runtime.Player
     {
         private readonly PlayerData _playerData;
         private readonly MonoBehaviour _mono;
-        private readonly ColorChanger _colorChanger;
+        private readonly ColorChangerComponent _colorChangerComponent;
 
-        public PlayerGameStatus(PlayerData playerData, MonoBehaviour mono)
+        public PlayerGameStatus(PlayerData playerData, MonoBehaviour mono, ColorChangerComponent changerComponent)
         {
             _playerData = playerData;
             _mono = mono;
-            _colorChanger = new ColorChanger(mono, playerData.PlayerHitColor);
+            _colorChangerComponent = changerComponent;
         }
-
-        public void PlayerHit()
+        
+        [TargetRpc]
+        public void RpcPlayerHit()
         {
-            _mono.StartCoroutine(PlayerHitRoutine());
+            _mono.StartCoroutine(RpcPlayerHitRoutine());
         }
-
-        private IEnumerator PlayerHitRoutine()
+        
+        [TargetRpc]
+        private IEnumerator RpcPlayerHitRoutine()
         {
-            Debug.Log("Color change");
-            _colorChanger.SetPlayerHitColor();
+            _colorChangerComponent.CmdSetPlayerHitColor();
             yield return new WaitForSeconds(_playerData.HitTime);
-            _colorChanger.SetPlayerDefaultColor();
-            Debug.Log("Color back");
+            _colorChangerComponent.CmdSetPlayerDefaultColor();
         }
     }
 }
