@@ -44,7 +44,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             PlayerOnServer playerOnServer = new PlayerOnServer(player, conn);
             _players.Add(playerOnServer);
-            _playerGameUI.RpcAddPlayerToScoreTable(playerOnServer.Name, playerOnServer.NetID);
+            _playerGameUI.RpcAddPlayerToScoreTable(playerOnServer.Name, playerOnServer.Player.netIdentity);
         }
 
         public void RemovePlayer(NetworkConnectionToClient conn)
