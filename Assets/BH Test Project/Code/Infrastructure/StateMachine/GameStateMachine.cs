@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.DI;
+using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
@@ -8,12 +10,14 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
     {
         private readonly Dictionary<Type, IExitableState> _states;
 
-        public GameStateMachine()
+        public GameStateMachine(DIContainer diContainer)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(),
-                [typeof(GameLoopState)] = new GameLoopState()
+                [typeof(BootstrapState)] = new BootstrapState(this, diContainer),
+                [typeof(LoadOfflineMenuState)] = new LoadOfflineMenuState(this, diContainer.Resolve<IUIFactory>(), diContainer.Resolve<IStaticDataService>()),
+                [typeof(LoadRoomState)] = new LoadRoomState(this, diContainer),
+                [typeof(GameLoopState)] = new GameLoopState(this)
             };
         }
 

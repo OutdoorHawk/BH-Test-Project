@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class NetworkSystem : NetworkManager
+    public class GameLoopNetworkManager : NetworkManager
     {
         [SerializeField] private List<Transform> _spawnPoints;
         [SerializeField] private PlayerGameUI _playerUI;
