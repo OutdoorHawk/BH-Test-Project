@@ -1,22 +1,39 @@
-using BH_Test_Project.Code.Infrastructure.Data;
+using System;
+using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 {
     public class MainMenuNetworkSystem : NetworkManager
     {
-        public override void OnStartServer()
-        {
-            base.OnStartServer();
-            SceneManager.LoadScene((int)LevelID.Lobby);
-        }
+        public event Action OnServerStarted;
+        public event Action OnClientConnected;
+        
+        [SerializeField] private LobbyMenuWindow _lobbyMenu;
 
         public override void OnClientConnect()
         {
             base.OnClientConnect();
-            SceneManager.LoadScene((int)LevelID.Lobby);
+            OnClientConnected?.Invoke();
+            Debug.Log("OnClientConnect");
+        }
+
+        private void OnConnectedToServer()
+        {
+            Debug.Log("OnConnectedToServer");
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            Debug.Log("OnStartClient");
+        }
+
+        public override void OnStartServer()
+        {
+            base.OnStartServer();
+            OnServerStarted?.Invoke();
         }
 
         public void StartGameAsHost()
