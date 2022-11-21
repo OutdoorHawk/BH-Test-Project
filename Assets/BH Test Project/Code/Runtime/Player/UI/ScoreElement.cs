@@ -28,5 +28,6 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         {
             return _msgNetId;
         }
+        
     }
 }

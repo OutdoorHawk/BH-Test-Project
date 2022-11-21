@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
@@ -8,31 +10,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkPlayerSystem : NetworkBehaviour
     {
-        private readonly SyncList<PlayerOnServer> _players = new();
+        private List<PlayerOnServer> _players = new();
         private PlayerGameUI _playerGameUI;
-
-        private void Awake()
-        {
-            _players.Callback += OnPlayersListChanged;
-        }
 
         public void Init(PlayerGameUI playerGameUI)
         {
             _playerGameUI = playerGameUI;
-        }
-
-        private void OnPlayersListChanged(SyncList<PlayerOnServer>.Operation op, int itemIndex,
-            PlayerOnServer oldItem, PlayerOnServer newItem)
-        {
-            switch (op)
-            {
-                case SyncList<PlayerOnServer>.Operation.OP_REMOVEAT:
-                    break;
-                case SyncList<PlayerOnServer>.Operation.OP_SET:
-                    Debug.Log("set");
-                   // _playerGameUI.UpdatePlayerScore(newItem.Score, newItem.NetID);
-                    break;
-            }
         }
 
         public void RegisterHandlers()
@@ -44,11 +27,33 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void OnPlayerHit(NetworkConnection connection, PlayerHitMessage message)
         {
             HitPlayer(message.HurtPlayerNetId);
-            for (var i = 0; i < _players.Count; i++)
+            IncreasePlayerScore(message.SuccessPlayerNetId);
+            //IncreasePlayerScore(message);
+        }
+
+        [Server]
+        private void HitPlayer(uint hurtPlayerNetId)
+        {
+            foreach (var conn in NetworkServer.connections.Values)
             {
-                var pl = _players[i];
-                if (pl.NetID == message.SuccessPlayerNetId)
-                    pl.Score++;
+                if (conn.identity.netId == hurtPlayerNetId)
+                {
+                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                    playerBehavior.RpcHitPlayer();
+                }
+            }
+        }
+
+        [Server]
+        private void IncreasePlayerScore(uint successPlayerNetId)
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.netId == successPlayerNetId)
+                {
+                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                    playerBehavior.RpcIncreasePlayerScore(successPlayerNetId);
+                }
             }
         }
         
@@ -57,26 +62,15 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerGameUI.AddPlayerToScoreTable(MSG);
         }
 
-        [Server]
-        private void HitPlayer(uint targetID)
+        public void AddNewPlayer(uint netID)
         {
-            foreach (var conn in NetworkServer.connections.Values)
-            {
-                if (conn.identity.netId == targetID)
-                {
-                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.RpcHitPlayer();
-                }
-            }
-        }
+            PlayerOnServer newPlayer = new PlayerOnServer(netID);
+            _players.Add(newPlayer);
 
-        public void AddNewPlayer(NetworkConnectionToClient conn)
-        {
-            _players.Add(new PlayerOnServer(conn.identity.netId));
             PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
             {
-                NetId = conn.identity.netId,
-                PlayerName = $"PLAYER{conn.identity.netId}",
+                NetId = netID,
+                PlayerName = $"{PlayerPrefs.GetString(Constants.PLAYER_NAME)}{netID}",
                 Id = _players.Count
             };
             NetworkServer.SendToAll(playerConnectedMessage);

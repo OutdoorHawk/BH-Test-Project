@@ -5,8 +5,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network.Data
 {
     public struct PlayerOnServer
     {
-        public readonly uint NetID;
-        public readonly string Name;
+        public uint NetID;
+        public string Name;
         public int Score;
 
         public PlayerOnServer(uint netID)

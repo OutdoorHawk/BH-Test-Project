@@ -4,6 +4,7 @@ using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
+using BH_Test_Project.Code.Runtime.Player.UI;
 using Mirror;
 using UnityEngine;
 
@@ -25,19 +26,25 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
+        private PlayerGameUI _playerGameUI;
 
         private void Start()
         {
             if (isOwned)
                 Init();
         }
-        
+
         private void Init()
         {
             CreateSystems();
             InitSystems();
             _playerInput.EnableAllInput();
             _playerInput.OnEscapePressed += ChangeCursorSettings;
+        }
+
+        public void InitUI(PlayerGameUI playerGameUI)
+        {
+            _playerGameUI = playerGameUI;
         }
 
         private void CreateSystems()
@@ -52,8 +59,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId,
-                    _playerGameStatus);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
+                    netId, _playerGameStatus);
         }
 
         private void InitSystems()
@@ -75,6 +82,13 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (_playerStateMachine.ActiveState is not HitState)
                 _playerStateMachine.Enter<HitState>();
+        }
+
+        [ClientRpc]
+        public void RpcIncreasePlayerScore(uint successPlayerNetId)
+        {
+            Debug.Log(successPlayerNetId);
+            _playerGameUI.UpdatePlayerScore(successPlayerNetId);
         }
 
         private void ChangeCursorSettings()
