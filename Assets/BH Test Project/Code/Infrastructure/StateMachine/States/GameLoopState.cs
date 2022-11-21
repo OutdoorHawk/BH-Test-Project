@@ -1,4 +1,5 @@
 using BH_Test_Project.Code.Infrastructure.Services;
+using Mirror;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -7,6 +8,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IStaticDataService _staticDataService;
         private readonly ISceneContextService _sceneContextService;
+
 
         public GameLoopState(IGameStateMachine gameStateMachine, IStaticDataService staticDataService,
             ISceneContextService sceneContextService)
@@ -18,7 +20,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            //NetworkManager.singleton.st
+            _sceneContextService.InitSceneContext();
         }
 
         public void Exit()

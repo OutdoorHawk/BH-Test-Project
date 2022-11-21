@@ -11,12 +11,21 @@ namespace BH_Test_Project.Code.Infrastructure.Services
 
         public void InitSceneContext()
         {
-            _sceneContext = Object.FindObjectOfType<SceneContext>();
+            _sceneContext = Object.FindObjectOfType<SceneContext>(true);
             CollectSceneSpawnPoints();
         }
 
-        private void CollectSceneSpawnPoints() => _spawnPoints = _sceneContext.SpawnPointsParent.GetComponentsInChildren<Transform>().ToList();
+        private void CollectSceneSpawnPoints()
+        {
+            _spawnPoints = new List<Transform>();
+            for (int i = 0; i < _sceneContext.SpawnPointsParent.childCount; i++)
+            {
+                Transform spawn = _sceneContext.SpawnPointsParent.GetChild(i);
+                _spawnPoints.Add(spawn);
+            }
+        }
 
-        public List<Transform> GetSceneSpawnPoints() => _spawnPoints;
+        public List<Transform> GetSceneSpawnPoints() 
+            => _spawnPoints;
     }
 }

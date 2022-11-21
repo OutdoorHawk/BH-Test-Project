@@ -37,13 +37,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void HostGameClicked()
         {
-            _gameManager.StartGameAsHost();
+            _gameManager.CreateLobbyAsHost();
             SavePlayerName();
         }
 
         private void JoinGameClicked(string networkAddress)
         {
-            _gameManager.StartGameAsClient(networkAddress);
+            _gameManager.CreateLobbyAsClient(networkAddress);
             SavePlayerName();
         }
 

@@ -12,10 +12,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private readonly List<PlayerOnServer> _players;
         private readonly PlayerGameUI _playerGameUI;
 
-        public NetworkPlayerSystem(PlayerGameUI playerGameUI)
+        public NetworkPlayerSystem()
         {
-            _playerGameUI = playerGameUI;
-            _playerGameUI.Init();
+           // _playerGameUI = playerGameUI;
+           // _playerGameUI.Init();
             _players = new List<PlayerOnServer>();
         }
 
@@ -38,8 +38,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     _players[i].Player.RpcHitPlayer();
             }
         }
-
-        [Server]
+        
         public void AddNewPlayer(Player player, NetworkConnectionToClient conn)
         {
             PlayerOnServer playerOnServer = new PlayerOnServer(player, conn);
