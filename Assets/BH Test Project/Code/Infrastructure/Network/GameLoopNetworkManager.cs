@@ -1,20 +1,22 @@
 using System.Collections.Generic;
+using BH_Test_Project.Code.Runtime.UI;
 using Mirror;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class NetworkSystem : NetworkManager
+    public class GameLoopNetworkManager : NetworkManager
     {
         [SerializeField] private List<Transform> _spawnPoints;
+        [SerializeField] private PlayerGameUI _playerUI;
 
         private NetworkSpawnSystem _spawnSystem;
         private NetworkPlayerSystem _playerSystem;
         private int _playerID;
 
-        public override void Start()
+        public override void OnStartClient()
         {
-            base.Start();
+            base.OnStartClient();
             CreateSystems();
             Subscribe();
         }
@@ -32,7 +34,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void CreateSystems()
         {
             _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
-            _playerSystem = new NetworkPlayerSystem();
+            _playerSystem = new NetworkPlayerSystem(_playerUI);
+            _spawnSystem.RegisterHandlers();
+            _playerSystem.RegisterHandlers();
         }
 
         public override void OnClientConnect()
@@ -47,9 +51,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerSystem.RemovePlayer(conn);
         }
 
-        public override void OnDestroy()
+        public override void OnStopServer()
         {
-            base.OnDestroy();
+            base.OnStopServer();
             CleanUp();
         }
     }

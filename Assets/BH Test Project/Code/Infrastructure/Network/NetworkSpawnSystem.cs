@@ -11,28 +11,28 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSpawnSystem
     {
-        public event Action<Player,NetworkConnectionToClient> OnPlayerSpawned;
+        public event Action<Player, NetworkConnectionToClient> OnPlayerSpawned;
 
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
-
-        private int _currentPlayerId;
 
         public NetworkSpawnSystem(GameObject playerPrefab, List<Transform> spawnPoints)
         {
             _playerPrefab = playerPrefab;
             _spawnPoints = spawnPoints;
-            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
         }
-        
+
+        [ServerCallback]
+        public void RegisterHandlers() =>
+            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
+
         public void SpawnNewPlayer()
         {
             SpawnPlayerMessage message = new SpawnPlayerMessage()
             {
                 SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position,
-                Id = ++_currentPlayerId
             };
-            
+
             NetworkClient.Send(message);
         }
 

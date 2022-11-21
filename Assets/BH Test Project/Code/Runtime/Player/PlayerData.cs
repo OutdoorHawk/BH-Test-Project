@@ -12,6 +12,5 @@ namespace BH_Test_Project.Code.Runtime.Player
         public float DashTime;
         public float HitTime;
         public LayerMask PlayerCollisionMask;
-        public Color32 PlayerHitColor;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player
 {
-    public class ColorChangerComponent : NetworkBehaviour
+    public class ColorChangeComponent : NetworkBehaviour
     {
         private readonly SyncList<Color32> _currentColors = new();
         private readonly List<Material> _cachedMaterials = new();

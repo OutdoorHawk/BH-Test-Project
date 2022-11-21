@@ -5,19 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/HitState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/HitState.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/IStaticDataService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/IStaticDataService.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/IUIFactory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/IUIFactory.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticDataService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticDataService.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/LoadOfflineMenuState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/LoadOfflineMenuState.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/LoadRoomState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/LoadRoomState.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StaticData/WindowConfig.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StaticData/WindowConfig.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/AnimationControlComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/AnimationControlComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimationParameter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimationParameter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/IPlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/IPlayerStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/DashState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/DashState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/DownloadedAssets/3D/Characters/LowPoly/Demo_FREE_LowPolyCharacter/LowPolyHumanAnimator.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DownloadedAssets/3D/Characters/LowPoly/Demo_FREE_LowPolyCharacter/LowPolyHumanAnimator.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/LevelID.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/LevelID.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/Enums.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/GameLoopNetworkManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkSystem.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/GameLoopNetworkManager.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IGameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IGameStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/GameLoopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/GameLoopState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BH Test Project.sln.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/BH Test Project.sln.DotSettings" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,16 +44,24 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c9d3ffd4b98649ee9989e1908eaca01946a800/cd/878ebb97/Stack`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e7f2b8407dc441f28814515d15959b551a000/2d/a59e6cbb/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f391b866413f4e668a73b3209d3d8b8626e00/ff/b7f45bd2/Animator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/DI/DIContainer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/DI/IService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/Constants.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/Enums.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/GameBootstrapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/Data/SpawnPlayerMessage.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkSystem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/GameLoopNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/UIFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/IState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/AnimationControlComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimationParameter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/MainMenu/Network/MainMenuNetworkSystem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/ITickableState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/UI/WindowBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionReference.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/InputManager.cs" root0="SKIP_HIGHLIGHTING" />
@@ -55,6 +73,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2HiWkF4SWB2xXUbU2p0UDks68tJ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -100,10 +121,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="13996">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="18708">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="13996" />
+      <option name="pid" value="18708" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -121,7 +142,7 @@
       <updated>1668768525658</updated>
       <workItem from="1668768540755" duration="18095000" />
       <workItem from="1668870507619" duration="24028000" />
-      <workItem from="1668931135024" duration="24540000" />
+      <workItem from="1668931135024" duration="29804000" />
     </task>
     <servers />
   </component>
