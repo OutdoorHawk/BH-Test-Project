@@ -1,45 +1,44 @@
-using System;
 using System.Collections.Generic;
-using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSpawnSystem
     {
-        public event Action<PlayerBehavior, NetworkConnectionToClient> OnPlayerSpawned;
-
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
 
-        public NetworkSpawnSystem(List<Transform> spawnPoints)
+        public NetworkSpawnSystem(List<Transform> spawnPoints, GameObject playerPrefab)
         {
             _spawnPoints = spawnPoints;
+            _playerPrefab = playerPrefab;
         }
 
-        [ServerCallback]
-        public void RegisterHandlers() =>
-            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
-
-        public void SpawnNewPlayer()
+        public PlayerBehavior SpawnNewPlayer()
         {
-            SpawnPlayerMessage message = new SpawnPlayerMessage()
+            GameObject player = Object.Instantiate(_playerPrefab, GetAvailableSpawnPoint(), Quaternion.identity);
+            GetAvailableSpawnPoint();
+            return player.GetComponent<PlayerBehavior>();
+        }
+
+
+        private Vector3 GetAvailableSpawnPoint()
+        {
+            List<Transform> availableSpawnPoints = new List<Transform>();
+            availableSpawnPoints.AddRange(_spawnPoints);
+            for (int i = 0; i < _spawnPoints.Count; i++)
             {
-                SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position,
-            };
+                for (int j = 0; j < NetworkServer.connections.Values.Count; j++)
+                {
+                    Vector3 playerPosition = NetworkServer.connections[j].identity.transform.position;
+                    if (playerPosition == _spawnPoints[i].position)
+                        availableSpawnPoints.Remove(_spawnPoints[i]);
+                }
+            }
 
-            NetworkClient.Send(message);
-        }
-
-        private void OnCreateCharacter(NetworkConnectionToClient conn, SpawnPlayerMessage message)
-        {
-            GameObject go = Object.Instantiate(_playerPrefab, message.SpawnPosition, Quaternion.identity);
-            NetworkServer.AddPlayerForConnection(conn, go);
-            OnPlayerSpawned?.Invoke(go.GetComponent<PlayerBehavior>(), conn);
+            return availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count - 1)].position;
         }
     }
 }

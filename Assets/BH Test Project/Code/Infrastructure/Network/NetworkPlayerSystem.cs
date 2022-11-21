@@ -39,13 +39,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 }
             }
         }
-
-        [ClientRpc]
+        
         public void AddNewPlayer(PlayerBehavior playerBehavior, NetworkConnectionToClient conn)
         {
             PlayerOnServer playerOnServer = new PlayerOnServer(playerBehavior, conn);
             _players.Add(playerOnServer);
-            Debug.Log(_players.Count);
             //_playerGameUI.RpcAddPlayerToScoreTable(playerOnServer.Name, playerOnServer.playerBehavior.netIdentity);
         }
 

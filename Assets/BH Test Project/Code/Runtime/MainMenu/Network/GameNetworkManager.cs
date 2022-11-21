@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
@@ -6,6 +7,7 @@ using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 {
@@ -20,6 +22,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             _sceneContextService = sceneContextService;
             _gameStateMachine = gameStateMachine;
+            SceneManager.sceneLoaded += HandleGameLevelLoaded;
         }
 
         public void CreateLobbyAsHost()
@@ -35,28 +38,34 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
                 StartClient();
         }
 
-        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
-            GameObject roomPlayer)
+        private void HandleGameLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            PlayerBehavior playerBehavior = Instantiate(playerPrefab).GetComponent<PlayerBehavior>();
-            _playerSystem = new NetworkPlayerSystem();
-            _playerSystem.AddNewPlayer(playerBehavior, conn);
-            return playerBehavior.gameObject;
-        }
-
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn,
-            GameObject roomPlayer, GameObject gamePlayer)
-        {
+            if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
+                return;
             _gameStateMachine.Enter<GameLoopState>(); // todo Rework with actions
             InitGameLevel();
-            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
         }
 
         private void InitGameLevel()
         {
             List<Transform> spawnPoints = _sceneContextService.GetSceneSpawnPoints();
-            _spawnSystem = new NetworkSpawnSystem(spawnPoints);
+            _spawnSystem = new NetworkSpawnSystem(spawnPoints, playerPrefab);
+            _playerSystem = new NetworkPlayerSystem();
             _playerSystem.RegisterHandlers();
+        }
+
+        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
+            GameObject roomPlayer)
+        {
+            PlayerBehavior playerBehavior = _spawnSystem.SpawnNewPlayer();
+            _playerSystem.AddNewPlayer(playerBehavior, conn);
+            return playerBehavior.gameObject;
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            SceneManager.sceneLoaded -= HandleGameLevelLoaded;
         }
     }
 }
