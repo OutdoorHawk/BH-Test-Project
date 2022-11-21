@@ -11,10 +11,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private readonly SyncList<PlayerOnServer> _players = new();
         private PlayerGameUI _playerGameUI;
 
+        private void Awake()
+        {
+            _players.Callback += OnPlayersListChanged;
+        }
+
         public void Init(PlayerGameUI playerGameUI)
         {
             _playerGameUI = playerGameUI;
-            _players.Callback += OnPlayersListChanged;
         }
 
         private void OnPlayersListChanged(SyncList<PlayerOnServer>.Operation op, int itemIndex,
@@ -22,17 +26,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             switch (op)
             {
-                case SyncList<PlayerOnServer>.Operation.OP_ADD:
-                    //_playerGameUI.AddPlayerToScoreTable(newItem, itemIndex);
-                   // _playerGameUI.UpdateScoreTable();
-                    break;
-                case SyncList<PlayerOnServer>.Operation.OP_CLEAR:
-                    break;
-                case SyncList<PlayerOnServer>.Operation.OP_INSERT:
-                    break;
                 case SyncList<PlayerOnServer>.Operation.OP_REMOVEAT:
                     break;
                 case SyncList<PlayerOnServer>.Operation.OP_SET:
+                    Debug.Log("set");
+                   // _playerGameUI.UpdatePlayerScore(newItem.Score, newItem.NetID);
                     break;
             }
         }
@@ -46,12 +44,17 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void OnPlayerHit(NetworkConnection connection, PlayerHitMessage message)
         {
             HitPlayer(message.HurtPlayerNetId);
+            for (var i = 0; i < _players.Count; i++)
+            {
+                var pl = _players[i];
+                if (pl.NetID == message.SuccessPlayerNetId)
+                    pl.Score++;
+            }
         }
-
+        
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
-           // _playerGameUI.UpdateScoreTable();
         }
 
         [Server]
