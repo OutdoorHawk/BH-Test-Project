@@ -26,6 +26,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         public void Enter()
         {
+            _playerInput.EnableAllInput();
             _playerAnimator.PlayHitAnimation();
             _playerGameStatus.RpcPlayerHit();
             _playerGameStatus.OnHitEnded += EndHitState;
@@ -34,8 +35,10 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         public void Tick()
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
+            float currentSpeed = _playerMovement.GetPlayerSpeed();
             _playerMovement.UpdateInput(currentInput);
             _playerMovement.Tick();
+            _playerAnimator.SetPlayerSpeed(currentSpeed);
         }
 
         private void EndHitState()

@@ -20,13 +20,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             _sceneContextService = sceneContextService;
             _gameStateMachine = gameStateMachine;
-            CreateSystems();
-        }
-
-        private void CreateSystems()
-        {
-            _playerSystem = new NetworkPlayerSystem();
-            _playerSystem.RegisterHandlers();
         }
 
         public void CreateLobbyAsHost()
@@ -46,6 +39,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             GameObject roomPlayer)
         {
             PlayerBehavior playerBehavior = Instantiate(playerPrefab).GetComponent<PlayerBehavior>();
+            _playerSystem = new NetworkPlayerSystem();
             _playerSystem.AddNewPlayer(playerBehavior, conn);
             return playerBehavior.gameObject;
         }
@@ -62,6 +56,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             List<Transform> spawnPoints = _sceneContextService.GetSceneSpawnPoints();
             _spawnSystem = new NetworkSpawnSystem(spawnPoints);
+            _playerSystem.RegisterHandlers();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         private readonly PlayerAnimator _playerAnimator;
         private readonly PlayerCollisionDetector _playerCollisionDetector;
         private GameObject _currentGameObject;
-        private uint _netId;
+        private readonly uint _netId;
 
         public DashState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector, uint netId)
@@ -46,7 +46,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
                 CmdPlayerHit(player);
             }
         }
-        
+
         [Command]
         private void CmdPlayerHit(PlayerBehavior playerBehavior)
         {
@@ -55,7 +55,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
                 HurtPlayerNetId = playerBehavior.netId,
                 SuccessPlayerNetId = _netId
             };
-   
+          
             NetworkClient.Send(message);
         }
 

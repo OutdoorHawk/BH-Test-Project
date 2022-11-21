@@ -1,7 +1,7 @@
 ﻿using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 
-namespace BH_Test_Project.Code.Infrastructure.Network
+namespace BH_Test_Project.Code.Infrastructure.Network.Data
 {
     public class PlayerOnServer
     {

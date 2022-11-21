@@ -31,13 +31,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             if (isOwned)
                 Init();
         }
-
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-          
-        }
-
+        
         private void Init()
         {
             CreateSystems();

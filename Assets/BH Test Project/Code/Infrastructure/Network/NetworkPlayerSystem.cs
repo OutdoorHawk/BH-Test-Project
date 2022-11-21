@@ -14,15 +14,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public NetworkPlayerSystem()
         {
-           // _playerGameUI = playerGameUI;
-           // _playerGameUI.Init();
+            // _playerGameUI = playerGameUI;
+            // _playerGameUI.Init();
             _players = new List<PlayerOnServer>();
         }
-        
-        public void RegisterHandlers() => 
+
+        public void RegisterHandlers() =>
             NetworkServer.RegisterHandler<PlayerHitMessage>(OnPlayerHit);
 
-        [Server]
         private void OnPlayerHit(NetworkConnection connection, PlayerHitMessage message)
         {
             HitPlayer(message.HurtPlayerNetId);
@@ -31,18 +30,22 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Server]
         private void HitPlayer(uint targetID)
         {
-            Debug.Log(_players.Count);
-            for (int i = 0; i < _players.Count; i++)
+            foreach (var conn in NetworkServer.connections.Values)
             {
-                if (_players[i].NetID == targetID)
-                    _players[i].playerBehavior.RpcHitPlayer();
+                if (conn.identity.netId == targetID)
+                {
+                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                    playerBehavior.RpcHitPlayer();
+                }
             }
         }
-        
+
+        [ClientRpc]
         public void AddNewPlayer(PlayerBehavior playerBehavior, NetworkConnectionToClient conn)
         {
             PlayerOnServer playerOnServer = new PlayerOnServer(playerBehavior, conn);
             _players.Add(playerOnServer);
+            Debug.Log(_players.Count);
             //_playerGameUI.RpcAddPlayerToScoreTable(playerOnServer.Name, playerOnServer.playerBehavior.netIdentity);
         }
 

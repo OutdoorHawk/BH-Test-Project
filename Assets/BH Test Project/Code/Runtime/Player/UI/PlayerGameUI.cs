@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
 using Mirror;
 using UnityEngine;
 
