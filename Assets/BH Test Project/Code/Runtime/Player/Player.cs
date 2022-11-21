@@ -25,10 +25,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-
-        public override void OnStartClient()
+        
+        private void Start()
         {
-            base.OnStartClient();
             if (isOwned)
                 Init();
         }
@@ -74,7 +73,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void RpcHitPlayer()
         {
-            if (_playerStateMachine.ActiveState is not HitState) 
+            if (_playerStateMachine.ActiveState is not HitState)
                 _playerStateMachine.Enter<HitState>();
         }
 

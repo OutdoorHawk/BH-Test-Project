@@ -10,6 +10,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services
     {
         void Load();
         WindowConfig GetWindow(WindowID id);
-        LobbyNetworkManager GetLobbyNetworkManager();
+        GameNetworkManager GetLobbyNetworkManager();
     }
 }

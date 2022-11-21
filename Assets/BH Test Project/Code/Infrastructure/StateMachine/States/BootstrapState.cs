@@ -19,6 +19,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             BindStaticDataService();
             _diContainer.BindSingle(_gameStateMachine);
+            _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
         }
 

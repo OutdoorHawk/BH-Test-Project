@@ -18,7 +18,8 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
                 [typeof(LoadMainMenuState)] = new LoadMainMenuState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IStaticDataService>()),
                 [typeof(LoadRoomState)] = new LoadRoomState(this, diContainer),
-                [typeof(GameLoopState)] = new GameLoopState(this)
+                [typeof(GameLoopState)] = new GameLoopState(this, diContainer.Resolve<IStaticDataService>(),
+                    diContainer.Resolve<ISceneContextService>())
             };
         }
 
