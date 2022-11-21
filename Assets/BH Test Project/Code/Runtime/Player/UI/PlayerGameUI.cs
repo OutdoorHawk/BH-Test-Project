@@ -20,21 +20,20 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
    
         public void AddPlayerToScoreTable(PlayerConnectedMessage msg)
         {
-            Debug.Log(_scoreElements.Count);
             _scoreElements[msg.Id].SetName(msg.PlayerName);
             _scoreElements[msg.Id].SetScore(0);
-           // _scoreElements[msg.Id].SetNetId(msg.NetId);
+           _scoreElements[msg.Id].SetNetId((int)msg.NetId);
             _scoreElements[msg.Id].gameObject.SetActive(true);
         }
         
-        /*public void UpdatePlayerScore(int newScore, uint netID)
+        public void UpdatePlayerScore(int newScore, uint netID)
         {
             for (var i = 0; i < _scoreElements.Count; i++)
             {
                 var element = _scoreElements[i];
-                if (element.NetId == netID) 
+                if (element.GetNetId() == netID) 
                     element.SetScore(newScore);
             }
-        }*/
+        }
     }
 }

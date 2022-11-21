@@ -7,6 +7,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
     {
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _scoreText;
+        private int _msgNetId;
 
         public void SetName(string playerName)
         {
@@ -17,6 +18,15 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         {
             _scoreText.text = score.ToString();
         }
-        
+
+        public void SetNetId(int msgNetId)
+        {
+            _msgNetId = msgNetId;
+        }
+
+        public int GetNetId()
+        {
+            return _msgNetId;
+        }
     }
 }
