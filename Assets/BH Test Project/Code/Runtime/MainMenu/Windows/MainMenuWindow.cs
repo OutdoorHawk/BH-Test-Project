@@ -43,7 +43,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void JoinGameClicked(string networkAddress)
         {
-            _gameManager.CreateLobbyAsClient(networkAddress);
+            _gameManager.JoinLobbyAsClient(networkAddress);
             SavePlayerName();
         }
 

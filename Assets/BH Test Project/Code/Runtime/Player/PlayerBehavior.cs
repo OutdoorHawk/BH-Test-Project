@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
-    public class Player : NetworkBehaviour
+    public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private CameraFollow _cameraFollowPrefab;
@@ -25,11 +25,17 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-        
+
         private void Start()
         {
             if (isOwned)
                 Init();
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+          
         }
 
         private void Init()

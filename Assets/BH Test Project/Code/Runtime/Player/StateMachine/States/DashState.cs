@@ -40,7 +40,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         private void HitPlayer(ControllerColliderHit hit)
         {
-            if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out Player player))
+            if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out PlayerBehavior player))
             {
                 _currentGameObject = hit.gameObject;
                 CmdPlayerHit(player);
@@ -48,11 +48,11 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         }
         
         [Command]
-        private void CmdPlayerHit(Player player)
+        private void CmdPlayerHit(PlayerBehavior playerBehavior)
         {
             PlayerHitMessage message = new PlayerHitMessage()
             {
-                HurtPlayerNetId = player.netId,
+                HurtPlayerNetId = playerBehavior.netId,
                 SuccessPlayerNetId = _netId
             };
    

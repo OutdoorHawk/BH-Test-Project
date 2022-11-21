@@ -5,16 +5,16 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class PlayerOnServer
     {
-        public readonly Player Player;
+        public readonly PlayerBehavior playerBehavior;
         public readonly uint NetID;
         public readonly string Name;
         public readonly NetworkConnectionToClient Connection;
 
-        public PlayerOnServer(Player player, NetworkConnectionToClient connection)
+        public PlayerOnServer(PlayerBehavior playerBehavior, NetworkConnectionToClient connection)
         {
-            Player = player;
+            this.playerBehavior = playerBehavior;
             Connection = connection;
-            NetID = player.netId;
+            NetID = playerBehavior.netId;
             Name = $"Player{NetID}";
             Score = 0;
         }

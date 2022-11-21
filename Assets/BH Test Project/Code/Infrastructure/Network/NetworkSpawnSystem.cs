@@ -11,14 +11,13 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSpawnSystem
     {
-        public event Action<Player, NetworkConnectionToClient> OnPlayerSpawned;
+        public event Action<PlayerBehavior, NetworkConnectionToClient> OnPlayerSpawned;
 
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
 
-        public NetworkSpawnSystem(GameObject playerPrefab, List<Transform> spawnPoints)
+        public NetworkSpawnSystem(List<Transform> spawnPoints)
         {
-            _playerPrefab = playerPrefab;
             _spawnPoints = spawnPoints;
         }
 
@@ -40,7 +39,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             GameObject go = Object.Instantiate(_playerPrefab, message.SpawnPosition, Quaternion.identity);
             NetworkServer.AddPlayerForConnection(conn, go);
-            OnPlayerSpawned?.Invoke(go.GetComponent<Player>(), conn);
+            OnPlayerSpawned?.Invoke(go.GetComponent<PlayerBehavior>(), conn);
         }
     }
 }

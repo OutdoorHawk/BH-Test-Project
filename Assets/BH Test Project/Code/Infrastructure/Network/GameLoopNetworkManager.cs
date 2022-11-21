@@ -33,7 +33,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private void CreateSystems()
         {
-            _spawnSystem = new NetworkSpawnSystem(playerPrefab, _spawnPoints);
             _playerSystem = new NetworkPlayerSystem();
             _spawnSystem.RegisterHandlers();
             _playerSystem.RegisterHandlers();
