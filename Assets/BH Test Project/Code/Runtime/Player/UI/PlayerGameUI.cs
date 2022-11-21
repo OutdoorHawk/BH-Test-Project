@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
@@ -12,26 +13,17 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         [SerializeField] private Transform _layoutParent;
 
         private List<ScoreElement> _scoreElements = new();
-        
 
-        public void Awake()
+        private void Awake()
         {
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
         }
 
-        public void AddPlayerToScoreTable(PlayerOnServer newItem, int itemIndex)
+        public void AddPlayerToScoreTable(PlayerConnectedMessage msg)
         {
-            _scoreElements[itemIndex].SetName(newItem.Name);
-            _scoreElements[itemIndex].SetScore(newItem.Score);
-            _scoreElements[itemIndex].gameObject.SetActive(true);
+            _scoreElements[msg.Id].SetName(msg.PlayerName);
+            _scoreElements[msg.Id].SetScore(0);
+            _scoreElements[msg.Id].gameObject.SetActive(true);
         }
-
-        [ClientRpc]
-        public void RpcAddPlayerToScoreTable(string playerName, NetworkIdentity identity)
-        {
-           
-        }
-
-      
     }
 }

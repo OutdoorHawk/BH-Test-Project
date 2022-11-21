@@ -23,7 +23,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             switch (op)
             {
                 case SyncList<PlayerOnServer>.Operation.OP_ADD:
-                    _playerGameUI.AddPlayerToScoreTable(newItem, itemIndex);
+                    //_playerGameUI.AddPlayerToScoreTable(newItem, itemIndex);
+                   // _playerGameUI.UpdateScoreTable();
                     break;
                 case SyncList<PlayerOnServer>.Operation.OP_CLEAR:
                     break;
@@ -36,12 +37,21 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
-        public void RegisterHandlers() =>
+        public void RegisterHandlers()
+        {
             NetworkServer.RegisterHandler<PlayerHitMessage>(OnPlayerHit);
+            NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
+        }
 
         private void OnPlayerHit(NetworkConnection connection, PlayerHitMessage message)
         {
             HitPlayer(message.HurtPlayerNetId);
+        }
+
+        private void OnPlayerConnected(PlayerConnectedMessage MSG)
+        {
+            _playerGameUI.AddPlayerToScoreTable(MSG);
+           // _playerGameUI.UpdateScoreTable();
         }
 
         [Server]
@@ -57,9 +67,16 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
-        public void AddNewPlayer(PlayerBehavior playerBehavior, NetworkConnectionToClient conn)
+        public void AddNewPlayer(NetworkConnectionToClient conn)
         {
             _players.Add(new PlayerOnServer(conn.identity.netId));
+            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
+            {
+                NetId = conn.identity.netId,
+                PlayerName = $"PLAYER{conn.identity.netId}",
+                Id = _players.Count
+            };
+            NetworkServer.SendToAll(playerConnectedMessage);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             GameObject roomPlayer)
         {
             PlayerBehavior playerBehavior = _spawnSystem.SpawnNewPlayer();
-            _playerSystem.AddNewPlayer(playerBehavior, conn);
+            _playerSystem.AddNewPlayer(conn);
             return playerBehavior.gameObject;
         }
 
