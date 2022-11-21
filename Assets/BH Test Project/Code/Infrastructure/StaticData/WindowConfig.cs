@@ -1,6 +1,6 @@
 using System;
 using BH_Test_Project.Code.Infrastructure.Data;
-using BH_Test_Project.Code.UI;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StaticData
 {
@@ -8,6 +8,6 @@ namespace BH_Test_Project.Code.Infrastructure.StaticData
     public class WindowConfig
     {
         public WindowID ID;
-        public WindowBase Prefab;
+        public MonoBehaviour WindowPrefab;
     }
 }

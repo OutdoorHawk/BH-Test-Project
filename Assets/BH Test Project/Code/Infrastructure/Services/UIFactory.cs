@@ -1,6 +1,6 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.StaticData;
-using BH_Test_Project.Code.UI;
+using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Services
@@ -15,16 +15,18 @@ namespace BH_Test_Project.Code.Infrastructure.Services
             _staticDataService = staticDataService;
         }
 
-        public void CreateWindow(WindowID id)
+        public MainMenuWindow CreateMainMenuWindow()
         {
-            WindowConfig windowPrefab = _staticDataService.GetWindow(id);
-            WindowBase window = Object.Instantiate(windowPrefab.Prefab, _uiRoot);
+            WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.MainMenu);
+            MainMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
+                .GetComponent<MainMenuWindow>();
+            return window;
         }
 
         public void CreateUiRoot()
         {
             WindowConfig root = _staticDataService.GetWindow(WindowID.UiRoot);
-            _uiRoot = Object.Instantiate(root.Prefab).transform;
+            _uiRoot = Object.Instantiate(root.WindowPrefab).transform;
         }
     }
 }
