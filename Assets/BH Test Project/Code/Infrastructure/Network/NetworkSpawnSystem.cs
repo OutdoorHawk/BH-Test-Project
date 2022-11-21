@@ -30,11 +30,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             availableSpawnPoints.AddRange(_spawnPoints);
             for (int i = 0; i < _spawnPoints.Count; i++)
             {
-                for (int j = 0; j < NetworkServer.connections.Values.Count; j++)
+                foreach (var conn in NetworkServer.connections.Values)
                 {
-                    Vector3 playerPosition = NetworkServer.connections[j].identity.transform.position;
-                    if (playerPosition == _spawnPoints[i].position)
-                        availableSpawnPoints.Remove(_spawnPoints[i]);
+                    if (conn.identity != null)
+                    {
+                        Vector3 playerPosition = conn.identity.transform.position;
+                        if (playerPosition == _spawnPoints[i].position)
+                            availableSpawnPoints.Remove(_spawnPoints[i]);
+                    }
                 }
             }
 

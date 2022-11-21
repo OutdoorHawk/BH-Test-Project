@@ -1,22 +1,39 @@
-using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
-using BH_Test_Project.Code.Runtime.UI;
+using BH_Test_Project.Code.Runtime.Player.UI;
 using Mirror;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class NetworkPlayerSystem
+    public class NetworkPlayerSystem : NetworkBehaviour
     {
-        private readonly List<PlayerOnServer> _players;
-        private readonly PlayerGameUI _playerGameUI;
+        private readonly SyncList<PlayerOnServer> _players = new();
+        private PlayerGameUI _playerGameUI;
 
-        public NetworkPlayerSystem()
+        public void Init(PlayerGameUI playerGameUI)
         {
-            // _playerGameUI = playerGameUI;
-            // _playerGameUI.Init();
-            _players = new List<PlayerOnServer>();
+            _playerGameUI = playerGameUI;
+            _players.Callback += OnPlayersListChanged;
+        }
+
+        private void OnPlayersListChanged(SyncList<PlayerOnServer>.Operation op, int itemIndex,
+            PlayerOnServer oldItem, PlayerOnServer newItem)
+        {
+            switch (op)
+            {
+                case SyncList<PlayerOnServer>.Operation.OP_ADD:
+                    _playerGameUI.AddPlayerToScoreTable(newItem, itemIndex);
+                    break;
+                case SyncList<PlayerOnServer>.Operation.OP_CLEAR:
+                    break;
+                case SyncList<PlayerOnServer>.Operation.OP_INSERT:
+                    break;
+                case SyncList<PlayerOnServer>.Operation.OP_REMOVEAT:
+                    break;
+                case SyncList<PlayerOnServer>.Operation.OP_SET:
+                    break;
+            }
         }
 
         public void RegisterHandlers() =>
@@ -39,21 +56,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 }
             }
         }
-        
+
         public void AddNewPlayer(PlayerBehavior playerBehavior, NetworkConnectionToClient conn)
         {
-            PlayerOnServer playerOnServer = new PlayerOnServer(playerBehavior, conn);
-            _players.Add(playerOnServer);
-            //_playerGameUI.RpcAddPlayerToScoreTable(playerOnServer.Name, playerOnServer.playerBehavior.netIdentity);
-        }
-
-        public void RemovePlayer(NetworkConnectionToClient conn)
-        {
-            for (int i = 0; i < _players.Count; i++)
-            {
-                if (_players[i].Connection == conn)
-                    _players.Remove(_players[i]);
-            }
+            _players.Add(new PlayerOnServer(conn.identity.netId));
         }
     }
 }

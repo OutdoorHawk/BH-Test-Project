@@ -1,25 +1,20 @@
-﻿using BH_Test_Project.Code.Runtime.Player;
-using Mirror;
+﻿using BH_Test_Project.Code.Infrastructure.Data;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network.Data
 {
-    public class PlayerOnServer
+    public struct PlayerOnServer
     {
-        public readonly PlayerBehavior playerBehavior;
         public readonly uint NetID;
         public readonly string Name;
-        public readonly NetworkConnectionToClient Connection;
+        public int Score;
 
-        public PlayerOnServer(PlayerBehavior playerBehavior, NetworkConnectionToClient connection)
+        public PlayerOnServer(uint netID)
         {
-            this.playerBehavior = playerBehavior;
-            Connection = connection;
-            NetID = playerBehavior.netId;
-            Name = $"Player{NetID}";
+            NetID = netID;
+            Name = PlayerPrefs.GetString(Constants.PLAYER_NAME);
             Score = 0;
         }
-
-        public int Score { get; private set; }
 
         public void IncreasePlayerScore()
         {

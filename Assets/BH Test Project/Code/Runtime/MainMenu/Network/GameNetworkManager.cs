@@ -49,8 +49,9 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private void InitGameLevel()
         {
             List<Transform> spawnPoints = _sceneContextService.GetSceneSpawnPoints();
+            _playerSystem = _sceneContextService.GetPlayerSystem();
             _spawnSystem = new NetworkSpawnSystem(spawnPoints, playerPrefab);
-            _playerSystem = new NetworkPlayerSystem();
+            _playerSystem.Init(_sceneContextService.GetPlayerUI());
             _playerSystem.RegisterHandlers();
         }
 
