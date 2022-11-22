@@ -39,23 +39,11 @@ namespace BH_Test_Project.Code.Runtime.Player
             if (isOwned)
                 Init();
         }
-        
-        [Command]
-        private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
-        {
-            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
-            {
-                NetId = netID,
-                PlayerName = $"{playerName}"
-            };
-            NetworkServer.SendToAll(playerConnectedMessage);
-        }
 
         private void Init()
         {
             CreateSystems();
             InitSystems();
-            _playerInput.EnableAllInput();
             _playerInput.OnEscapePressed += ChangeCursorSettings;
             CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
@@ -82,6 +70,17 @@ namespace BH_Test_Project.Code.Runtime.Player
             _cameraFollow.Init(_playerInput, _playerData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
             _collisionDetector.Init(_playerData.PlayerCollisionMask);
+        }
+
+        [Command]
+        private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
+        {
+            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
+            {
+                NetId = netID,
+                PlayerName = $"{playerName}"
+            };
+            NetworkServer.SendToAll(playerConnectedMessage);
         }
 
         private void Update()
@@ -113,12 +112,6 @@ namespace BH_Test_Project.Code.Runtime.Player
         public void TargetGameEnd()
         {
             _playerStateMachine.Enter<EndGameState>();
-        }
-
-        [TargetRpc]
-        public void TargetPlayerRestart()
-        {
-            _playerStateMachine.Enter<BasicMovementState>();
         }
 
         private void ChangeCursorSettings()

@@ -16,15 +16,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _spawnPoints = spawnPoints;
         }
 
-        public void RegisterHandlers()
-        {
-        }
-
-        public void UnregisterHandlers()
-        {
-            //  NetworkClient.UnregisterHandler<GameRestartMessage>();
-        }
-
         /*public void RespawnAllPlayers()
         {
             foreach (var conn in NetworkServer.connections.Values)

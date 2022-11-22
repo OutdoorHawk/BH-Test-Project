@@ -16,11 +16,12 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private List<ScoreElement> _scoreElements = new();
 
-        private const int RESTART_DELAY = 3;
+        private float _restartDelay = 3;
 
-        private void Awake()
+        public void Init(float gameRestartDelay)
         {
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
+            _restartDelay = gameRestartDelay;
         }
 
         public void AddPlayerToScoreTable(PlayerConnectedMessage msg)
@@ -31,19 +32,6 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
                 {
                     _scoreElements[i].SetNetId((int)msg.NetId);
                     _scoreElements[i].SetName(msg.PlayerName);
-                    _scoreElements[i].ActivateElement();
-                    break;
-                }
-            }
-        }
-        public void AddPlayerToScoreTable(uint netID, string playerName)
-        {
-            for (int i = 0; i < _scoreElements.Count; i++)
-            {
-                if (!_scoreElements[i].Active)
-                {
-                    _scoreElements[i].SetNetId((int)netID);
-                    _scoreElements[i].SetName(playerName);
                     _scoreElements[i].ActivateElement();
                     break;
                 }
@@ -60,15 +48,6 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
             }
         }
 
-        public void ResetPlayerScores()
-        {
-            for (var i = 0; i < _scoreElements.Count; i++)
-            {
-                if (_scoreElements[i].Active)
-                    _scoreElements[i].SetScore(0);
-            }
-        }
-
         public void EnableEndGamePanel(string winnerName)
         {
             _endGamePlate.gameObject.SetActive(true);
@@ -78,7 +57,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private IEnumerator EndGameTimerRoutine()
         {
-            float countdown = RESTART_DELAY;
+            float countdown = _restartDelay;
             do
             {
                 _countDownText.text = countdown.ToString("0");

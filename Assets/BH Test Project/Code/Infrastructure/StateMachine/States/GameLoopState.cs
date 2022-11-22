@@ -26,13 +26,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.RegisterHandlers();
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
-            _spawnSystem.RegisterHandlers();
         }
 
         public void Exit()
         {
             _playerSystem.UnregisterHandlers();
-            _spawnSystem.UnregisterHandlers();
         }
     }
 }

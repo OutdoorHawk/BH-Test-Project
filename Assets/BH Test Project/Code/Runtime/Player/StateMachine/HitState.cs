@@ -28,7 +28,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         {
             _playerInput.EnableAllInput();
             _playerAnimator.PlayHitAnimation();
-            _playerGameStatus.RpcPlayerHit();
+            _playerGameStatus.TargetPlayerHit();
             _playerGameStatus.OnHitEnded += EndHitState;
         }
 
