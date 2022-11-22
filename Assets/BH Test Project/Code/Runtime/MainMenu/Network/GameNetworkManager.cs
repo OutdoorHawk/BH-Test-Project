@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
@@ -58,6 +59,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         private void RestartGame()
         {
+            StartCoroutine(RestartGameRoutine());
+        }
+
+        private IEnumerator RestartGameRoutine()
+        {
+            _playerSystem.OnGameEnd -= RestartGame;
+            yield return new WaitForSeconds(4.5f);
             ServerChangeScene(GameplayScene);
         }
 

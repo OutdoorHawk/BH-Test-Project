@@ -43,11 +43,13 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         private void EndHitState()
         {
-            _playerStateMachine.Enter<BasicMovementState>();
+            if (_playerStateMachine.ActiveState is not EndGameState)
+                _playerStateMachine.Enter<BasicMovementState>();
         }
 
         public void Exit()
         {
+            _playerInput.DisableAllInput();
             _playerGameStatus.OnHitEnded -= Exit;
         }
     }

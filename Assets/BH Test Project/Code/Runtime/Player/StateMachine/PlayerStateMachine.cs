@@ -23,7 +23,9 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
                 [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator, playerCollisionDetector,
                     netId),
                 [typeof(HitState)] =
-                    new HitState(this, playerMovement, playerAnimator, playerGameStatus, playerInput)
+                    new HitState(this, playerMovement, playerAnimator, playerGameStatus, playerInput),
+                [typeof(EndGameState)] =
+                    new EndGameState(this, playerInput),
             };
         }
 

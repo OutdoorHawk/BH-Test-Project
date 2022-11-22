@@ -28,9 +28,10 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         public void Enter()
         {
             _playerAnimator.SetPlayerSpeed(0);
-            _playerMovement.PerformDash(OnDashFinished);
+            _playerMovement.PerformDash();
             _playerAnimator.PlayDashAnimation();
-            _playerCollisionDetector.OnPlayerCollided += HitPlayer;
+            _playerMovement.OnDashEnded += OnDashFinished;
+            _playerCollisionDetector.OnPlayerCollided += OnObjectHit;
         }
 
         public void Tick()
@@ -38,7 +39,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
             _playerMovement.Tick();
         }
 
-        private void HitPlayer(ControllerColliderHit hit)
+        private void OnObjectHit(ControllerColliderHit hit)
         {
             if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out PlayerBehavior player))
             {
@@ -66,13 +67,15 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         private void OnDashFinished()
         {
-            _stateMachine.Enter<BasicMovementState>();
+            if (_stateMachine.ActiveState is not EndGameState) 
+                _stateMachine.Enter<BasicMovementState>();
         }
 
         public void Exit()
         {
             _playerAnimator.StopDashAnimation();
-            _playerCollisionDetector.OnPlayerCollided -= HitPlayer;
+            _playerMovement.OnDashEnded -= OnDashFinished;
+            _playerCollisionDetector.OnPlayerCollided -= OnObjectHit;
             _currentGameObject = null;
         }
     }

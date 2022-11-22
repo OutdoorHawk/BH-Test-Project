@@ -127,7 +127,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void RpcGameEnd()
         {
-            _playerInput.DisableAllInput();
+            _playerStateMachine.Enter<EndGameState>();
         }
 
         private void ChangeCursorSettings()

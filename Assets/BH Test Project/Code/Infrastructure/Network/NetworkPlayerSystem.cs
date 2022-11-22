@@ -27,6 +27,13 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
             NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerAskHit);
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
+        }   
+        
+        public void ClearHandlers()
+        {
+            NetworkClient.UnregisterHandler<PlayerConnectedMessage>();
+            NetworkServer.UnregisterHandler<PlayerAskHitMessage>();
+            NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
 
         private void OnPlayerAskHit(NetworkConnection connection, PlayerAskHitMessage message)
@@ -56,7 +63,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 CheckGameEndConditions(player.Score);
             }
         }
-
+        
         private void CheckGameEndConditions(int playerScore)
         {
             if (playerScore == _gameEndScore)
@@ -65,9 +72,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 {
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
                     playerBehavior.RpcGameEnd();
-                    Debug.Log("gameEnded");
                 }
-
                 OnGameEnd?.Invoke();
             }
         }
