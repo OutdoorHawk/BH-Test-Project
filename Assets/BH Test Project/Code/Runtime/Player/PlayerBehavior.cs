@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
@@ -43,7 +44,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             base.OnStartClient();
             _playerGameSystem = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerSystem();
-            _playerGameSystem.AddNewPlayer(netId);
+            _playerGameSystem.AddNewPlayer(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
         private void Init()

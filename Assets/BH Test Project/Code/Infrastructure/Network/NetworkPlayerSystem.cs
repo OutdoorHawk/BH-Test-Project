@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using Mirror;
-using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
@@ -57,8 +55,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
         }
-        
-        public void AddNewPlayer(uint netID)
+
+        public void AddNewPlayer(uint netID, string playerName)
         {
             PlayerOnServer newPlayer = new PlayerOnServer(netID);
             _players.Add(newPlayer);
@@ -66,8 +64,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
             {
                 NetId = netID,
-                PlayerName = $"{PlayerPrefs.GetString(Constants.PLAYER_NAME)}{netID}",
-                Id = _players.Count
+                PlayerName = $"{playerName}{netID}"
             };
             NetworkServer.SendToAll(playerConnectedMessage);
         }
