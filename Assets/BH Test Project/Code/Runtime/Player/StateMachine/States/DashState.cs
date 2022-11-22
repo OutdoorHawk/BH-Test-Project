@@ -50,12 +50,12 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         [Command]
         private void CmdPlayerHit(PlayerBehavior playerBehavior)
         {
-            PlayerHitMessage message = new PlayerHitMessage()
+            PlayerAskHitMessage message = new PlayerAskHitMessage()
             {
-                HurtPlayerNetId = playerBehavior.netId,
-                SuccessPlayerNetId = _netId
+                HitRecipientNetId = playerBehavior.netId,
+                HitSenderNetId = _netId
             };
-          
+
             NetworkClient.Send(message);
         }
 

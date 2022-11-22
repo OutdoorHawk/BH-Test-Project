@@ -20,43 +20,42 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public void RegisterHandlers()
         {
-            NetworkServer.RegisterHandler<PlayerHitMessage>(OnPlayerHit);
             NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
+            NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerAskHit);
+            NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
         }
 
-        private void OnPlayerHit(NetworkConnection connection, PlayerHitMessage message)
+        private void OnPlayerAskHit(NetworkConnection connection, PlayerAskHitMessage message)
         {
-            HitPlayer(message.HurtPlayerNetId);
-            IncreasePlayerScore(message.SuccessPlayerNetId);
+            SendPlayerHitRpc(message.HitRecipientNetId, message.HitSenderNetId);
+        }
+
+        [Server]
+        private void SendPlayerHitRpc(uint hitRecipientNetId, uint hitSenderNetId)
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.netId == hitRecipientNetId)
+                {
+                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                    playerBehavior.RpcHitPlayer(hitSenderNetId);
+                }
+            }
+        }
+
+        private void OnPlayerHitSucceed(PlayerHitSuccessMessage msg)
+        {
+            foreach (var player in _players.Where(player => player.NetID == msg.HitSenderNetId))
+            {
+                player.IncreasePlayerScore();
+                UpdatePlayersScoreUI(msg.HitSenderNetId, player.Score);
+            }
         }
 
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
             _players.Add(new PlayerOnServer(MSG.NetId));
-        }
-
-        [Server]
-        private void HitPlayer(uint hurtPlayerNetId)
-        {
-            foreach (var conn in NetworkServer.connections.Values)
-            {
-                if (conn.identity.netId == hurtPlayerNetId)
-                {
-                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.RpcHitPlayer();
-                }
-            }
-        }
-
-        [Server]
-        private void IncreasePlayerScore(uint successPlayerNetId)
-        {
-            foreach (var player in _players.Where(player => player.NetID == successPlayerNetId))
-            {
-                player.IncreasePlayerScore();
-                UpdatePlayersScoreUI(successPlayerNetId, player.Score);
-            }
         }
 
         private void UpdatePlayersScoreUI(uint successPlayerNetId, int newScore)
