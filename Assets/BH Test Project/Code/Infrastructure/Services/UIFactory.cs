@@ -1,6 +1,7 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
+using BH_Test_Project.Code.Runtime.Player.UI;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Services
@@ -20,6 +21,13 @@ namespace BH_Test_Project.Code.Infrastructure.Services
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.MainMenu);
             MainMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<MainMenuWindow>();
+            return window;
+        }
+
+        public PlayerHUD CreatePlayerHUD()
+        {
+            WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.PlayerHUD);
+            PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot).GetComponent<PlayerHUD>();
             return window;
         }
 

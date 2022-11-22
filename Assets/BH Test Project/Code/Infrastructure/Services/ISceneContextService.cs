@@ -11,6 +11,5 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         void InitSceneContext();
         List<Transform> GetSceneSpawnPoints();
         NetworkPlayerSystem GetPlayerSystem();
-        PlayerGameUI GetPlayerUI();
     }
 }

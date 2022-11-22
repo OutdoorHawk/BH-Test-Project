@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     public class NetworkPlayerSystem : NetworkBehaviour
     {
         private readonly List<PlayerOnServer> _players = new();
-        private PlayerGameUI _playerGameUI;
+        private PlayerHUD _playerHUD;
 
         private int _gameEndScore;
         private float _gameRestartDelay;
@@ -33,14 +33,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
 
-        public void Init(PlayerGameUI playerGameUI, WorldStaticData worldStaticData,
+        public void Init(PlayerHUD playerHUD, WorldStaticData worldStaticData,
             PlayerStaticData playerStaticData)
         {
             _gameEndScore = worldStaticData.GameEndScore;
             _gameRestartDelay = worldStaticData.GameRestartDelay;
             _playerStaticData = playerStaticData;
-            _playerGameUI = playerGameUI;
-            _playerGameUI.Init(_gameRestartDelay);
+            _playerHUD = playerHUD;
+            _playerHUD.Init(_gameRestartDelay);
             ResetPlayersScore();
             Debug.Log("InitSystem");
         }
@@ -83,7 +83,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
-            _playerGameUI.AddPlayerToScoreTable(MSG);
+            _playerHUD.AddPlayerToScoreTable(MSG);
             _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
         }
 
@@ -116,7 +116,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private void UpdatePlayersScoreUI(uint successPlayerNetId, int newScore)
         {
-            _playerGameUI.UpdatePlayerScore(successPlayerNetId, newScore);
+            _playerHUD.UpdatePlayerScore(successPlayerNetId, newScore);
         }
 
         private void CheckGameEndConditions(PlayerOnServer player)
@@ -133,7 +133,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 playerBehavior.TargetGameEnd();
             }
 
-            _playerGameUI.EnableEndGamePanel(player.Name);
+            _playerHUD.EnableEndGamePanel(player.Name);
             if (isServer)
                 StartCoroutine(RestartGameRoutine());
         }

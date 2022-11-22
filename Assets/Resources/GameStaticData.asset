@@ -19,6 +19,8 @@ MonoBehaviour:
     WindowPrefab: {fileID: 2542654767967686669, guid: 8261758975c4bf44ba2702c5bf5f665e, type: 3}
   - ID: 1
     WindowPrefab: {fileID: 502568323371046962, guid: c13ff1b69c585324e837e57bfecf6807, type: 3}
+  - ID: 2
+    WindowPrefab: {fileID: 2763079019457763397, guid: 6000b0a6b216feb4081e43f499aa0b28, type: 3}
   _gameManagerPrefab: {fileID: 3657566080650770623, guid: b9797bb3d3123384e83fde9ee6d1767d, type: 3}
   _playerStaticData:
     MovementSpeed: 5

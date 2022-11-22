@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.Player.UI
 {
-    public class PlayerGameUI : MonoBehaviour
+    public class PlayerHUD : MonoBehaviour
     {
         [SerializeField] private Transform _layoutParent;
         [SerializeField] private GameObject _endGamePlate;
