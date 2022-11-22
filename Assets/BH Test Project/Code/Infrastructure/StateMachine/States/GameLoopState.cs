@@ -2,6 +2,7 @@ using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
+using Mirror;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -32,12 +33,16 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             _sceneContextService.InitSceneContext();
             _spawnSystem = new NetworkSpawnSystem(_sceneContextService.GetSceneSpawnPoints());
+            NetworkManager.startPositions = _sceneContextService.GetSceneSpawnPoints();
             InitPlayerSystem();
         }
 
         private void InitPlayerSystem()
         {
+            //_playerSystem = Object.Instantiate(_staticDataService.GetPlayerNetworkSystem());
             _playerSystem = _sceneContextService.GetPlayerSystem();
+            // NetworkManager.singleton.spawnPrefabs.Add(_playerSystem.gameObject);
+            //  NetworkServer.Spawn(_playerSystem.gameObject);
             _playerSystem.RegisterHandlers();
             WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
             PlayerStaticData playerStaticData = _staticDataService.GetPlayerStaticData();

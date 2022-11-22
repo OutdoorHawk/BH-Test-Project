@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using BH_Test_Project.Code.StaticData;
@@ -47,7 +48,9 @@ namespace BH_Test_Project.Code.Infrastructure.Services
             _windows.TryGetValue(id, out var windowConfig) ? windowConfig : null;
 
         public GameNetworkManager GetLobbyNetworkManager() => 
-            _gameNetworkManager;
+            _gameNetworkManager;   
+        public NetworkPlayerSystem GetPlayerNetworkSystem() => 
+            _data.PlayerSystem;
 
         public PlayerStaticData GetPlayerStaticData() => 
             _playerStaticData;
