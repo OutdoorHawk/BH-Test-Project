@@ -43,7 +43,9 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
                 return;
+            
             _gameStateMachine.Enter<GameLoopState>(); // todo Rework with actions
+            
             InitGameLevel();
         }
 
@@ -51,9 +53,9 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             List<Transform> spawnPoints = _sceneContextService.GetSceneSpawnPoints();
             _playerSystem = _sceneContextService.GetPlayerSystem();
+            startPositions = spawnPoints;
             _spawnSystem = new NetworkSpawnSystem(spawnPoints, playerPrefab);
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
-            _playerSystem.RegisterHandlers();
             _playerSystem.OnGameEnd += RestartGame;
         }
 
@@ -67,13 +69,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             _playerSystem.OnGameEnd -= RestartGame;
             yield return new WaitForSeconds(4.5f);
             ServerChangeScene(GameplayScene);
-        }
-
-        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
-            GameObject roomPlayer)
-        {
-            PlayerBehavior playerBehavior = _spawnSystem.SpawnNewPlayer();
-            return playerBehavior.gameObject;
         }
 
         public override void OnDestroy()

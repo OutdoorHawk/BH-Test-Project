@@ -24,16 +24,24 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public void RegisterHandlers()
         {
+            Debug.Log("reg");
             NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
             NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerAskHit);
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
-        }   
+        }
         
-        public void ClearHandlers()
+        public void UnregisterHandlers()
         {
+            Debug.Log("unreg");
             NetworkClient.UnregisterHandler<PlayerConnectedMessage>();
             NetworkServer.UnregisterHandler<PlayerAskHitMessage>();
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
+        }
+
+        private void OnPlayerConnected(PlayerConnectedMessage MSG)
+        {
+            _playerGameUI.AddPlayerToScoreTable(MSG);
+            _players.Add(new PlayerOnServer(MSG.NetId));
         }
 
         private void OnPlayerAskHit(NetworkConnection connection, PlayerAskHitMessage message)
@@ -63,7 +71,16 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 CheckGameEndConditions(player.Score);
             }
         }
-        
+
+        private void UpdatePlayersScoreUI(uint successPlayerNetId, int newScore)
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                playerBehavior.RpcIncreasePlayerScore(successPlayerNetId, newScore);
+            }
+        }
+
         private void CheckGameEndConditions(int playerScore)
         {
             if (playerScore == _gameEndScore)
@@ -74,21 +91,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     playerBehavior.RpcGameEnd();
                 }
                 OnGameEnd?.Invoke();
-            }
-        }
-
-        private void OnPlayerConnected(PlayerConnectedMessage MSG)
-        {
-            _playerGameUI.AddPlayerToScoreTable(MSG);
-            _players.Add(new PlayerOnServer(MSG.NetId));
-        }
-
-        private void UpdatePlayersScoreUI(uint successPlayerNetId, int newScore)
-        {
-            foreach (var conn in NetworkServer.connections.Values)
-            {
-                conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                playerBehavior.RpcIncreasePlayerScore(successPlayerNetId, newScore);
             }
         }
     }
