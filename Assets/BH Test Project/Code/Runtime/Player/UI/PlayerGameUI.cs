@@ -57,13 +57,12 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private IEnumerator EndGameTimerRoutine()
         {
-            int formatCorrectionValue = 1;
             float countdown = _restartDelay;
             do
             {
                 _countDownText.text = Mathf.Round(countdown).ToString("0");
-                countdown -= Time.deltaTime;
-                yield return new WaitForSeconds(Time.deltaTime);
+                countdown -= 1;
+                yield return new WaitForSeconds(1);
             } while (countdown > 0);
         }
     }

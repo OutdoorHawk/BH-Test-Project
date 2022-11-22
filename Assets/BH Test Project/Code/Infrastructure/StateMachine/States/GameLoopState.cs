@@ -1,5 +1,6 @@
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.StaticData;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -21,11 +22,23 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
+            InitGameLevel();
+        }
+
+        private void InitGameLevel()
+        {
             _sceneContextService.InitSceneContext();
             _spawnSystem = new NetworkSpawnSystem(_sceneContextService.GetSceneSpawnPoints());
+            InitPlayerSystem();
+        }
+
+        private void InitPlayerSystem()
+        {
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.RegisterHandlers();
-            _playerSystem.Init(_sceneContextService.GetPlayerUI(), _staticDataService.GetWorldStaticData());
+            WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
+            PlayerStaticData playerStaticData = _staticDataService.GetPlayerStaticData();
+            _playerSystem.Init(_sceneContextService.GetPlayerUI(), worldStaticData, playerStaticData);
         }
 
         public void Exit()

@@ -15,8 +15,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private readonly List<PlayerOnServer> _players = new();
         private PlayerGameUI _playerGameUI;
 
-        private int _gameEndScore = 3;
-        private float _gameRestartDelay = 3;
+        private int _gameEndScore;
+        private float _gameRestartDelay;
+        private PlayerStaticData _playerStaticData;
 
         public void RegisterHandlers()
         {
@@ -32,13 +33,46 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
 
-        public void Init(PlayerGameUI playerGameUI, WorldStaticData worldStaticData)
+        public void Init(PlayerGameUI playerGameUI, WorldStaticData worldStaticData,
+            PlayerStaticData playerStaticData)
         {
-            _playerGameUI = playerGameUI;
-            _playerGameUI.Init(_gameRestartDelay);
             _gameEndScore = worldStaticData.GameEndScore;
             _gameRestartDelay = worldStaticData.GameRestartDelay;
+            _playerStaticData = playerStaticData;
+            _playerGameUI = playerGameUI;
+            _playerGameUI.Init(_gameRestartDelay);
             ResetPlayersScore();
+            Debug.Log("InitSystem");
+        }
+
+        private void Start()
+        {
+            if (isClient)
+                InitPlayers(_playerStaticData);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void InitPlayers(PlayerStaticData playerStaticData)
+        {
+            Debug.Log("InitializePlayers");
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity == null)
+                    return;
+                if (!PlayerWasInitialized(conn.identity.netId))
+                {
+                    if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                    {
+                        Debug.Log("InitPlayer");
+                        player.Init(playerStaticData);
+                    }
+                }
+            }
+        }
+
+        private bool PlayerWasInitialized(uint identityNetId)
+        {
+            return _players.Any(player => player.NetID == identityNetId);
         }
 
         private void ResetPlayersScore()
@@ -111,7 +145,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdRestartGame() => 
+        private void CmdRestartGame() =>
             NetworkServer.SendToAll(new GameRestartMessage());
     }
 }

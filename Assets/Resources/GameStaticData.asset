@@ -28,4 +28,4 @@ MonoBehaviour:
     HitTime: 3
   _worldStaticData:
     GameEndScore: 3
-    GameRestartDelay: 6
+    GameRestartDelay: 5
