@@ -56,17 +56,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerGameUI.AddPlayerToScoreTable(MSG);
         }
 
-        public void AddNewPlayer(uint netID, string playerName)
-        {
-            PlayerOnServer newPlayer = new PlayerOnServer(netID);
-            _players.Add(newPlayer);
-
-            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
-            {
-                NetId = netID,
-                PlayerName = $"{playerName}{netID}"
-            };
-            NetworkServer.SendToAll(playerConnectedMessage);
-        }
+    
     }
 }

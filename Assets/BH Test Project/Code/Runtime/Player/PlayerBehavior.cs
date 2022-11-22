@@ -1,6 +1,7 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
@@ -44,7 +45,20 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             base.OnStartClient();
             _playerGameSystem = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerSystem();
-            _playerGameSystem.AddNewPlayer(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            AddNewPlayer(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
+        }
+
+        [Command]
+        public void AddNewPlayer(uint netID, string playerName)
+        {
+            PlayerOnServer newPlayer = new PlayerOnServer(netID);
+            Debug.Log($"message send: {playerName}{netID}");
+            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
+            {
+                NetId = netID,
+                PlayerName = $"{playerName}{netID}"
+            };
+            NetworkServer.SendToAll(playerConnectedMessage);
         }
 
         private void Init()
