@@ -7,6 +7,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 {
     public class PlayerMovement
     {
+        public event Action OnDashEnded;
+        
         private readonly CharacterController _characterController;
         private readonly Transform _cameraTransform;
         private readonly Transform _playerPlayerTransform;
@@ -85,13 +87,13 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private void ApplyMovement() =>
             _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
 
-        public void PerformDash(Action OnDashFinished)
+        public void PerformDash()
         {
             _movementVector = Vector3.zero;
-            _mono.StartCoroutine(Dashing(OnDashFinished));
+            _mono.StartCoroutine(Dashing());
         }
 
-        private IEnumerator Dashing(Action OnDashFinished)
+        private IEnumerator Dashing()
         {
             Vector3 dashVector = _playerPlayerTransform.forward * _playerData.DashPower;
             float t = _playerData.DashTime;
@@ -102,7 +104,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
                 yield return new WaitForSeconds(Time.deltaTime);
             } while (t > 0);
 
-            OnDashFinished?.Invoke();
+            OnDashEnded?.Invoke();
         }
     }
 }

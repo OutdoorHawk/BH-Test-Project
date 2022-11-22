@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,27 +6,26 @@ using static BH_Test_Project.Code.Infrastructure.Data.Constants;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
-    public class LobbyMenuWindow : NetworkBehaviour
+    public class LobbyMenuWindow : NetworkRoomPlayer
     {
         [SerializeField] private Button _readyButton;
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
         [SerializeField] private int _minPlayersToStartGame = 2;
-        [SerializeField] private MainMenuNetworkSystem _networkSystem;
 
         private PlayerSlotView[] _playerSlots;
         private readonly SyncList<LobbyPlayer> _playersInLobby = new();
 
-        private void Start()
+        public override void OnClientEnterRoom()
         {
-            _networkSystem.OnClientConnected += InitLobby;
-            gameObject.SetActive(false);
+            base.OnClientEnterRoom();
+            if (isClient && isLocalPlayer)
+                InitClient();
         }
 
-        private void InitLobby()
+        private void InitClient()
         {
-            gameObject.SetActive(true);
             _playerSlots = _playerSlotsParent.GetComponentsInChildren<PlayerSlotView>(true);
             _leaveButton.onClick.AddListener(DisconnectLobby);
 
@@ -36,25 +33,14 @@ namespace BH_Test_Project.Code.Runtime.Lobby
                 _playersInLobby.Callback += OnPlayersListChanged;
             if (isServer)
                 _startGameButton.gameObject.SetActive(true);
-      
+
             CmdUpdatePlayersList();
         }
 
         [Command(requiresAuthority = false)]
         private void CmdUpdatePlayersList()
         {
-            foreach (var conn in NetworkServer.connections)
-            {
-                Debug.Log(conn.Value.identity);
-                Debug.Log(conn.Value);
-                Debug.Log(conn.Value.connectionId);
-                _playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
-            }
-            
-            /*foreach (var connection in NetworkServer.connections)
-                _playersInLobby.Add(new LobbyPlayer(connection.Value.connectionId,
-                    PlayerPrefs.GetString(PLAYER_NAME), false));*/
-            //_playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
+            _playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
         }
 
         private void OnPlayersListChanged(SyncList<LobbyPlayer>.Operation op, int itemIndex, LobbyPlayer oldItem,
@@ -92,8 +78,9 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             Debug.Log("disconnect");
         }
 
-        private void OnDisable()
+        public override void OnClientExitRoom()
         {
+            base.OnClientExitRoom();
             _leaveButton.onClick.RemoveListener(DisconnectLobby);
             _playersInLobby.Callback -= OnPlayersListChanged;
         }

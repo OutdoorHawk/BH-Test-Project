@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using Mirror;
 using UnityEngine;
 
@@ -7,10 +8,10 @@ namespace BH_Test_Project.Code.Infrastructure.StaticData
     public class GameStaticData : ScriptableObject
     {
         [SerializeField] private WindowConfig[] _windows;
-        [SerializeField] private NetworkManager _networkManagerPrefab;
+        [SerializeField] private GameNetworkManager gameManagerPrefab;
 
         public WindowConfig[] Windows => _windows;
 
-        public NetworkManager ManagerPrefab => _networkManagerPrefab;
+        public GameNetworkManager ManagerPrefab => gameManagerPrefab;
     }
 }

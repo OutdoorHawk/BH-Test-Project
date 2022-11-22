@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         private readonly PlayerAnimator _playerAnimator;
         private readonly PlayerCollisionDetector _playerCollisionDetector;
         private GameObject _currentGameObject;
-        private uint _netId;
+        private readonly uint _netId;
 
         public DashState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector, uint netId)
@@ -28,9 +28,10 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         public void Enter()
         {
             _playerAnimator.SetPlayerSpeed(0);
-            _playerMovement.PerformDash(OnDashFinished);
+            _playerMovement.PerformDash();
             _playerAnimator.PlayDashAnimation();
-            _playerCollisionDetector.OnPlayerCollided += HitPlayer;
+            _playerMovement.OnDashEnded += OnDashFinished;
+            _playerCollisionDetector.OnPlayerCollided += OnObjectHit;
         }
 
         public void Tick()
@@ -38,24 +39,24 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
             _playerMovement.Tick();
         }
 
-        private void HitPlayer(ControllerColliderHit hit)
+        private void OnObjectHit(ControllerColliderHit hit)
         {
-            if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out Player player))
+            if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out PlayerBehavior player))
             {
                 _currentGameObject = hit.gameObject;
                 CmdPlayerHit(player);
             }
         }
-        
+
         [Command]
-        private void CmdPlayerHit(Player player)
+        private void CmdPlayerHit(PlayerBehavior playerBehavior)
         {
-            PlayerHitMessage message = new PlayerHitMessage()
+            PlayerAskHitMessage message = new PlayerAskHitMessage()
             {
-                HurtPlayerNetId = player.netId,
-                SuccessPlayerNetId = _netId
+                HitRecipientNetId = playerBehavior.netId,
+                HitSenderNetId = _netId
             };
-   
+
             NetworkClient.Send(message);
         }
 
@@ -66,13 +67,15 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         private void OnDashFinished()
         {
-            _stateMachine.Enter<BasicMovementState>();
+            if (_stateMachine.ActiveState is not EndGameState) 
+                _stateMachine.Enter<BasicMovementState>();
         }
 
         public void Exit()
         {
             _playerAnimator.StopDashAnimation();
-            _playerCollisionDetector.OnPlayerCollided -= HitPlayer;
+            _playerMovement.OnDashEnded -= OnDashFinished;
+            _playerCollisionDetector.OnPlayerCollided -= OnObjectHit;
             _currentGameObject = null;
         }
     }

@@ -21,13 +21,12 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
         
         [TargetRpc]
-        public void RpcPlayerHit()
+        public void TargetPlayerHit()
         {
-            _mono.StartCoroutine(RpcPlayerHitRoutine());
+            _mono.StartCoroutine(PlayerHitRoutine());
         }
         
-        [TargetRpc]
-        private IEnumerator RpcPlayerHitRoutine()
+        private IEnumerator PlayerHitRoutine()
         {
             _colorChangeComponent.CmdSetPlayerHitColor();
             yield return new WaitForSeconds(_playerData.HitTime);

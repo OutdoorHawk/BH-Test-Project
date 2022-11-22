@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,15 +8,17 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 {
     public class MainMenuWindow : MonoBehaviour
     {
-        [SerializeField] private MainMenuNetworkSystem _menuNetwork;
         [SerializeField] private InputField _inputField;
         [SerializeField] private Button _joinGameButton;
         [SerializeField] private Button _hostGameButton;
         [SerializeField] private Button _exitGameButton;
         [SerializeField] private EnterIpView _enterIpWindow;
+        
+        private GameNetworkManager _gameManager;
 
-        private void Awake()
+        public void Init(GameNetworkManager gameManager)
         {
+            _gameManager = gameManager;
             Subscribe();
         }
 
@@ -25,7 +28,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
             _hostGameButton.onClick.AddListener(HostGameClicked);
             _exitGameButton.onClick.AddListener(ExitGame);
             _enterIpWindow.OnJoinGamePressed += JoinGameClicked;
-            _menuNetwork.OnClientConnected += DisableMainMenu;
         }
 
         private void DisableMainMenu()
@@ -35,13 +37,14 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void HostGameClicked()
         {
-            _menuNetwork.StartGameAsHost();
+            _gameManager.CreateLobbyAsHost();
             SavePlayerName();
         }
 
         private void JoinGameClicked(string networkAddress)
         {
-            _menuNetwork.StartGameAsClient(networkAddress);
+            _gameManager.JoinLobbyAsClient(networkAddress);
+            SavePlayerName();
         }
 
         private void SavePlayerName()
@@ -68,7 +71,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
             _hostGameButton.onClick.RemoveListener(HostGameClicked);
             _exitGameButton.onClick.RemoveListener(ExitGame);
             _enterIpWindow.OnJoinGamePressed -= JoinGameClicked;
-            _menuNetwork.OnClientConnected -= DisableMainMenu;
         }
 
         private void OnDestroy()

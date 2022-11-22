@@ -1,46 +1,51 @@
-using System;
 using System.Collections.Generic;
-using BH_Test_Project.Code.Infrastructure.Network.Data;
+using System.Linq;
 using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkSpawnSystem
     {
-        public event Action<Player, NetworkConnectionToClient> OnPlayerSpawned;
-
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
 
-        public NetworkSpawnSystem(GameObject playerPrefab, List<Transform> spawnPoints)
+        public NetworkSpawnSystem(List<Transform> spawnPoints)
         {
-            _playerPrefab = playerPrefab;
             _spawnPoints = spawnPoints;
         }
 
-        [ServerCallback]
-        public void RegisterHandlers() =>
-            NetworkServer.RegisterHandler<SpawnPlayerMessage>(OnCreateCharacter);
-
-        public void SpawnNewPlayer()
+        /*public void RespawnAllPlayers()
         {
-            SpawnPlayerMessage message = new SpawnPlayerMessage()
+            foreach (var conn in NetworkServer.connections.Values)
             {
-                SpawnPosition = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position,
-            };
+                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                {
+                    /*player.GetComponent<NetworkTransform>()
+                        .RpcTeleport(_spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position);#1#
+                    player.RpcPlayerRestart();
+                }
+            }
+        }*/
 
-            NetworkClient.Send(message);
-        }
-
-        private void OnCreateCharacter(NetworkConnectionToClient conn, SpawnPlayerMessage message)
+        private Vector3 GetAvailableSpawnPoint()
         {
-            GameObject go = Object.Instantiate(_playerPrefab, message.SpawnPosition, Quaternion.identity);
-            NetworkServer.AddPlayerForConnection(conn, go);
-            OnPlayerSpawned?.Invoke(go.GetComponent<Player>(), conn);
+            List<Vector3> availableSpawnPoints = _spawnPoints.Select(point => point.position).ToList();
+            for (int i = 0; i < availableSpawnPoints.Count; i++)
+            {
+                foreach (var conn in NetworkServer.connections.Values)
+                {
+                    if (conn.identity != null)
+                    {
+                        Vector3 playerPosition = conn.identity.transform.position;
+                        if (playerPosition == availableSpawnPoints[i])
+                            availableSpawnPoints.RemoveAt(i);
+                    }
+                }
+            }
+
+            return availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count - 1)];
         }
     }
 }

@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: GameStaticData
   m_EditorClassIdentifier: 
   _windows:
+  - ID: 3
+    WindowPrefab: {fileID: 6196261818361794901, guid: c25be20d8a723444e926359e62e9268d, type: 3}
   - ID: 0
-    Prefab: {fileID: 0}
-  _networkManagerPrefab: {fileID: 0}
+    WindowPrefab: {fileID: 2542654767967686669, guid: 8261758975c4bf44ba2702c5bf5f665e, type: 3}
+  - ID: 1
+    WindowPrefab: {fileID: 502568323371046962, guid: c13ff1b69c585324e837e57bfecf6807, type: 3}
+  gameManagerPrefab: {fileID: 3657566080650770623, guid: b9797bb3d3123384e83fde9ee6d1767d, type: 3}

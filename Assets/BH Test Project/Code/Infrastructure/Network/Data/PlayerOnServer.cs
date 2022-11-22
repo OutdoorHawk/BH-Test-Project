@@ -1,29 +1,21 @@
-﻿using BH_Test_Project.Code.Runtime.Player;
-using Mirror;
-
-namespace BH_Test_Project.Code.Infrastructure.Network
+﻿namespace BH_Test_Project.Code.Infrastructure.Network.Data
 {
     public class PlayerOnServer
     {
-        public readonly Player Player;
-        public readonly uint NetID;
-        public readonly string Name;
-        public readonly NetworkConnectionToClient Connection;
+        public uint NetID;
+        public int Score;
+        public string Name;
 
-        public PlayerOnServer(Player player, NetworkConnectionToClient connection)
+        public PlayerOnServer(uint netID, string playerName)
         {
-            Player = player;
-            Connection = connection;
-            NetID = player.netId;
-            Name = $"Player{NetID}";
+            NetID = netID;
             Score = 0;
+            Name = playerName;
         }
-
-        public int Score { get; private set; }
 
         public void IncreasePlayerScore()
         {
-            Score++;
+            Score += 1;
         }
 
         public void ResetScore()

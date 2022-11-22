@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.StaticData;
+using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using Mirror;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         private const string GAME_STATIC_DATA_PATH = "GameStaticData";
 
         private readonly Dictionary<WindowID, WindowConfig> _windows = new();
+        private GameNetworkManager _gameNetworkManager;
         private NetworkManager _networkManager;
         public GameStaticData Data { get; private set; }
 
@@ -26,9 +28,9 @@ namespace BH_Test_Project.Code.Infrastructure.Services
             return _windows.TryGetValue(id, out var windowConfig) ? windowConfig : null;
         }
 
-        public NetworkManager GetNetworkManager()
+        public GameNetworkManager GetLobbyNetworkManager()
         {
-            return _networkManager;
+            return _gameNetworkManager;
         }
 
         private void LoadWindows()
@@ -39,7 +41,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
 
         private void LoadNetworkManager()
         {
-            _networkManager = Data.ManagerPrefab;
+            _gameNetworkManager = Data.ManagerPrefab;
         }
     }
 }

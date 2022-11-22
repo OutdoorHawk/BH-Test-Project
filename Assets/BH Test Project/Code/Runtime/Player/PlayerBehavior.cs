@@ -1,9 +1,15 @@
+using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.DI;
+using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
+using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
+using BH_Test_Project.Code.Runtime.Player.UI;
 using Mirror;
 using UnityEngine;
 
@@ -13,7 +19,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
-    public class Player : NetworkBehaviour
+    public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private CameraFollow _cameraFollowPrefab;
@@ -26,9 +32,10 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
 
-        public override void OnStartClient()
+        private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
+
+        public void Start()
         {
-            base.OnStartClient();
             if (isOwned)
                 Init();
         }
@@ -37,8 +44,8 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             CreateSystems();
             InitSystems();
-            _playerInput.EnableAllInput();
             _playerInput.OnEscapePressed += ChangeCursorSettings;
+            CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
         private void CreateSystems()
@@ -53,8 +60,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId,
-                    _playerGameStatus);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
+                    netId, _playerGameStatus);
         }
 
         private void InitSystems()
@@ -65,6 +72,17 @@ namespace BH_Test_Project.Code.Runtime.Player
             _collisionDetector.Init(_playerData.PlayerCollisionMask);
         }
 
+        [Command]
+        private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
+        {
+            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
+            {
+                NetId = netID,
+                PlayerName = $"{playerName}"
+            };
+            NetworkServer.SendToAll(playerConnectedMessage);
+        }
+
         private void Update()
         {
             if (isClient && isLocalPlayer)
@@ -72,10 +90,28 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
 
         [TargetRpc]
-        public void RpcHitPlayer()
+        public void TargetHitPlayer(uint hitSenderNetId)
         {
-            if (_playerStateMachine.ActiveState is not HitState) 
-                _playerStateMachine.Enter<HitState>();
+            if (_playerIsHitNow)
+                return;
+            _playerStateMachine.Enter<HitState>();
+            CmdSuccessHit(hitSenderNetId);
+        }
+
+        [Command]
+        private void CmdSuccessHit(uint hitSenderNetId)
+        {
+            PlayerHitSuccessMessage message = new PlayerHitSuccessMessage()
+            {
+                HitSenderNetId = hitSenderNetId
+            };
+            NetworkServer.SendToAll(message);
+        }
+        
+        [TargetRpc]
+        public void TargetGameEnd()
+        {
+            _playerStateMachine.Enter<EndGameState>();
         }
 
         private void ChangeCursorSettings()
@@ -94,8 +130,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         public override void OnStopLocalPlayer()
         {
-            base.OnStopLocalPlayer();
             DisposePlayer();
+            base.OnStopLocalPlayer();
         }
 
         private void DisposePlayer()

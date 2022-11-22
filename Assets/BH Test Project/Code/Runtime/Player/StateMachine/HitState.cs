@@ -26,25 +26,30 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         public void Enter()
         {
+            _playerInput.EnableAllInput();
             _playerAnimator.PlayHitAnimation();
-            _playerGameStatus.RpcPlayerHit();
+            _playerGameStatus.TargetPlayerHit();
             _playerGameStatus.OnHitEnded += EndHitState;
         }
 
         public void Tick()
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
+            float currentSpeed = _playerMovement.GetPlayerSpeed();
             _playerMovement.UpdateInput(currentInput);
             _playerMovement.Tick();
+            _playerAnimator.SetPlayerSpeed(currentSpeed);
         }
 
         private void EndHitState()
         {
-            _playerStateMachine.Enter<BasicMovementState>();
+            if (_playerStateMachine.ActiveState is not EndGameState)
+                _playerStateMachine.Enter<BasicMovementState>();
         }
 
         public void Exit()
         {
+            _playerInput.DisableAllInput();
             _playerGameStatus.OnHitEnded -= Exit;
         }
     }

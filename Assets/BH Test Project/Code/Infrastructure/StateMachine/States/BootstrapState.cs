@@ -19,7 +19,8 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             BindStaticDataService();
             _diContainer.BindSingle(_gameStateMachine);
-            _diContainer.BindSingle(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
+            _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
+            _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
         }
 
         private void BindStaticDataService()
@@ -31,7 +32,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            _gameStateMachine.Enter<LoadOfflineMenuState>();
+            _gameStateMachine.Enter<LoadMainMenuState>();
         }
 
         public void Exit()
