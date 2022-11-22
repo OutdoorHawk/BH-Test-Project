@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
@@ -15,7 +16,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _spawnPoints = spawnPoints;
         }
-        
+
         public void RegisterHandlers()
         {
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
@@ -37,7 +38,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 if (conn.identity.TryGetComponent(out PlayerBehavior player))
                 {
-                    player.transform.position = GetAvailableSpawnPoint();
+                    player.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position;
                     player.RpcPlayerRestart();
                 }
             }
@@ -45,22 +46,24 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private Vector3 GetAvailableSpawnPoint()
         {
-            List<Transform> availableSpawnPoints = new List<Transform>();
-            availableSpawnPoints.AddRange(_spawnPoints);
-            for (int i = 0; i < _spawnPoints.Count; i++)
+            List<Vector3> availableSpawnPoints = _spawnPoints.Select(point => point.position).ToList();
+            for (int i = 0; i < availableSpawnPoints.Count; i++)
             {
                 foreach (var conn in NetworkServer.connections.Values)
                 {
                     if (conn.identity != null)
                     {
                         Vector3 playerPosition = conn.identity.transform.position;
-                        if (playerPosition == _spawnPoints[i].position)
+                        if (playerPosition == availableSpawnPoints[i])
                             availableSpawnPoints.RemoveAt(i);
                     }
                 }
             }
 
-            return availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count - 1)].position;
+            foreach (var point in availableSpawnPoints) 
+                Debug.Log(point);
+
+            return availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count - 1)];
         }
     }
 }
