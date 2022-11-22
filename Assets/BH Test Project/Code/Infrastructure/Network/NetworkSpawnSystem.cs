@@ -10,10 +10,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private readonly GameObject _playerPrefab;
         private readonly List<Transform> _spawnPoints;
 
-        public NetworkSpawnSystem(List<Transform> spawnPoints, GameObject playerPrefab)
+        public NetworkSpawnSystem(List<Transform> spawnPoints)
         {
             _spawnPoints = spawnPoints;
-            _playerPrefab = playerPrefab;
         }
 
         public PlayerBehavior SpawnNewPlayer()
@@ -22,7 +21,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             GetAvailableSpawnPoint();
             return player.GetComponent<PlayerBehavior>();
         }
-
 
         private Vector3 GetAvailableSpawnPoint()
         {

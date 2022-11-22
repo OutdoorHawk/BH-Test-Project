@@ -44,7 +44,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
                 return;
             
-            _gameStateMachine.Enter<GameLoopState>(); // todo Rework with actions
+            _gameStateMachine.Enter<GameLoopState>(); 
             
             InitGameLevel();
         }
@@ -53,7 +53,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             _playerSystem = _sceneContextService.GetPlayerSystem();
             startPositions = _sceneContextService.GetSceneSpawnPoints();
-            _playerSystem.OnGameEnd += RestartGame;
+            _playerSystem.OnGameEnd += RestartGame; // todo make with register message
         }
 
         private void RestartGame()
@@ -63,14 +63,14 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         private IEnumerator RestartGameRoutine()
         {
-            _playerSystem.OnGameEnd -= RestartGame;
             yield return new WaitForSeconds(4.5f);
-            ServerChangeScene(GameplayScene);
+            _gameStateMachine.Enter<GameLoopState>();
         }
 
         public override void OnDestroy()
         {
             base.OnDestroy();
+            _playerSystem.OnGameEnd -= RestartGame;
             SceneManager.sceneLoaded -= HandleGameLevelLoaded;
         }
     }

@@ -391,9 +391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e90415fad90ad4fae9afbb37196b1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
   _layoutParent: {fileID: 7767066173630120699}
 --- !u!114 &6688835280373039898
 MonoBehaviour:
@@ -519,6 +516,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerScoreElement (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3255077919034809916, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5929341371774708206, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -624,6 +625,10 @@ PrefabInstance:
     - target: {fileID: 3255077919034809916, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
       propertyPath: m_Name
       value: PlayerScoreElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 3255077919034809916, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5929341371774708206, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
       propertyPath: m_Pivot.x
@@ -731,6 +736,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerScoreElement (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3255077919034809916, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5929341371774708206, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -836,6 +845,10 @@ PrefabInstance:
     - target: {fileID: 3255077919034809916, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
       propertyPath: m_Name
       value: PlayerScoreElement (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3255077919034809916, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5929341371774708206, guid: c5811daab97dcda4c8b9530b082ef8c1, type: 3}
       propertyPath: m_Pivot.x

@@ -46,8 +46,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             SendPlayerHitRpc(message.HitRecipientNetId, message.HitSenderNetId);
         }
-
-        [Server]
+        
         private void SendPlayerHitRpc(uint hitRecipientNetId, uint hitSenderNetId)
         {
             foreach (var conn in NetworkServer.connections.Values)

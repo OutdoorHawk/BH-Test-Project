@@ -10,6 +10,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly IStaticDataService _staticDataService;
         private readonly ISceneContextService _sceneContextService;
         private NetworkPlayerSystem _playerSystem;
+        private NetworkSpawnSystem _spawnSystem;
 
 
         public GameLoopState(IGameStateMachine gameStateMachine, IStaticDataService staticDataService,
@@ -23,6 +24,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         public void Enter()
         {
             _sceneContextService.InitSceneContext();
+            _spawnSystem = new NetworkSpawnSystem(_sceneContextService.GetSceneSpawnPoints());
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.RegisterHandlers();
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
