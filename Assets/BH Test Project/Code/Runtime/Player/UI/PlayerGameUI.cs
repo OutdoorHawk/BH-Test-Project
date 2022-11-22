@@ -36,6 +36,19 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
                 }
             }
         }
+        public void AddPlayerToScoreTable(uint netID, string playerName)
+        {
+            for (int i = 0; i < _scoreElements.Count; i++)
+            {
+                if (!_scoreElements[i].Active)
+                {
+                    _scoreElements[i].SetNetId((int)netID);
+                    _scoreElements[i].SetName(playerName);
+                    _scoreElements[i].ActivateElement();
+                    break;
+                }
+            }
+        }
 
         public void UpdatePlayerScore(uint netID, int newScore)
         {

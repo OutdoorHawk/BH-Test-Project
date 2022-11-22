@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +56,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 if (conn.identity.netId == hitRecipientNetId)
                 {
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.RpcHitPlayer(hitSenderNetId);
+                    playerBehavior.TargetHitPlayer(hitSenderNetId);
                 }
             }
         }
@@ -77,8 +76,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             foreach (var conn in NetworkServer.connections.Values)
             {
                 conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                playerBehavior.RpcIncreasePlayerScore(successPlayerNetId, newScore);
+                //playerBehavior.TargetIncreasePlayerScore(successPlayerNetId, newScore);
             }
+
+            _playerGameUI.UpdatePlayerScore(successPlayerNetId, newScore);
         }
 
         private void CheckGameEndConditions(PlayerOnServer player)
@@ -88,20 +89,22 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 foreach (var conn in NetworkServer.connections.Values)
                 {
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.RpcGameEnd(player.Name);
+                    playerBehavior.TargetGameEnd();
                 }
-                
+
+                _playerGameUI.EnableEndGamePanel(player.Name);
+
                 if (isServer)
                     StartCoroutine(RestartGameRoutine());
             }
         }
-        
+
         private IEnumerator RestartGameRoutine()
         {
             yield return new WaitForSeconds(_gameRestartDelay);
             CmdGameOver();
         }
-        
+
         [Command(requiresAuthority = false)]
         private void CmdGameOver()
         {

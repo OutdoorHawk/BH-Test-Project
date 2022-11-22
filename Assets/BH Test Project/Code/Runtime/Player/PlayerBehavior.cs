@@ -1,4 +1,3 @@
-using System;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
@@ -32,23 +31,15 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-        private PlayerGameUI _playerGameUI;
-        private NetworkPlayerSystem _playerGameSystem;
 
         private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
 
         public void Start()
         {
-            if (isOwned) 
+            if (isOwned)
                 Init();
         }
-
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartLocalPlayer();
-            CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
-        }
-
+        
         [Command]
         private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
         {
@@ -66,6 +57,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             InitSystems();
             _playerInput.EnableAllInput();
             _playerInput.OnEscapePressed += ChangeCursorSettings;
+            CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
         private void CreateSystems()
@@ -73,8 +65,6 @@ namespace BH_Test_Project.Code.Runtime.Player
             Animator animator = GetComponent<Animator>();
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
-            _playerGameUI = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerUI();
-            _playerGameSystem = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerSystem();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
@@ -101,7 +91,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
 
         [TargetRpc]
-        public void RpcHitPlayer(uint hitSenderNetId)
+        public void TargetHitPlayer(uint hitSenderNetId)
         {
             if (_playerIsHitNow)
                 return;
@@ -118,22 +108,15 @@ namespace BH_Test_Project.Code.Runtime.Player
             };
             NetworkServer.SendToAll(message);
         }
-
+        
         [TargetRpc]
-        public void RpcIncreasePlayerScore(uint successPlayerNetId, int newScore)
-        {
-            _playerGameUI.UpdatePlayerScore(successPlayerNetId, newScore);
-        }
-
-        [TargetRpc]
-        public void RpcGameEnd(string winnerNetID)
+        public void TargetGameEnd()
         {
             _playerStateMachine.Enter<EndGameState>();
-            _playerGameUI.EnableEndGamePanel(winnerNetID);
         }
 
         [TargetRpc]
-        public void RpcPlayerRestart()
+        public void TargetPlayerRestart()
         {
             _playerStateMachine.Enter<BasicMovementState>();
         }

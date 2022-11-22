@@ -16,7 +16,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private IGameStateMachine _gameStateMachine;
         private ISceneContextService _sceneContextService;
         private NetworkSpawnSystem _spawnSystem;
-        private NetworkPlayerSystem _playerSystem;
 
         public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService)
         {
@@ -49,19 +48,18 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
                 return;
 
-            _gameStateMachine.Enter<GameLoopState>();
-            InitGameLevel();
+            OnLoaded();
         }
 
-        private void InitGameLevel()
+        private void OnLoaded()
         {
-            _playerSystem = _sceneContextService.GetPlayerSystem();
+            _gameStateMachine.Enter<GameLoopState>();
+            startPositions = _sceneContextService.GetSceneSpawnPoints();
         }
 
         private void OnGameRestarted(GameRestartMessage obj)
         {
             ServerChangeScene(GameplayScene);
-            _gameStateMachine.Enter<GameLoopState>();
         }
         
         public override void OnDestroy()

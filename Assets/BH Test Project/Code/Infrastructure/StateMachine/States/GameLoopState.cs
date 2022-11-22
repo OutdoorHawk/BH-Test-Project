@@ -11,7 +11,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private NetworkPlayerSystem _playerSystem;
         private NetworkSpawnSystem _spawnSystem;
 
-
         public GameLoopState(IGameStateMachine gameStateMachine, IStaticDataService staticDataService,
             ISceneContextService sceneContextService)
         {
@@ -28,7 +27,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _playerSystem.RegisterHandlers();
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
             _spawnSystem.RegisterHandlers();
-            // _spawnSystem.RespawnAllPlayers();
         }
 
         public void Exit()
