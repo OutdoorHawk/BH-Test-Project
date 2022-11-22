@@ -1,4 +1,5 @@
 using BH_Test_Project.Code.Infrastructure.DI;
+using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
@@ -29,12 +30,20 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
         private PlayerGameUI _playerGameUI;
+        private NetworkPlayerSystem _playerGameSystem;
 
         private void Start()
         {
             if (isOwned)
                 Init();
             Debug.Log(netId);
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            _playerGameSystem = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerSystem();
+            _playerGameSystem.AddNewPlayer(netId);
         }
 
         private void Init()
@@ -51,6 +60,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _playerGameUI = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerUI();
+
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);

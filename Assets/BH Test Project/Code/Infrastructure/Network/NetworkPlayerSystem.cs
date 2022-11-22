@@ -57,7 +57,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
         }
-
+        
         public void AddNewPlayer(uint netID)
         {
             PlayerOnServer newPlayer = new PlayerOnServer(netID);
