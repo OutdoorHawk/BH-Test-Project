@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
@@ -13,6 +14,33 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public NetworkSpawnSystem(List<Transform> spawnPoints)
         {
             _spawnPoints = spawnPoints;
+        }
+        
+        public void RegisterHandlers()
+        {
+            NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
+        }
+
+        public void UnregisterHandlers()
+        {
+            NetworkClient.UnregisterHandler<GameRestartMessage>();
+        }
+
+        private void OnGameRestarted(GameRestartMessage obj)
+        {
+            RespawnAllPlayers();
+        }
+
+        public void RespawnAllPlayers()
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                {
+                    player.transform.position = GetAvailableSpawnPoint();
+                    player.RpcPlayerRestart();
+                }
+            }
         }
 
         public PlayerBehavior SpawnNewPlayer()

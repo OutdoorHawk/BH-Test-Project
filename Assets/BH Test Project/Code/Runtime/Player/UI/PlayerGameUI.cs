@@ -39,5 +39,14 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
                     element.SetScore(newScore);
             }
         }
+
+        public void ResetPlayerScores()
+        {
+            for (var i = 0; i < _scoreElements.Count; i++)
+            {
+                if (_scoreElements[i].Active) 
+                    _scoreElements[i].SetScore(0);
+            }
+        }
     }
 }

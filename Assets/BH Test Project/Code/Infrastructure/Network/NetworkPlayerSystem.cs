@@ -20,6 +20,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public void Init(PlayerGameUI playerGameUI)
         {
             _playerGameUI = playerGameUI;
+            for (int i = 0; i < _players.Count; i++) 
+                _players[i].ResetScore();
         }
 
         public void RegisterHandlers()

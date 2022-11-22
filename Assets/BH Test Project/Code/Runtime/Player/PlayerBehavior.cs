@@ -36,7 +36,7 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
 
-        private void Start()
+        public void Start()
         {
             if (isOwned)
                 Init();
@@ -128,6 +128,13 @@ namespace BH_Test_Project.Code.Runtime.Player
         public void RpcGameEnd()
         {
             _playerStateMachine.Enter<EndGameState>();
+        }
+
+        [TargetRpc]
+        public void RpcPlayerRestart()
+        {
+            _playerStateMachine.Enter<BasicMovementState>();
+            _playerGameUI.ResetPlayerScores();
         }
 
         private void ChangeCursorSettings()

@@ -1,6 +1,5 @@
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
-using Mirror;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -28,11 +27,13 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.RegisterHandlers();
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
+            _spawnSystem.RegisterHandlers();
         }
 
         public void Exit()
         {
             _playerSystem.UnregisterHandlers();
+            _spawnSystem.UnregisterHandlers();
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
@@ -44,15 +45,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
                 return;
             
-            _gameStateMachine.Enter<GameLoopState>(); 
-            
+            _gameStateMachine.Enter<GameLoopState>();
             InitGameLevel();
         }
 
         private void InitGameLevel()
         {
             _playerSystem = _sceneContextService.GetPlayerSystem();
-            startPositions = _sceneContextService.GetSceneSpawnPoints();
             _playerSystem.OnGameEnd += RestartGame; // todo make with register message
         }
 
@@ -63,8 +62,9 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         private IEnumerator RestartGameRoutine()
         {
-            yield return new WaitForSeconds(4.5f);
+            yield return new WaitForSeconds(2.5f);
             _gameStateMachine.Enter<GameLoopState>();
+            NetworkServer.SendToAll(new GameRestartMessage());
         }
 
         public override void OnDestroy()
