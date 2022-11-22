@@ -31,15 +31,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
 
-        public void Start()
-        {
-            if (!isOwned)
-                return;
-         
-        }
-
         [TargetRpc]
-        public void Init(PlayerStaticData staticData)
+        public void TargetInitPlayer(PlayerStaticData staticData)
         {
             if (!isOwned)
                 return;
@@ -92,7 +85,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
 
         [TargetRpc]
-        public void TargetHitPlayer(uint hitSenderNetId)
+        public void TargetPlayerHit(uint hitSenderNetId)
         {
             if (_playerIsHitNow)
                 return;

@@ -22,7 +22,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public void RegisterHandlers()
         {
             NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
-            NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerAskHit);
+            NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerHit);
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
         }
 
@@ -45,14 +45,20 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             Debug.Log("InitSystem");
         }
 
+        private void ResetPlayersScore()
+        {
+            for (int i = 0; i < _players.Count; i++)
+                _players[i].ResetScore();
+        }
+
         private void Start()
         {
             if (isClient)
-                InitPlayers(_playerStaticData);
+                CmdInitPlayers(_playerStaticData);
         }
 
         [Command(requiresAuthority = false)]
-        private void InitPlayers(PlayerStaticData playerStaticData)
+        private void CmdInitPlayers(PlayerStaticData playerStaticData)
         {
             Debug.Log("InitializePlayers");
             foreach (var conn in NetworkServer.connections.Values)
@@ -64,7 +70,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     if (conn.identity.TryGetComponent(out PlayerBehavior player))
                     {
                         Debug.Log("InitPlayer");
-                        player.Init(playerStaticData);
+                        player.TargetInitPlayer(playerStaticData);
                     }
                 }
             }
@@ -75,31 +81,25 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             return _players.Any(player => player.NetID == identityNetId);
         }
 
-        private void ResetPlayersScore()
-        {
-            for (int i = 0; i < _players.Count; i++)
-                _players[i].ResetScore();
-        }
-
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
             _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
         }
 
-        private void OnPlayerAskHit(NetworkConnection connection, PlayerAskHitMessage message)
+        private void OnPlayerHit(NetworkConnection connection, PlayerAskHitMessage message)
         {
-            SendPlayerHitRpc(message.HitRecipientNetId, message.HitSenderNetId);
+            SendPlayerHit(message.HitRecipientNetId, message.HitSenderNetId);
         }
 
-        private void SendPlayerHitRpc(uint hitRecipientNetId, uint hitSenderNetId)
+        private void SendPlayerHit(uint hitRecipientNetId, uint hitSenderNetId)
         {
             foreach (var conn in NetworkServer.connections.Values)
             {
                 if (conn.identity.netId == hitRecipientNetId)
                 {
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.TargetHitPlayer(hitSenderNetId);
+                    playerBehavior.TargetPlayerHit(hitSenderNetId);
                 }
             }
         }
