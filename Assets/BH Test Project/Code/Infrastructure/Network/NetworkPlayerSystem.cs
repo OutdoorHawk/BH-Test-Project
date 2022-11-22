@@ -89,7 +89,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
                     playerBehavior.RpcGameEnd();
                 }
-                OnGameEnd?.Invoke();
+
+                if (isServer) 
+                    OnGameEnd?.Invoke();
             }
         }
     }

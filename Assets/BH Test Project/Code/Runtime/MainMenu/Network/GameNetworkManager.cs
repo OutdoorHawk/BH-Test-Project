@@ -1,12 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
-using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -44,7 +42,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
                 return;
-            
+
             _gameStateMachine.Enter<GameLoopState>();
             InitGameLevel();
         }
