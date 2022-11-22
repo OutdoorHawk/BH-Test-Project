@@ -34,6 +34,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (isOwned)
                 Init();
+            Debug.Log(netId);
         }
 
         private void Init()
@@ -85,7 +86,6 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void RpcIncreasePlayerScore(uint successPlayerNetId)
         {
-            Debug.Log(_playerGameUI);
             _playerGameUI.UpdatePlayerScore(successPlayerNetId);
         }
 

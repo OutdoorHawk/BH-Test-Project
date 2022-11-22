@@ -28,7 +28,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             HitPlayer(message.HurtPlayerNetId);
             IncreasePlayerScore(message.SuccessPlayerNetId);
-            //IncreasePlayerScore(message);
         }
 
         [Server]
