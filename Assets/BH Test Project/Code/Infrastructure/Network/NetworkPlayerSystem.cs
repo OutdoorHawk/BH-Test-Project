@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
@@ -51,16 +52,15 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Server]
         private void IncreasePlayerScore(uint successPlayerNetId)
         {
-            int newScore = 0;
-            for (int i = 0; i < _players.Count; i++)
+            foreach (var player in _players.Where(player => player.NetID == successPlayerNetId))
             {
-                if (_players[i].NetID == successPlayerNetId)
-                {
-                    _players[i].IncreasePlayerScore();
-                    newScore = _players[i].Score;
-                }
+                player.IncreasePlayerScore();
+                UpdatePlayersScoreUI(successPlayerNetId, player.Score);
             }
-            
+        }
+
+        private void UpdatePlayersScoreUI(uint successPlayerNetId, int newScore)
+        {
             foreach (var conn in NetworkServer.connections.Values)
             {
                 conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
