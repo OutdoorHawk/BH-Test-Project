@@ -24,7 +24,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public void RegisterHandlers()
         {
-            Debug.Log("reg");
             NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
             NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerAskHit);
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
@@ -32,7 +31,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         
         public void UnregisterHandlers()
         {
-            Debug.Log("unreg");
             NetworkClient.UnregisterHandler<PlayerConnectedMessage>();
             NetworkServer.UnregisterHandler<PlayerAskHitMessage>();
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();

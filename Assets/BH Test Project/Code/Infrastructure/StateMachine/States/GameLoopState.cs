@@ -25,6 +25,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _sceneContextService.InitSceneContext();
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.RegisterHandlers();
+            _playerSystem.Init(_sceneContextService.GetPlayerUI());
         }
 
         public void Exit()

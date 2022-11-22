@@ -51,11 +51,8 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         private void InitGameLevel()
         {
-            List<Transform> spawnPoints = _sceneContextService.GetSceneSpawnPoints();
             _playerSystem = _sceneContextService.GetPlayerSystem();
-            startPositions = spawnPoints;
-            _spawnSystem = new NetworkSpawnSystem(spawnPoints, playerPrefab);
-            _playerSystem.Init(_sceneContextService.GetPlayerUI());
+            startPositions = _sceneContextService.GetSceneSpawnPoints();
             _playerSystem.OnGameEnd += RestartGame;
         }
 
