@@ -56,28 +56,14 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private void InitGameLevel()
         {
             _playerSystem = _sceneContextService.GetPlayerSystem();
-            //_playerSystem.OnGameEnd += RestartGame; // todo make with register message
         }
 
         private void OnGameRestarted(GameRestartMessage obj)
         {
-            _gameStateMachine.Enter<GameLoopState>();
-            StartCoroutine(RestartGameRoutine());
-        }
-
-        private IEnumerator RestartGameRoutine()
-        {
-            yield return new WaitForSeconds(2.5f);
-           // NetworkServer.SendToAll(new GameRestartMessage());
             ServerChangeScene(GameplayScene);
+            _gameStateMachine.Enter<GameLoopState>();
         }
-
-        private void RestartGame()
-        {
-            _playerSystem.OnGameEnd -= RestartGame;
-            StartCoroutine(RestartGameRoutine());
-        }
-
+        
         public override void OnDestroy()
         {
             base.OnDestroy();

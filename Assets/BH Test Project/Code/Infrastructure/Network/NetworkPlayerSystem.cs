@@ -1,7 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
@@ -12,11 +12,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkPlayerSystem : NetworkBehaviour
     {
-        public event Action OnGameEnd;
         private List<PlayerOnServer> _players = new();
         private PlayerGameUI _playerGameUI;
 
         private int _gameEndScore = 3;
+        private float _gameRestartDelay = 3;
 
         public void Init(PlayerGameUI playerGameUI)
         {
@@ -90,13 +90,18 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
                     playerBehavior.RpcGameEnd(player.Name);
                 }
-
-                CmdGameOver();
-                //if (isServer)
-                // OnGameEnd?.Invoke();
+                
+                if (isServer)
+                    StartCoroutine(RestartGameRoutine());
             }
         }
-
+        
+        private IEnumerator RestartGameRoutine()
+        {
+            yield return new WaitForSeconds(_gameRestartDelay);
+            CmdGameOver();
+        }
+        
         [Command(requiresAuthority = false)]
         private void CmdGameOver()
         {
