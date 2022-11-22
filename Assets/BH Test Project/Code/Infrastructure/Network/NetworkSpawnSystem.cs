@@ -43,13 +43,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
-        public PlayerBehavior SpawnNewPlayer()
-        {
-            GameObject player = Object.Instantiate(_playerPrefab, GetAvailableSpawnPoint(), Quaternion.identity);
-            GetAvailableSpawnPoint();
-            return player.GetComponent<PlayerBehavior>();
-        }
-
         private Vector3 GetAvailableSpawnPoint()
         {
             List<Transform> availableSpawnPoints = new List<Transform>();
@@ -62,7 +55,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     {
                         Vector3 playerPosition = conn.identity.transform.position;
                         if (playerPosition == _spawnPoints[i].position)
-                            availableSpawnPoints.Remove(_spawnPoints[i]);
+                            availableSpawnPoints.RemoveAt(i);
                     }
                 }
             }
