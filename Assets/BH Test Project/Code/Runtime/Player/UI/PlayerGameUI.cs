@@ -16,7 +16,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private List<ScoreElement> _scoreElements = new();
 
-        private float _restartDelay = 3;
+        private float _restartDelay;
 
         public void Init(float gameRestartDelay)
         {
@@ -57,10 +57,11 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private IEnumerator EndGameTimerRoutine()
         {
+            int formatCorrectionValue = 1;
             float countdown = _restartDelay;
             do
             {
-                _countDownText.text = countdown.ToString("0");
+                _countDownText.text = Mathf.Round(countdown).ToString("0");
                 countdown -= Time.deltaTime;
                 yield return new WaitForSeconds(Time.deltaTime);
             } while (countdown > 0);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using BH_Test_Project.Code.Runtime.CameraLogic;
+using BH_Test_Project.Code.StaticData;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player.Movement
@@ -14,17 +15,17 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private readonly Transform _playerPlayerTransform;
         private readonly MonoBehaviour _mono;
 
-        private readonly PlayerData _playerData;
+        private readonly PlayerStaticData _playerStaticData;
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
-        public PlayerMovement(PlayerData playerData, CharacterController characterController,
+        public PlayerMovement(PlayerStaticData playerStaticData, CharacterController characterController,
             Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
         {
             _mono = mono;
             _playerPlayerTransform = playerTransform;
             _characterController = characterController;
-            _playerData = playerData;
+            _playerStaticData = playerStaticData;
             _cameraTransform = cameraFollow.transform;
         }
 
@@ -85,7 +86,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         }
 
         private void ApplyMovement() =>
-            _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
+            _characterController.Move(_movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed));
 
         public void PerformDash()
         {
@@ -95,8 +96,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private IEnumerator Dashing()
         {
-            Vector3 dashVector = _playerPlayerTransform.forward * _playerData.DashPower;
-            float t = _playerData.DashTime;
+            Vector3 dashVector = _playerPlayerTransform.forward * _playerStaticData.DashPower;
+            float t = _playerStaticData.DashTime;
             do
             {
                 t -= Time.deltaTime;

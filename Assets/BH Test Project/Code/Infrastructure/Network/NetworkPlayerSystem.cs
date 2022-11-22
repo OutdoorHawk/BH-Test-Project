@@ -4,6 +4,7 @@ using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
+using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
 
@@ -31,10 +32,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
 
-        public void Init(PlayerGameUI playerGameUI)
+        public void Init(PlayerGameUI playerGameUI, WorldStaticData worldStaticData)
         {
             _playerGameUI = playerGameUI;
             _playerGameUI.Init(_gameRestartDelay);
+            _gameEndScore = worldStaticData.GameEndScore;
+            _gameRestartDelay = worldStaticData.GameRestartDelay;
             ResetPlayersScore();
         }
 

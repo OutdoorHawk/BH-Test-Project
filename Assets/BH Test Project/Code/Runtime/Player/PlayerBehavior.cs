@@ -10,6 +10,7 @@ using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.UI;
+using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(ColorChangeComponent))]
     public class PlayerBehavior : NetworkBehaviour
     {
-        [SerializeField] private PlayerData _playerData;
+        [SerializeField] private PlayerStaticData playerStaticData;
         [SerializeField] private CameraFollow _cameraFollowPrefab;
 
         private CameraFollow _cameraFollow;
@@ -57,8 +58,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
-            _playerMovement = new PlayerMovement(_playerData, characterController, transform, _cameraFollow, this);
-            _playerGameStatus = new PlayerGameStatus(_playerData, this, changeComponent);
+            _playerMovement = new PlayerMovement(playerStaticData, characterController, transform, _cameraFollow, this);
+            _playerGameStatus = new PlayerGameStatus(playerStaticData, this, changeComponent);
             _playerStateMachine =
                 new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
                     netId, _playerGameStatus);
@@ -67,9 +68,8 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void InitSystems()
         {
             _playerInput.Init();
-            _cameraFollow.Init(_playerInput, _playerData, transform);
+            _cameraFollow.Init(_playerInput, playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
-            _collisionDetector.Init(_playerData.PlayerCollisionMask);
         }
 
         [Command]

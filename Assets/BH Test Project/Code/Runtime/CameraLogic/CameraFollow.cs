@@ -1,5 +1,6 @@
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.Input;
+using BH_Test_Project.Code.StaticData;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.CameraLogic
@@ -19,7 +20,7 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         private Camera _camera;
         private Vector3 _currentPosition;
         private Vector3 _currentRotation;
-        private PlayerData _playerData;
+        private PlayerStaticData _playerStaticData;
         private Vector2 _mouseAxis;
         private Vector3 _smoothVelocity = Vector3.zero;
         private Vector3 _focusPoint;
@@ -43,9 +44,9 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             }
         }
 
-        public void Init(IPlayerInput playerInput, PlayerData playerData, Transform target)
+        public void Init(IPlayerInput playerInput, PlayerStaticData playerStaticData, Transform target)
         {
-            _playerData = playerData;
+            _playerStaticData = playerStaticData;
             _playerInput = playerInput;
             _followTarget = target;
             _cachedTransform = transform;
@@ -101,8 +102,8 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         {
             _mouseAxis = _playerInput.MouseAxis.ReadValue<Vector2>();
 
-            float mouseX = _mouseAxis.x * _playerData.MouseSensitivity;
-            float mouseY = _mouseAxis.y * _playerData.MouseSensitivity;
+            float mouseX = _mouseAxis.x * _playerStaticData.MouseSensitivity;
+            float mouseY = _mouseAxis.y * _playerStaticData.MouseSensitivity;
 
             yRotation += mouseX;
             xRotation -= mouseY;

@@ -5,10 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkPlayerSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/NetworkPlayerSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/IStaticDataService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/IStaticDataService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticDataService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticDataService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/GameLoopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/GameLoopState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StaticData/GameStaticData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StaticData/GameStaticData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/CameraLogic/CameraFollow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/CameraLogic/CameraFollow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Movement/PlayerMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Movement/PlayerMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerCollisionDetector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerCollisionDetector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerData.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerData.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerGameStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/HitState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/HitState.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerGameUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerGameUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Players/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Players/Player.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +54,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Animation/PlayerAnimationParameter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/MainMenu/Network/GameNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/StaticData/PlayerStaticData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionReference.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/InputManager.cs" root0="SKIP_HIGHLIGHTING" />

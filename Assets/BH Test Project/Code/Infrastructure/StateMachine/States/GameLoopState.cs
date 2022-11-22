@@ -25,7 +25,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _spawnSystem = new NetworkSpawnSystem(_sceneContextService.GetSceneSpawnPoints());
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.RegisterHandlers();
-            _playerSystem.Init(_sceneContextService.GetPlayerUI());
+            _playerSystem.Init(_sceneContextService.GetPlayerUI(), _staticDataService.GetWorldStaticData());
         }
 
         public void Exit()
