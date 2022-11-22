@@ -42,7 +42,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
             PlayerStaticData playerStaticData = _staticDataService.GetPlayerStaticData();
             PlayerHUD playerHUD = _uiFactory.CreatePlayerHUD();
-                _playerSystem.Init(playerHUD, worldStaticData, playerStaticData);
+            _playerSystem.Init(playerHUD, worldStaticData, playerStaticData);
         }
 
         public void Exit()
