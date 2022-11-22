@@ -1,3 +1,4 @@
+using System;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
@@ -39,7 +40,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         public void Start()
         {
             if (isOwned)
+            {
                 Init();
+            }
         }
 
         public override void OnStartLocalPlayer()
@@ -153,8 +156,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         public override void OnStopLocalPlayer()
         {
-            base.OnStopLocalPlayer();
             DisposePlayer();
+            base.OnStopLocalPlayer();
         }
 
         private void DisposePlayer()

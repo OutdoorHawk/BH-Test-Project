@@ -28,6 +28,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _playerSystem.RegisterHandlers();
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
             _spawnSystem.RegisterHandlers();
+            _spawnSystem.RespawnAllPlayers();
         }
 
         public void Exit()

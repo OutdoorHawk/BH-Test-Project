@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class NetworkPlayerSystem : NetworkBehaviour
+    public class NetworkPlayerSystem : MonoBehaviour
     {
         public event Action OnGameEnd;
         private List<PlayerOnServer> _players = new();
@@ -20,7 +20,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public void Init(PlayerGameUI playerGameUI)
         {
             _playerGameUI = playerGameUI;
-            for (int i = 0; i < _players.Count; i++) 
+            for (int i = 0; i < _players.Count; i++)
                 _players[i].ResetScore();
         }
 
@@ -30,7 +30,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerAskHit);
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
         }
-        
+
         public void UnregisterHandlers()
         {
             NetworkClient.UnregisterHandler<PlayerConnectedMessage>();
@@ -48,7 +48,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             SendPlayerHitRpc(message.HitRecipientNetId, message.HitSenderNetId);
         }
-        
+
         private void SendPlayerHitRpc(uint hitRecipientNetId, uint hitSenderNetId)
         {
             foreach (var conn in NetworkServer.connections.Values)
@@ -90,7 +90,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     playerBehavior.RpcGameEnd();
                 }
 
-                if (isServer) 
+                //if (isServer)
                     OnGameEnd?.Invoke();
             }
         }

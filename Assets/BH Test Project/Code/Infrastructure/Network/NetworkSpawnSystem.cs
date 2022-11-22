@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
@@ -19,17 +18,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public void RegisterHandlers()
         {
-            NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
         }
 
         public void UnregisterHandlers()
         {
-            NetworkClient.UnregisterHandler<GameRestartMessage>();
-        }
-
-        private void OnGameRestarted(GameRestartMessage obj)
-        {
-            RespawnAllPlayers();
+            //  NetworkClient.UnregisterHandler<GameRestartMessage>();
         }
 
         public void RespawnAllPlayers()
@@ -38,7 +31,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 if (conn.identity.TryGetComponent(out PlayerBehavior player))
                 {
-                    player.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position;
+                    player.GetComponent<NetworkTransform>()
+                        .RpcTeleport(_spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position);
                     player.RpcPlayerRestart();
                 }
             }
@@ -59,9 +53,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     }
                 }
             }
-
-            foreach (var point in availableSpawnPoints) 
-                Debug.Log(point);
 
             return availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count - 1)];
         }

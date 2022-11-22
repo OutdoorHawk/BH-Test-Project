@@ -59,6 +59,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         public void CleanUp()
         {
+            ActiveState.Exit();
             ActiveState = null;
             _states.Clear();
         }

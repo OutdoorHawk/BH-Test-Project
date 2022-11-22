@@ -37,6 +37,12 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             if (!NetworkClient.active && !NetworkServer.active)
                 StartClient();
         }
+        
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
+        }
 
         private void HandleGameLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
@@ -52,6 +58,11 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             _playerSystem = _sceneContextService.GetPlayerSystem();
             _playerSystem.OnGameEnd += RestartGame; // todo make with register message
         }
+        
+        private void OnGameRestarted(GameRestartMessage obj)
+        {
+            _gameStateMachine.Enter<GameLoopState>();
+        }
 
         private void RestartGame()
         {
@@ -61,10 +72,21 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private IEnumerator RestartGameRoutine()
         {
             yield return new WaitForSeconds(2.5f);
-            _gameStateMachine.Enter<GameLoopState>();
-            NetworkServer.SendToAll(new GameRestartMessage());
+           // NetworkServer.SendToAll(new GameRestartMessage());
+           ServerChangeScene(GameplayScene);
         }
 
+        public override void OnServerChangeScene(string newSceneName)
+        {
+            foreach (var connection in NetworkServer.connections)
+            {
+                Debug.Log(connection.Value.identity.gameObject.name);
+                foreach (var identity in connection.Value.owned) 
+                    Debug.Log(identity.gameObject.name);
+            }
+            base.OnServerChangeScene(newSceneName);
+        }
+        
         public override void OnDestroy()
         {
             base.OnDestroy();
