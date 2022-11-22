@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class NetworkPlayerSystem : MonoBehaviour
+    public class NetworkPlayerSystem : NetworkBehaviour
     {
         public event Action OnGameEnd;
         private List<PlayerOnServer> _players = new();
@@ -41,7 +42,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
-            _players.Add(new PlayerOnServer(MSG.NetId));
+            _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
         }
 
         private void OnPlayerAskHit(NetworkConnection connection, PlayerAskHitMessage message)
@@ -67,7 +68,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 player.IncreasePlayerScore();
                 UpdatePlayersScoreUI(msg.HitSenderNetId, player.Score);
-                CheckGameEndConditions(player.Score);
+                CheckGameEndConditions(player);
             }
         }
 
@@ -80,19 +81,26 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
-        private void CheckGameEndConditions(int playerScore)
+        private void CheckGameEndConditions(PlayerOnServer player)
         {
-            if (playerScore == _gameEndScore)
+            if (player.Score == _gameEndScore)
             {
                 foreach (var conn in NetworkServer.connections.Values)
                 {
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.RpcGameEnd();
+                    playerBehavior.RpcGameEnd(player.Name);
                 }
 
+                CmdGameOver();
                 //if (isServer)
-                    OnGameEnd?.Invoke();
+                // OnGameEnd?.Invoke();
             }
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdGameOver()
+        {
+            NetworkServer.SendToAll(new GameRestartMessage());
         }
     }
 }

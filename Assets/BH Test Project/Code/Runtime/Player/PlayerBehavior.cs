@@ -39,10 +39,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         public void Start()
         {
-            if (isLocalPlayer && isClient)
-            {
+            if (isOwned) 
                 Init();
-            }
         }
 
         public override void OnStartLocalPlayer()
@@ -57,7 +55,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
             {
                 NetId = netID,
-                PlayerName = $"{playerName}{netID}"
+                PlayerName = $"{playerName}"
             };
             NetworkServer.SendToAll(playerConnectedMessage);
         }
@@ -128,16 +126,16 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
 
         [TargetRpc]
-        public void RpcGameEnd()
+        public void RpcGameEnd(string winnerNetID)
         {
             _playerStateMachine.Enter<EndGameState>();
+            _playerGameUI.EnableEndGamePanel(winnerNetID);
         }
 
         [TargetRpc]
         public void RpcPlayerRestart()
         {
             _playerStateMachine.Enter<BasicMovementState>();
-            _playerGameUI.ResetPlayerScores();
         }
 
         private void ChangeCursorSettings()

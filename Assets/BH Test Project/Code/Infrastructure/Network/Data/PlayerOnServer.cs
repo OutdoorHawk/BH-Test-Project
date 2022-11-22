@@ -4,11 +4,13 @@
     {
         public uint NetID;
         public int Score;
+        public string Name;
 
-        public PlayerOnServer(uint netID)
+        public PlayerOnServer(uint netID, string playerName)
         {
             NetID = netID;
             Score = 0;
+            Name = playerName;
         }
 
         public void IncreasePlayerScore()

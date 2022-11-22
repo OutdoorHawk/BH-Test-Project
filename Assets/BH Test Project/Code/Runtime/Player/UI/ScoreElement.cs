@@ -11,14 +11,12 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         public int NetId { get; private set; }
 
         public bool Active { get; private set; }
-        public int Score { get; private set; }
 
         public void ActivateElement()
         {
             Active = true;
             _nameText.name = PlayerPrefs.GetString(Constants.PLAYER_NAME);
             _scoreText.text = "0";
-            Score = 0;
             gameObject.SetActive(true);
         }
 
@@ -30,13 +28,6 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         public void SetScore(int score)
         {
             _scoreText.text = score.ToString();
-            Score = score;
-        }  
-        
-        public void IncreaseScore()
-        {
-            Score++;
-            _scoreText.text = Score.ToString();
         }
 
         public void SetNetId(int msgNetId)

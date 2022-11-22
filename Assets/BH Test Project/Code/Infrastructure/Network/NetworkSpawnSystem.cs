@@ -25,18 +25,18 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             //  NetworkClient.UnregisterHandler<GameRestartMessage>();
         }
 
-        public void RespawnAllPlayers()
+        /*public void RespawnAllPlayers()
         {
             foreach (var conn in NetworkServer.connections.Values)
             {
                 if (conn.identity.TryGetComponent(out PlayerBehavior player))
                 {
-                    player.GetComponent<NetworkTransform>()
-                        .RpcTeleport(_spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position);
+                    /*player.GetComponent<NetworkTransform>()
+                        .RpcTeleport(_spawnPoints[Random.Range(0, _spawnPoints.Count - 1)].position);#1#
                     player.RpcPlayerRestart();
                 }
             }
-        }
+        }*/
 
         private Vector3 GetAvailableSpawnPoint()
         {

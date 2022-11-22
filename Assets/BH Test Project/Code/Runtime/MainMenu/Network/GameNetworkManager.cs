@@ -37,7 +37,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             if (!NetworkClient.active && !NetworkServer.active)
                 StartClient();
         }
-        
+
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -56,16 +56,12 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private void InitGameLevel()
         {
             _playerSystem = _sceneContextService.GetPlayerSystem();
-            _playerSystem.OnGameEnd += RestartGame; // todo make with register message
+            //_playerSystem.OnGameEnd += RestartGame; // todo make with register message
         }
-        
+
         private void OnGameRestarted(GameRestartMessage obj)
         {
             _gameStateMachine.Enter<GameLoopState>();
-        }
-
-        private void RestartGame()
-        {
             StartCoroutine(RestartGameRoutine());
         }
 
@@ -73,24 +69,18 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             yield return new WaitForSeconds(2.5f);
            // NetworkServer.SendToAll(new GameRestartMessage());
-           ServerChangeScene(GameplayScene);
+            ServerChangeScene(GameplayScene);
         }
 
-        public override void OnServerChangeScene(string newSceneName)
+        private void RestartGame()
         {
-            foreach (var connection in NetworkServer.connections)
-            {
-                Debug.Log(connection.Value.identity.gameObject.name);
-                foreach (var identity in connection.Value.owned) 
-                    Debug.Log(identity.gameObject.name);
-            }
-            base.OnServerChangeScene(newSceneName);
+            _playerSystem.OnGameEnd -= RestartGame;
+            StartCoroutine(RestartGameRoutine());
         }
-        
+
         public override void OnDestroy()
         {
             base.OnDestroy();
-            _playerSystem.OnGameEnd -= RestartGame;
             SceneManager.sceneLoaded -= HandleGameLevelLoaded;
         }
     }
