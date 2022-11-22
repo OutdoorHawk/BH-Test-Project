@@ -39,7 +39,7 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         public void Start()
         {
-            if (isOwned)
+            if (isLocalPlayer && isClient)
             {
                 Init();
             }
