@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
@@ -10,8 +11,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkPlayerSystem : NetworkBehaviour
     {
+        public event Action OnGameEnd;
         private List<PlayerOnServer> _players = new();
         private PlayerGameUI _playerGameUI;
+
+        private int _gameEndScore = 3;
 
         public void Init(PlayerGameUI playerGameUI)
         {
@@ -49,6 +53,22 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 player.IncreasePlayerScore();
                 UpdatePlayersScoreUI(msg.HitSenderNetId, player.Score);
+                CheckGameEndConditions(player.Score);
+            }
+        }
+
+        private void CheckGameEndConditions(int playerScore)
+        {
+            if (playerScore == _gameEndScore)
+            {
+                foreach (var conn in NetworkServer.connections.Values)
+                {
+                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                    playerBehavior.RpcGameEnd();
+                    Debug.Log("gameEnded");
+                }
+
+                OnGameEnd?.Invoke();
             }
         }
 

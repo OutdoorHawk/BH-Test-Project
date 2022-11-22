@@ -53,6 +53,12 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             _spawnSystem = new NetworkSpawnSystem(spawnPoints, playerPrefab);
             _playerSystem.Init(_sceneContextService.GetPlayerUI());
             _playerSystem.RegisterHandlers();
+            _playerSystem.OnGameEnd += RestartGame;
+        }
+
+        private void RestartGame()
+        {
+            ServerChangeScene(GameplayScene);
         }
 
         public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,

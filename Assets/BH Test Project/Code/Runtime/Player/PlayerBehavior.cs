@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
@@ -34,6 +33,8 @@ namespace BH_Test_Project.Code.Runtime.Player
         private IPlayerStateMachine _playerStateMachine;
         private PlayerGameUI _playerGameUI;
         private NetworkPlayerSystem _playerGameSystem;
+
+        private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
 
         private void Start()
         {
@@ -101,7 +102,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void RpcHitPlayer(uint hitSenderNetId)
         {
-            if (PlayerIsHitNow())
+            if (_playerIsHitNow)
                 return;
             _playerStateMachine.Enter<HitState>();
             CmdSuccessHit(hitSenderNetId);
@@ -117,15 +118,16 @@ namespace BH_Test_Project.Code.Runtime.Player
             NetworkServer.SendToAll(message);
         }
 
-        private bool PlayerIsHitNow()
-        {
-            return _playerStateMachine.ActiveState is HitState;
-        }
-
         [TargetRpc]
         public void RpcIncreasePlayerScore(uint successPlayerNetId, int newScore)
         {
             _playerGameUI.UpdatePlayerScore(successPlayerNetId, newScore);
+        }
+
+        [TargetRpc]
+        public void RpcGameEnd()
+        {
+            _playerInput.DisableAllInput();
         }
 
         private void ChangeCursorSettings()
