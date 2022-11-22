@@ -36,23 +36,19 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void Start()
         {
-            if (isOwned)
+            if (isOwned) 
                 Init();
-            Debug.Log(netId);
         }
 
-        public override void OnStartClient()
+        public override void OnStartLocalPlayer()
         {
-            base.OnStartClient();
-            _playerGameSystem = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerSystem();
-            AddNewPlayer(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            base.OnStartLocalPlayer();
+            CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
         [Command]
-        public void AddNewPlayer(uint netID, string playerName)
+        private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
         {
-            PlayerOnServer newPlayer = new PlayerOnServer(netID);
-            Debug.Log($"message send: {playerName}{netID}");
             PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
             {
                 NetId = netID,
@@ -75,7 +71,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _playerGameUI = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerUI();
-
+            _playerGameSystem = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerSystem();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
@@ -109,9 +105,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
 
         [TargetRpc]
-        public void RpcIncreasePlayerScore(uint successPlayerNetId)
+        public void RpcIncreasePlayerScore(uint successPlayerNetId, int newScore)
         {
-            _playerGameUI.UpdatePlayerScore(successPlayerNetId);
+            _playerGameUI.UpdatePlayerScore(successPlayerNetId,newScore);
         }
 
         private void ChangeCursorSettings()

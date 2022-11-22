@@ -30,13 +30,13 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
             }
         }
 
-        public void UpdatePlayerScore(uint netID)
+        public void UpdatePlayerScore(uint netID, int newScore)
         {
             for (var i = 0; i < _scoreElements.Count; i++)
             {
                 var element = _scoreElements[i];
                 if (element.NetId == netID)
-                    element.IncreaseScore();
+                    element.SetScore(newScore);
             }
         }
     }

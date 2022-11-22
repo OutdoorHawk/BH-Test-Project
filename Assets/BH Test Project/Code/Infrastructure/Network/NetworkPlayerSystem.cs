@@ -3,6 +3,7 @@ using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using Mirror;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
@@ -28,6 +29,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             IncreasePlayerScore(message.SuccessPlayerNetId);
         }
 
+        private void OnPlayerConnected(PlayerConnectedMessage MSG)
+        {
+            _playerGameUI.AddPlayerToScoreTable(MSG);
+            _players.Add(new PlayerOnServer(MSG.NetId));
+        }
+
         [Server]
         private void HitPlayer(uint hurtPlayerNetId)
         {
@@ -44,18 +51,21 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Server]
         private void IncreasePlayerScore(uint successPlayerNetId)
         {
+            int newScore = 0;
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if (_players[i].NetID == successPlayerNetId)
+                {
+                    _players[i].IncreasePlayerScore();
+                    newScore = _players[i].Score;
+                }
+            }
+            
             foreach (var conn in NetworkServer.connections.Values)
             {
                 conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                playerBehavior.RpcIncreasePlayerScore(successPlayerNetId);
+                playerBehavior.RpcIncreasePlayerScore(successPlayerNetId, newScore);
             }
         }
-
-        private void OnPlayerConnected(PlayerConnectedMessage MSG)
-        {
-            _playerGameUI.AddPlayerToScoreTable(MSG);
-        }
-
-    
     }
 }
