@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,17 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
     {
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _scoreText;
-        private int _msgNetId;
+        public int NetId { get; private set; }
+
+        public bool Active { get; private set; }
+
+        public void ActivateElement()
+        {
+            Active = true;
+            _nameText.name = PlayerPrefs.GetString(Constants.PLAYER_NAME) + NetId;
+            _scoreText.text = "0";
+            gameObject.SetActive(true);
+        }
 
         public void SetName(string playerName)
         {
@@ -21,13 +32,12 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         public void SetNetId(int msgNetId)
         {
-            _msgNetId = msgNetId;
+            NetId = msgNetId;
         }
 
         public int GetNetId()
         {
-            return _msgNetId;
+            return NetId;
         }
-        
     }
 }

@@ -1,3 +1,5 @@
+using BH_Test_Project.Code.Infrastructure.DI;
+using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
@@ -42,16 +44,12 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.OnEscapePressed += ChangeCursorSettings;
         }
 
-        public void InitUI(PlayerGameUI playerGameUI)
-        {
-            _playerGameUI = playerGameUI;
-        }
-
         private void CreateSystems()
         {
             Animator animator = GetComponent<Animator>();
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
+            _playerGameUI = DIContainer.Container.Resolve<ISceneContextService>().GetPlayerUI();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
@@ -84,10 +82,10 @@ namespace BH_Test_Project.Code.Runtime.Player
                 _playerStateMachine.Enter<HitState>();
         }
 
-        [ClientRpc]
+        [TargetRpc]
         public void RpcIncreasePlayerScore(uint successPlayerNetId)
         {
-            Debug.Log(successPlayerNetId);
+            Debug.Log(_playerGameUI);
             _playerGameUI.UpdatePlayerScore(successPlayerNetId);
         }
 

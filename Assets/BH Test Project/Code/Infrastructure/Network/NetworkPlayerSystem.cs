@@ -49,14 +49,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             foreach (var conn in NetworkServer.connections.Values)
             {
-                if (conn.identity.netId == successPlayerNetId)
-                {
-                    conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.RpcIncreasePlayerScore(successPlayerNetId);
-                }
+                conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
+                playerBehavior.RpcIncreasePlayerScore(successPlayerNetId);
             }
         }
-        
+
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
             _playerGameUI.AddPlayerToScoreTable(MSG);
