@@ -1,3 +1,4 @@
+using System;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using Mirror;
@@ -8,21 +9,27 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 {
     public class RoomPlayer : NetworkRoomPlayer
     {
+        public event Action OnRoomPlayerStateChanged;
+
         [SerializeField] private Text _playerNameText;
         [SerializeField] private Toggle _isReadyToggle;
         [SerializeField] private GameObject _slot;
-        
+
         [SyncVar(hook = nameof(PlayerNameChanged))] private string _playerName;
+        [SyncVar(hook = nameof(ReadyToggleChanged))] private bool _isReady;
+        public bool IsReady => _isReady;
 
         private new void Start()
         {
             base.Start();
             if (isOwned)
+            {
+                _isReadyToggle.interactable = true;
                 CmdRefreshLobbyUI();
-            if (isOwned)
                 CmdPlayerNameSet(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            }
 
-            _isReadyToggle.onValueChanged.AddListener(CmdToggleChanged);
+            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
         }
 
         [Command(requiresAuthority = false)]
@@ -36,18 +43,18 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void CmdPlayerNameSet(string playerName)
         {
             _playerName = playerName;
-        }
-
+        } 
+        
         [Command(requiresAuthority = false)]
-        private void CmdToggleChanged(bool value)
+        private void CmdChangePlayerReadyState(bool value)
         {
-            readyToBegin = value;
+            _isReady = value;
         }
-
-        public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+        
+        public  void ReadyToggleChanged(bool oldReadyState, bool newReadyState)
         {
-            base.ReadyStateChanged(oldReadyState, newReadyState);
             _isReadyToggle.isOn = newReadyState;
+            OnRoomPlayerStateChanged?.Invoke();
         }
 
         private void PlayerNameChanged(string oldValue, string newValue)

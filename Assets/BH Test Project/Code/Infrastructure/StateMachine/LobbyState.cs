@@ -1,8 +1,5 @@
-
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Lobby;
-using Mirror;
-using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
@@ -24,12 +21,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Enter()
         {
-
         }
 
         public void Exit()
         {
-            
+            _uiFactory.ClearUIRoot();
         }
     }
 }

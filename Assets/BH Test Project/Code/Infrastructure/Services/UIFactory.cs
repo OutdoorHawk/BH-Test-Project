@@ -43,6 +43,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services
 
         public void CreateUiRoot()
         {
+            if (_uiRoot != null) 
+                Object.Destroy(_uiRoot.gameObject);
             WindowConfig config = _staticDataService.GetWindow(WindowID.UiRoot);
             GameObject uiRoot = Object.Instantiate(config.WindowPrefab.gameObject);
             Object.DontDestroyOnLoad(uiRoot);

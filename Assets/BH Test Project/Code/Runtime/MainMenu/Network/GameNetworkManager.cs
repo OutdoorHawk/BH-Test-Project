@@ -50,10 +50,8 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         private void OnRoomPlayerAdded(RoomPlayerAddedMessage msg)
         {
-            for (int i = 0; i < roomSlots.Count; i++)
-            {
+            for (int i = 0; i < roomSlots.Count; i++) 
                 _lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform);
-            }
         }
 
         /*public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
@@ -77,7 +75,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
             if (NetworkServer.active)
                 NetworkServer.Spawn(_lobbyMenuWindow.gameObject);
-            _lobbyMenuWindow.InitLobby(NetworkClient.isHostClient);
+            _lobbyMenuWindow.InitLobby(NetworkClient.isHostClient, minPlayers);
         }
 
         public override void OnClientSceneChanged()
@@ -90,6 +88,14 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private void OnGameRestarted(GameRestartMessage obj)
         {
             ServerChangeScene(GameplayScene);
+        }
+
+        public override void OnClientDisconnect()
+        {
+            base.OnClientDisconnect();
+            Destroy(gameObject);
+            SceneManager.LoadScene((int)LevelID.MainMenu);
+            _gameStateMachine.Enter<MainMenuState>();
         }
     }
 }

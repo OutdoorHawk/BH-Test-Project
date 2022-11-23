@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BH_Test_Project.Code.Infrastructure.Data;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,39 +13,69 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
-        [SerializeField] private int _minPlayersToStartGame = 2;
 
-        private RoomPlayer[] _playerSlots;
+        private int _minPlayersToStartGame = 1;
+
+        private List<RoomPlayer> _roomPlayers;
         public Transform PlayerSlotsParent => _playerSlotsParent;
 
-        public void InitLobby(bool IsHost)
+        public void InitLobby(bool IsHost, int minPlayers)
         {
             if (IsHost)
+            {
                 _startGameButton.gameObject.SetActive(true);
+                _startGameButton.onClick.AddListener(StartGame);
+            }
+
+            _leaveButton.onClick.AddListener(DisconnectLobby);
+            _roomPlayers = new List<RoomPlayer>();
+            _minPlayersToStartGame = minPlayers;
+        }
+
+        private void StartGame()
+        {
+            CleanUp();
+            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
         }
 
         public void AddNewPlayerToLobby(Transform roomPlayer)
         {
             roomPlayer.SetParent(_playerSlotsParent);
             roomPlayer.SetSiblingIndex(0);
+            roomPlayer.TryGetComponent(out RoomPlayer player);
+            if (!_roomPlayers.Contains(player))
+            {
+                _roomPlayers.Add(player);
+                player.OnRoomPlayerStateChanged += CheckGameCanStart;
+            }
         }
-        
+
+        private void CheckGameCanStart()
+        {
+            Debug.Log(IsEveryoneReady());
+            _startGameButton.interactable = IsEveryoneReady();
+        }
+
         private bool IsEveryoneReady()
         {
-            if (_playerSlots.Length < _minPlayersToStartGame)
+            if (_roomPlayers.Count < _minPlayersToStartGame)
                 return false;
-            return _playerSlots.All(player => player.readyToBegin);
+            return _roomPlayers.All(player => player.IsReady);
         }
 
         private void DisconnectLobby()
         {
-            /*if (isServer)
-                NetworkServer.DisconnectAll();
-            if (isClient)
-                NetworkClient.Disconnect();*/
-            // gameObject.SetActive(false);
+            NetworkClient.Disconnect();
+
 
             Debug.Log("disconnect");
+        }
+
+        private void CleanUp()
+        {
+            _leaveButton.onClick.RemoveListener(DisconnectLobby);
+            foreach (var pl in _roomPlayers)
+                pl.OnRoomPlayerStateChanged -= CheckGameCanStart;
         }
     }
 }

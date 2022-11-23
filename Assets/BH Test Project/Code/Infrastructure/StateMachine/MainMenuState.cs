@@ -25,14 +25,20 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         public void Enter()
         {
             _uiFactory.CreateUiRoot();
-            InitializeMainMenu();
+            InitNetworkManager();
+            InitMainMenu();
         }
 
-        private void InitializeMainMenu()
+        private void InitMainMenu()
         {
-            MainMenuWindow window = _uiFactory.CreateMainMenuWindow();
-            _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
-            window.Init(_gameNetworkManager);
+            MainMenuWindow mainMenuWindow = _uiFactory.CreateMainMenuWindow();
+            mainMenuWindow.Init(_gameNetworkManager);
+        }
+
+        private void InitNetworkManager()
+        {
+            if (_gameNetworkManager == null)
+                _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
             _gameNetworkManager.Init(_gameStateMachine, _sceneContextService, _uiFactory);
         }
 
