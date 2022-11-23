@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
-    public class LoadMainMenuState : IState
+    public class MainMenuState : IState
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         private readonly ISceneContextService _sceneContextService;
         private GameNetworkManager _gameNetworkManager;
 
-        public LoadMainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
+        public MainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
             IStaticDataService staticDataService, ISceneContextService sceneContextService)
         {
             _gameStateMachine = gameStateMachine;
@@ -24,7 +24,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Enter()
         {
-            _uiFactory.CreateUiRoot();
             InitializeMainMenu();
         }
 
@@ -38,7 +37,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Exit()
         {
-    
+           
         }
     }
 }

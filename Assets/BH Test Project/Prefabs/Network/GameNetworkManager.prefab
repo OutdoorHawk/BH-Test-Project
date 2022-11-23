@@ -62,7 +62,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 989263431012666124, guid: 4d13b08431acd9c48be43b17ae233f0a, type: 3}
   timeInterpolationGui: 0
-  showRoomGUI: 1
+  showRoomGUI: 0
   minPlayers: 1
   roomPlayerPrefab: {fileID: 3923620157842650766, guid: f3f44ed85a3456f4197a4a24bc57b675, type: 3}
   RoomScene: Assets/Scenes/Lobby.unity

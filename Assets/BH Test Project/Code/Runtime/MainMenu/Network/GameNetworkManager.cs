@@ -20,7 +20,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             _sceneContextService = sceneContextService;
             _gameStateMachine = gameStateMachine;
-            SceneManager.sceneLoaded += HandleGameLevelLoaded;
         }
 
         public void CreateLobbyAsHost()
@@ -42,20 +41,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
         }
 
-        private void HandleGameLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
-        {
-            if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
-                return;
-
-            //OnLoaded();
-        }
-
-        private void OnLoaded()
-        {
-            _gameStateMachine.Enter<GameLoopState>();
-            startPositions = _sceneContextService.GetSceneSpawnPoints();
-        }
-
         /*
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
             GameObject gamePlayer)
@@ -69,22 +54,19 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         public override void OnClientSceneChanged()
         {
             base.OnClientSceneChanged();
-            if (SceneManager.GetActiveScene().name == Constants.GAME_LEVEL_NAME)
-            {
+            if (SceneManager.GetActiveScene().name == Constants.GAME_SCENE_NAME)
                 _gameStateMachine.Enter<GameLoopState>();
-                Debug.Log("sceneLoaded");
-            }
         }
-        
+
+        public override void OnRoomClientEnter()
+        {
+            base.OnRoomClientEnter();
+            _gameStateMachine.Enter<LobbyState>();
+        }
+
         private void OnGameRestarted(GameRestartMessage obj)
         {
             ServerChangeScene(GameplayScene);
-        }
-
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-            SceneManager.sceneLoaded -= HandleGameLevelLoaded;
         }
     }
 }

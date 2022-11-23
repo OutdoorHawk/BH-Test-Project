@@ -1,10 +1,11 @@
 using System;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
-    public class PlayerSlotView : MonoBehaviour
+    public class PlayerSlotView : NetworkRoomPlayer
     {
         [SerializeField] private Text _playerName;
         [SerializeField] private Toggle _isReadyToggle;

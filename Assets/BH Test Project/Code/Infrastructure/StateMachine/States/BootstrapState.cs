@@ -32,7 +32,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            _gameStateMachine.Enter<LoadMainMenuState>();
+            _gameStateMachine.Enter<MainMenuState>();
         }
 
         public void Exit()

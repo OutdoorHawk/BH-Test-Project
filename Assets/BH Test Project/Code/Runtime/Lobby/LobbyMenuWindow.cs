@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
@@ -6,7 +7,7 @@ using static BH_Test_Project.Code.Infrastructure.Data.Constants;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
-    public class LobbyMenuWindow : NetworkRoomPlayer
+    public class LobbyMenuWindow : MonoBehaviour
     {
         [SerializeField] private Button _readyButton;
         [SerializeField] private Button _leaveButton;
@@ -15,32 +16,27 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private int _minPlayersToStartGame = 2;
 
         private PlayerSlotView[] _playerSlots;
-        private readonly SyncList<LobbyPlayer> _playersInLobby = new();
+        private readonly List<LobbyPlayer> _playersInLobby = new();
 
-        public override void OnClientEnterRoom()
-        {
-            base.OnClientEnterRoom();
-            if (isClient && isLocalPlayer)
-                InitClient();
-        }
+        public Transform PlayerSlotsParent => _playerSlotsParent;
 
         private void InitClient()
         {
-            _playerSlots = _playerSlotsParent.GetComponentsInChildren<PlayerSlotView>(true);
+            _playerSlots = PlayerSlotsParent.GetComponentsInChildren<PlayerSlotView>(true);
             _leaveButton.onClick.AddListener(DisconnectLobby);
 
-            if (isClient)
-                _playersInLobby.Callback += OnPlayersListChanged;
-            if (isServer)
-                _startGameButton.gameObject.SetActive(true);
+            /*if (isClient)
+                _playersInLobby.Callback += OnPlayersListChanged;*/
+            /*if (isServer)
+                _startGameButton.gameObject.SetActive(true);*/
 
             CmdUpdatePlayersList();
         }
 
-        [Command(requiresAuthority = false)]
+       // [Command(requiresAuthority = false)]
         private void CmdUpdatePlayersList()
         {
-            _playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
+            //_playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
         }
 
         private void OnPlayersListChanged(SyncList<LobbyPlayer>.Operation op, int itemIndex, LobbyPlayer oldItem,
@@ -69,20 +65,14 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void DisconnectLobby()
         {
-            if (isServer)
+            /*if (isServer)
                 NetworkServer.DisconnectAll();
             if (isClient)
-                NetworkClient.Disconnect();
-            gameObject.SetActive(false);
+                NetworkClient.Disconnect();*/
+           // gameObject.SetActive(false);
 
             Debug.Log("disconnect");
         }
-
-        public override void OnClientExitRoom()
-        {
-            base.OnClientExitRoom();
-            _leaveButton.onClick.RemoveListener(DisconnectLobby);
-            _playersInLobby.Callback -= OnPlayersListChanged;
-        }
+        
     }
 }
