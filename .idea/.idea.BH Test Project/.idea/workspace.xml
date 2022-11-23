@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/RoomPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/RoomPlayer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Network/GameNetworkManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Network/GameNetworkManager.prefab" afterDir="false" />
-    </list>
+    <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,10 +103,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="6004">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="6004" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -131,7 +126,7 @@
       <workItem from="1668870507619" duration="24028000" />
       <workItem from="1668931135024" duration="29804000" />
       <workItem from="1669099759948" duration="25953000" />
-      <workItem from="1669182420348" duration="49636000" />
+      <workItem from="1669182420348" duration="51213000" />
     </task>
     <servers />
   </component>
@@ -154,50 +149,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs</url>
-          <line>32</line>
-          <properties documentPath="L:\GitHub\BH Test Project\Assets\BH Test Project\Code\Runtime\Player\UI\PlayerHUD.cs" initialLine="32" containingFunctionPresentation="method 'AddPlayerToScoreTable'">
-            <startOffsets>
-              <option value="1084" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1130" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs</url>
-          <line>38</line>
-          <properties documentPath="L:\GitHub\BH Test Project\Assets\BH Test Project\Code\Runtime\Player\UI\PlayerHUD.cs" initialLine="38" containingFunctionPresentation="method 'AddPlayerToScoreTable'">
-            <startOffsets>
-              <option value="1357" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1393" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs</url>
-          <line>36</line>
-          <properties documentPath="L:\GitHub\BH Test Project\Assets\BH Test Project\Code\Runtime\Player\UI\PlayerHUD.cs" initialLine="36" containingFunctionPresentation="method 'AddPlayerToScoreTable'">
-            <startOffsets>
-              <option value="1230" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1273" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
