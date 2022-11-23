@@ -9,33 +9,27 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 {
     public class LobbyMenuWindow : MonoBehaviour
     {
-        [SerializeField] private Button _readyButton;
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
 
-        private int _minPlayersToStartGame = 1;
-
+        private int _minPlayersToStartGame;
         private List<RoomPlayer> _roomPlayers;
-        public Transform PlayerSlotsParent => _playerSlotsParent;
 
         public void InitLobby(bool IsHost, int minPlayers)
         {
-            if (IsHost)
-            {
-                _startGameButton.gameObject.SetActive(true);
-                _startGameButton.onClick.AddListener(StartGame);
-            }
+            if (IsHost) 
+                EnableStartGameButton();
 
-            _leaveButton.onClick.AddListener(DisconnectLobby);
+            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
             _roomPlayers = new List<RoomPlayer>();
             _minPlayersToStartGame = minPlayers;
         }
 
-        private void StartGame()
+        private void EnableStartGameButton()
         {
-            CleanUp();
-            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+            _startGameButton.gameObject.SetActive(true);
+            _startGameButton.onClick.AddListener(StartGame);
         }
 
         public void AddNewPlayerToLobby(Transform roomPlayer)
@@ -47,11 +41,17 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             if (!_roomPlayers.Contains(player))
             {
                 _roomPlayers.Add(player);
-                player.OnRoomPlayerStateChanged += CheckGameCanStart;
+                player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
             }
         }
 
-        private void CheckGameCanStart()
+        private void StartGame()
+        {
+            CleanUp();
+            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+        }
+
+        private void CheckStartButtonAvailable()
         {
             _startGameButton.interactable = IsEveryoneReady();
         }
@@ -63,7 +63,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             return _roomPlayers.All(player => player.IsReady);
         }
 
-        private void DisconnectLobby()
+        private void LeaveLobbyButtonPressed()
         {
             NetworkClient.Disconnect();
             UpdatePlayersList();
@@ -80,10 +80,10 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void CleanUp()
         {
-            _leaveButton.onClick.RemoveListener(DisconnectLobby);
+            _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
             foreach (var pl in _roomPlayers)
             {
-                pl.OnRoomPlayerStateChanged -= CheckGameCanStart;
+                pl.OnRoomPlayerStateChanged -= CheckStartButtonAvailable;
                 pl.transform.SetParent(null);
             }
         }

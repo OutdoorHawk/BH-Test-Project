@@ -50,12 +50,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             return new Vector3(velocity.x, 0, velocity.z).normalized.magnitude;
         }
 
-        public float GetPlayerSpeed()
-        {
-            Vector3 velocity = _characterController.velocity;
-            return new Vector3(velocity.x, 0, velocity.z).magnitude;
-        }
-
         private void ReadCurrentInput(Vector2 input)
         {
             _inputVector.Set(input.x, 0, input.y);
@@ -109,7 +103,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
             while (distance > 0)
             {
-                distance -= GetPlayerSpeed() * Time.deltaTime;
+                distance -= _playerStaticData.MovementSpeed * Time.deltaTime;
                 LerpToNewMovementVector(dashVector);
                 yield return new WaitForSeconds(Time.deltaTime);
             }

@@ -28,17 +28,16 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
         private PlayerStaticData _playerStaticData;
-
-
+        
         [TargetRpc]
         public void TargetInitPlayer(PlayerStaticData staticData)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             if (!isOwned)
                 return;
             _playerStaticData = staticData;
             CreateSystems();
             InitSystems();
-            _playerInput.OnEscapePressed += ChangeCursorSettings;
             CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
@@ -61,6 +60,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void InitSystems()
         {
             _playerInput.Init();
+            _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
         }
@@ -106,21 +106,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             _playerStateMachine.Enter<EndGameState>();
         }
-
-        private void ChangeCursorSettings()
-        {
-            if (Cursor.lockState != CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                _playerInput.EnableAllInput();
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-                _playerInput.DisableAllInput();
-            }
-        }
-
+        
         public override void OnStopLocalPlayer()
         {
             DisposePlayer();
@@ -130,7 +116,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void DisposePlayer()
         {
             _playerStateMachine.CleanUp();
-            _playerInput.OnEscapePressed -= ChangeCursorSettings;
+            _playerInput.CleanUp();
         }
     }
 }

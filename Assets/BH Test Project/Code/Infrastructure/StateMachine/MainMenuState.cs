@@ -41,12 +41,12 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         {
             if (_gameNetworkManager == null)
                 _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
-            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService, _uiFactory);
+            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService);
         }
 
         public void Exit()
         {
-           _uiFactory.ClearUIRoot();
+            _uiFactory.ClearUIRoot();
         }
     }
 }

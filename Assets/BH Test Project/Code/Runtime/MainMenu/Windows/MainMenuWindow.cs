@@ -1,4 +1,3 @@
-using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,13 +12,12 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         [SerializeField] private Button _hostGameButton;
         [SerializeField] private Button _exitGameButton;
         [SerializeField] private EnterIpView _enterIpWindow;
-        
+
         private GameNetworkManager _gameManager;
 
         public void Init(GameNetworkManager gameManager)
         {
             _gameManager = gameManager;
-            Debug.Log("init");
             Subscribe();
         }
 
@@ -45,10 +43,8 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void SavePlayerName()
         {
-            if (_inputField.text != "")
-                PlayerPrefs.SetString(PLAYER_NAME, _inputField.text);
-            else
-                PlayerPrefs.SetString(PLAYER_NAME, $"Player {Random.Range(0, 9)}");
+            PlayerPrefs.SetString(PLAYER_NAME,
+                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)}");
         }
 
         private void JoinGameClicked()
