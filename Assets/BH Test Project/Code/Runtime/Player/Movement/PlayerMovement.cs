@@ -94,7 +94,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private void ApplyMovement()
         {
             _characterController.Move(
-                _movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed ));
+                _movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed));
         }
 
         public void PerformDash()
@@ -107,7 +107,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         {
             Vector3 dashVector = _playerTransform.forward * _playerStaticData.DashDistance;
             float distance = dashVector.magnitude;
-            
+
             while (distance > 0)
             {
                 distance -= GetPlayerSpeed() * Time.deltaTime;

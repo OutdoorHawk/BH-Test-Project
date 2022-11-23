@@ -43,7 +43,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerHUD.Init(_gameRestartDelay);
             ResetPlayersScore();
             Debug.Log("InitSystem");
-            Debug.Log(isClient); //Null?
+           // Debug.Log(isClient); //Null?
             
            // if (isClient) 
             //    CmdInitPlayers(_playerStaticData); for instantiate
