@@ -71,5 +71,10 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             _isReadyToggle.isOn = isReady;
         }
+
+        private void OnDestroy()
+        {
+            NetworkServer.Destroy(this.gameObject);
+        }
     }
 }
