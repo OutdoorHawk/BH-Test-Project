@@ -8,35 +8,42 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 {
     public class RoomPlayer : NetworkRoomPlayer
     {
-        [SerializeField] private Text _playerName;
+        [SerializeField] private Text _playerNameText;
         [SerializeField] private Toggle _isReadyToggle;
         [SerializeField] private GameObject _slot;
 
         [SyncVar(hook = nameof(UpdateToggle))] private bool _isReady;
+        [SyncVar(hook = nameof(UpdatePlayerName))] private string _playerName;
 
         private new void Start()
         {
             base.Start();
             if (isOwned)
-                CmdRefreshLobbyUI(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+                CmdRefreshLobbyUI();
+            if (isOwned)
+                CmdPlayerNameSet(PlayerPrefs.GetString(Constants.PLAYER_NAME));
 
-            _isReadyToggle.onValueChanged.AddListener(OnToggleChanged);
+            _isReadyToggle.onValueChanged.AddListener(CmdToggleChanged);
         }
-        
 
         [Command(requiresAuthority = false)]
-        private void CmdRefreshLobbyUI(string playerName)
+        private void CmdRefreshLobbyUI()
         {
             RoomPlayerAddedMessage msg = new RoomPlayerAddedMessage
             {
-                NetId = netId,
-                PlayerName = playerName
+                NetId = netId
             };
             NetworkServer.SendToAll(msg);
         }
 
         [Command(requiresAuthority = false)]
-        private void OnToggleChanged(bool value)
+        private void CmdPlayerNameSet(string playerName)
+        {
+            _playerName = playerName;
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdToggleChanged(bool value)
         {
             _isReady = value;
         }
@@ -45,18 +52,18 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             _isReadyToggle.isOn = newValue;
         }
-        
-        public void SetPlayerName(string msgPlayerName)
+
+        private void UpdatePlayerName(string oldValue, string newValue)
         {
-            if (isOwned) 
-                _playerName.text = msgPlayerName;
+            _playerNameText.text = newValue;
         }
 
-        public void ConnectPlayer(string playerName)
+        public void SetPlayerName(string msgPlayerName)
         {
-            _playerName.text = playerName;
-            _slot.gameObject.SetActive(true);
+            //if (isOwned)
+                // _playerName.text = msgPlayerName;
         }
+
 
         public void ClearPlayer()
         {

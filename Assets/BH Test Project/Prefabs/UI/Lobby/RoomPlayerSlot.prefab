@@ -494,7 +494,7 @@ MonoBehaviour:
   showRoomGUI: 1
   readyToBegin: 0
   index: 0
-  _playerName: {fileID: 1885612801551703401}
+  _playerNameText: {fileID: 1885612801551703401}
   _isReadyToggle: {fileID: 7967797949692226520}
   _slot: {fileID: 4601409022460899108}
 --- !u!114 &911514252396536102
