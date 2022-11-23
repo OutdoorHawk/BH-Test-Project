@@ -35,7 +35,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
         public void Tick()
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
-            float currentSpeed = _playerMovement.GetPlayerSpeed();
+            float currentSpeed = _playerMovement.GetNormalizedPlayerSpeed();
             _playerMovement.UpdateInput(currentInput);
             _playerMovement.Tick();
             _playerAnimator.SetPlayerSpeed(currentSpeed);
