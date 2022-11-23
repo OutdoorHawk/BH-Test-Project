@@ -8,17 +8,14 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
     public class GameLoopState : IState
     {
-        private readonly IGameStateMachine _gameStateMachine;
         private readonly IStaticDataService _staticDataService;
         private readonly ISceneContextService _sceneContextService;
         private readonly IUIFactory _uiFactory;
         private NetworkPlayerSystem _playerSystem;
-        private NetworkSpawnSystem _spawnSystem;
 
-        public GameLoopState(IGameStateMachine gameStateMachine, IStaticDataService staticDataService,
+        public GameLoopState(IStaticDataService staticDataService,
             ISceneContextService sceneContextService, IUIFactory uiFactory)
         {
-            _gameStateMachine = gameStateMachine;
             _staticDataService = staticDataService;
             _sceneContextService = sceneContextService;
             _uiFactory = uiFactory;
@@ -32,17 +29,13 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void InitGameLevel()
         {
             _sceneContextService.CollectSceneContext();
-            _spawnSystem = new NetworkSpawnSystem(_sceneContextService.GetSceneSpawnPoints());
             NetworkManager.startPositions = _sceneContextService.GetSceneSpawnPoints();
             InitPlayerSystem();
         }
 
         private void InitPlayerSystem()
         {
-            //_playerSystem = Object.Instantiate(_staticDataService.GetPlayerNetworkSystem());
             _playerSystem = _sceneContextService.GetPlayerSystem();
-            // NetworkManager.singleton.spawnPrefabs.Add(_playerSystem.gameObject);
-            //  NetworkServer.Spawn(_playerSystem.gameObject);
             _playerSystem.RegisterHandlers();
             WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
             PlayerStaticData playerStaticData = _staticDataService.GetPlayerStaticData();

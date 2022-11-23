@@ -6,16 +6,13 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
     public class LobbyState : IState, IPayloadedState<int>
     {
-        private readonly IGameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
         private readonly ISceneContextService _sceneContextService;
 
         private LobbyMenuWindow _lobbyMenuWindow;
 
-        public LobbyState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
-            ISceneContextService sceneContextService)
+        public LobbyState(IUIFactory uiFactory, ISceneContextService sceneContextService)
         {
-            _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
             _sceneContextService = sceneContextService;
         }

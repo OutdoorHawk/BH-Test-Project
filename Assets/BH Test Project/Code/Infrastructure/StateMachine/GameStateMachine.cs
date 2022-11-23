@@ -17,9 +17,9 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
                 [typeof(BootstrapState)] = new BootstrapState(this, diContainer),
                 [typeof(MainMenuState)] = new MainMenuState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IStaticDataService>(), diContainer.Resolve<ISceneContextService>()),
-                [typeof(LobbyState)] = new LobbyState(this, diContainer.Resolve<IUIFactory>(),
+                [typeof(LobbyState)] = new LobbyState(diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<ISceneContextService>()),
-                [typeof(GameLoopState)] = new GameLoopState(this, diContainer.Resolve<IStaticDataService>(),
+                [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
                     diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>())
             };
         }

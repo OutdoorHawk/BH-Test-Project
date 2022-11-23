@@ -13,7 +13,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
     public class GameNetworkManager : NetworkRoomManager
     {
         private IGameStateMachine _gameStateMachine;
-        private NetworkSpawnSystem _spawnSystem;
         private ISceneContextService _sceneContextService;
 
         public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService)
