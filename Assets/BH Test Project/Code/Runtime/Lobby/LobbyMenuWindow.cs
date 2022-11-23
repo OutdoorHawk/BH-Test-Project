@@ -1,88 +1,91 @@
+using System.Collections.Generic;
 using System.Linq;
+using BH_Test_Project.Code.Infrastructure.Data;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
-using static BH_Test_Project.Code.Infrastructure.Data.Constants;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
-    public class LobbyMenuWindow : NetworkRoomPlayer
+    public class LobbyMenuWindow : MonoBehaviour
     {
-        [SerializeField] private Button _readyButton;
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
-        [SerializeField] private int _minPlayersToStartGame = 2;
 
-        private PlayerSlotView[] _playerSlots;
-        private readonly SyncList<LobbyPlayer> _playersInLobby = new();
+        private int _minPlayersToStartGame;
+        private List<RoomPlayer> _roomPlayers;
 
-        public override void OnClientEnterRoom()
+        public void InitLobby(bool IsHost, int minPlayers)
         {
-            base.OnClientEnterRoom();
-            if (isClient && isLocalPlayer)
-                InitClient();
+            if (IsHost) 
+                EnableStartGameButton();
+
+            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
+            _roomPlayers = new List<RoomPlayer>();
+            _minPlayersToStartGame = minPlayers;
         }
 
-        private void InitClient()
+        private void EnableStartGameButton()
         {
-            _playerSlots = _playerSlotsParent.GetComponentsInChildren<PlayerSlotView>(true);
-            _leaveButton.onClick.AddListener(DisconnectLobby);
-
-            if (isClient)
-                _playersInLobby.Callback += OnPlayersListChanged;
-            if (isServer)
-                _startGameButton.gameObject.SetActive(true);
-
-            CmdUpdatePlayersList();
+            _startGameButton.gameObject.SetActive(true);
+            _startGameButton.onClick.AddListener(StartGame);
         }
 
-        [Command(requiresAuthority = false)]
-        private void CmdUpdatePlayersList()
+        public void AddNewPlayerToLobby(Transform roomPlayer)
         {
-            _playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
-        }
-
-        private void OnPlayersListChanged(SyncList<LobbyPlayer>.Operation op, int itemIndex, LobbyPlayer oldItem,
-            LobbyPlayer newItem)
-        {
-            switch (op)
+            roomPlayer.SetParent(_playerSlotsParent);
+            roomPlayer.localScale = Vector3.one;;
+            roomPlayer.SetSiblingIndex(0);
+            roomPlayer.TryGetComponent(out RoomPlayer player);
+            if (!_roomPlayers.Contains(player))
             {
-                case SyncList<LobbyPlayer>.Operation.OP_ADD:
-                    _playerSlots[itemIndex].ConnectPlayer(newItem.PlayerName);
-                    break;
-                case SyncList<LobbyPlayer>.Operation.OP_REMOVEAT:
-                    _playerSlots[itemIndex].ClearPlayer();
-                    break;
-                case SyncList<LobbyPlayer>.Operation.OP_SET:
-                    _playerSlots[itemIndex].SetReady(newItem.IsReady);
-                    break;
+                _roomPlayers.Add(player);
+                player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
             }
+        }
+
+        private void StartGame()
+        {
+            CleanUp();
+            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+        }
+
+        private void CheckStartButtonAvailable()
+        {
+            _startGameButton.interactable = IsEveryoneReady();
         }
 
         private bool IsEveryoneReady()
         {
-            if (_playersInLobby.Count < _minPlayersToStartGame)
+            if (_roomPlayers.Count < _minPlayersToStartGame)
                 return false;
-            return _playersInLobby.All(player => player.IsReady);
+            return _roomPlayers.All(player => player.IsReady);
         }
 
-        private void DisconnectLobby()
+        private void LeaveLobbyButtonPressed()
         {
-            if (isServer)
-                NetworkServer.DisconnectAll();
-            if (isClient)
-                NetworkClient.Disconnect();
-            gameObject.SetActive(false);
-
-            Debug.Log("disconnect");
+            NetworkClient.Disconnect();
+            UpdatePlayersList();
         }
 
-        public override void OnClientExitRoom()
+        private void UpdatePlayersList()
         {
-            base.OnClientExitRoom();
-            _leaveButton.onClick.RemoveListener(DisconnectLobby);
-            _playersInLobby.Callback -= OnPlayersListChanged;
+            for (int i = 0; i < _roomPlayers.Count; i++)
+            {
+                if (_roomPlayers[i] == null)
+                    _roomPlayers.RemoveAt(i);
+            }
+        }
+
+        private void CleanUp()
+        {
+            _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
+            foreach (var pl in _roomPlayers)
+            {
+                pl.OnRoomPlayerStateChanged -= CheckStartButtonAvailable;
+                pl.transform.SetParent(null);
+            }
         }
     }
 }

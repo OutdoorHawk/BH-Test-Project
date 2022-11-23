@@ -34,26 +34,8 @@
                 },
                 {
                     "name": "Escape",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "7774ef62-3b43-438e-b831-210c7eedc7eb",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Menu",
-                    "type": "Button",
-                    "id": "4a8f7f51-db31-4775-94a2-d885f79a4bcb",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Space",
-                    "type": "Button",
-                    "id": "73d5c623-2192-4b4c-b510-911167aac123",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -157,28 +139,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Escape",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6d4ee899-20ab-47ad-aaca-d763b7584487",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6dd830b9-e1f0-4811-bf35-bded98daa55f",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Space",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

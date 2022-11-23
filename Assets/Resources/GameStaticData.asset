@@ -25,8 +25,9 @@ MonoBehaviour:
   _networkPlayerSystem: {fileID: 989263431012666123, guid: 4d13b08431acd9c48be43b17ae233f0a, type: 3}
   _playerStaticData:
     MovementSpeed: 5
-    MouseSensitivity: 0.5
-    DashDistance: 3
+    MouseSensitivity: 0.375
+    DashDistance: 2.5
+    DashRechargeTime: 0.75
     HitTime: 3
   _worldStaticData:
     GameEndScore: 3

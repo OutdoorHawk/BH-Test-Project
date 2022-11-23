@@ -5584,12 +5584,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  playerStaticData:
-    MovementSpeed: 3.39
-    MouseSensitivity: 1
-    DashPower: 5
-    DashTime: 0.35
-    HitTime: 2
   _cameraFollowPrefab: {fileID: 6814131064994553984, guid: f78c4ba29b958ce499dbd0ad575d88fb, type: 3}
 --- !u!114 &5689347882839104929
 MonoBehaviour:

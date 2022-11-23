@@ -15,10 +15,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, diContainer),
-                [typeof(LoadMainMenuState)] = new LoadMainMenuState(this, diContainer.Resolve<IUIFactory>(),
+                [typeof(MainMenuState)] = new MainMenuState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IStaticDataService>(), diContainer.Resolve<ISceneContextService>()),
-                [typeof(LoadRoomState)] = new LoadRoomState(this),
-                [typeof(GameLoopState)] = new GameLoopState(this, diContainer.Resolve<IStaticDataService>(),
+                [typeof(LobbyState)] = new LobbyState(diContainer.Resolve<IUIFactory>(),
+                    diContainer.Resolve<ISceneContextService>()),
+                [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
                     diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>())
             };
         }

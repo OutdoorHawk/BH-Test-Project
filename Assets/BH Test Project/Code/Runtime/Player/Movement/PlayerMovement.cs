@@ -16,6 +16,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private readonly MonoBehaviour _mono;
         private readonly PlayerStaticData _playerStaticData;
 
+        private IEnumerator _dashRoutine;
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
@@ -50,12 +51,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             return new Vector3(velocity.x, 0, velocity.z).normalized.magnitude;
         }
 
-        public float GetPlayerSpeed()
-        {
-            Vector3 velocity = _characterController.velocity;
-            return new Vector3(velocity.x, 0, velocity.z).magnitude;
-        }
-
         private void ReadCurrentInput(Vector2 input)
         {
             _inputVector.Set(input.x, 0, input.y);
@@ -76,7 +71,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private void ApplyToCurrentMovementVector()
         {
-            Vector3 nextMovementVector = _cameraTransform.TransformDirection(_inputVector);
+            Vector3 transformedVector = _cameraTransform.TransformDirection(_inputVector);
+            Vector3 nextMovementVector = new Vector3(transformedVector.x, 0, transformedVector.z);
             nextMovementVector.Normalize();
 
             LerpToNewMovementVector(nextMovementVector);
@@ -99,7 +95,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         public void PerformDash()
         {
             _movementVector = Vector3.zero;
-            _mono.StartCoroutine(Dashing());
+            _dashRoutine = Dashing();
+            _mono.StartCoroutine(_dashRoutine);
         }
 
         private IEnumerator Dashing()
@@ -109,12 +106,19 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
             while (distance > 0)
             {
-                distance -= GetPlayerSpeed() * Time.deltaTime;
+                distance -= _playerStaticData.MovementSpeed * Time.deltaTime;
                 LerpToNewMovementVector(dashVector);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
+            _dashRoutine = null;
             OnDashEnded?.Invoke();
+        }
+
+        public void StopDash()
+        {
+            if (_dashRoutine != null) 
+                _mono.StopCoroutine(_dashRoutine);
         }
     }
 }

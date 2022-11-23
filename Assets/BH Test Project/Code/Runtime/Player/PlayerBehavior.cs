@@ -27,19 +27,17 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-         private PlayerStaticData _playerStaticData;
-
-        private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
+        private PlayerStaticData _playerStaticData;
 
         [TargetRpc]
         public void TargetInitPlayer(PlayerStaticData staticData)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             if (!isOwned)
                 return;
             _playerStaticData = staticData;
             CreateSystems();
             InitSystems();
-            _playerInput.OnEscapePressed += ChangeCursorSettings;
             CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
@@ -56,13 +54,14 @@ namespace BH_Test_Project.Code.Runtime.Player
                 new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
-                    netId, _playerGameStatus);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId, this,
+                    _playerStaticData);
         }
 
         private void InitSystems()
         {
             _playerInput.Init();
+            _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
         }
@@ -87,9 +86,10 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void TargetPlayerHit(uint hitSenderNetId)
         {
-            if (_playerIsHitNow)
+            if (_playerGameStatus.IsHitNow)
                 return;
-            _playerStateMachine.Enter<HitState>();
+            _playerStateMachine.Enter<BasicMovementState>();
+            _playerGameStatus.TargetPlayerHit();
             CmdSuccessHit(hitSenderNetId);
         }
 
@@ -109,20 +109,6 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerStateMachine.Enter<EndGameState>();
         }
 
-        private void ChangeCursorSettings()
-        {
-            if (Cursor.lockState != CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                _playerInput.EnableAllInput();
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-                _playerInput.DisableAllInput();
-            }
-        }
-
         public override void OnStopLocalPlayer()
         {
             DisposePlayer();
@@ -132,7 +118,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void DisposePlayer()
         {
             _playerStateMachine.CleanUp();
-            _playerInput.OnEscapePressed -= ChangeCursorSettings;
+            _playerInput.CleanUp();
         }
     }
 }

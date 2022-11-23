@@ -5,6 +5,8 @@ using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
+using BH_Test_Project.Code.StaticData;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 {
@@ -14,18 +16,15 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         public PlayerStateMachine(PlayerMovement playerMovement, PlayerInput playerInput,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector, uint netId,
-            PlayerGameStatus playerGameStatus)
+            MonoBehaviour mono, PlayerStaticData playerStaticData)
         {
             _states = new Dictionary<Type, ITickableState>
             {
                 [typeof(BasicMovementState)] =
                     new BasicMovementState(this, playerMovement, playerAnimator, playerInput),
                 [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator, playerCollisionDetector,
-                    netId),
-                [typeof(HitState)] =
-                    new HitState(this, playerMovement, playerAnimator, playerGameStatus, playerInput),
-                [typeof(EndGameState)] =
-                    new EndGameState(this, playerInput),
+                    netId, mono, playerInput, playerStaticData.DashRechargeTime),
+                [typeof(EndGameState)] = new EndGameState(this, playerInput, playerMovement, playerAnimator)
             };
         }
 

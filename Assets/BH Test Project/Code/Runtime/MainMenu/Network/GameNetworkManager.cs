@@ -4,8 +4,8 @@ using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
+using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Runtime.MainMenu.Network
@@ -14,13 +14,11 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
     {
         private IGameStateMachine _gameStateMachine;
         private ISceneContextService _sceneContextService;
-        private NetworkSpawnSystem _spawnSystem;
 
         public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService)
         {
             _sceneContextService = sceneContextService;
             _gameStateMachine = gameStateMachine;
-            SceneManager.sceneLoaded += HandleGameLevelLoaded;
         }
 
         public void CreateLobbyAsHost()
@@ -40,51 +38,39 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             base.OnStartClient();
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
+            NetworkClient.RegisterHandler<RoomPlayerAddedMessage>(OnRoomPlayerAdded);
         }
 
-        private void HandleGameLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
+        private void OnRoomPlayerAdded(RoomPlayerAddedMessage msg)
         {
-            if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
-                return;
-
-            //OnLoaded();
+            LobbyMenuWindow lobbyMenuWindow = _sceneContextService.GetLobbyMenuWindow();
+            for (int i = 0; i < roomSlots.Count; i++)
+                lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform);
         }
 
-        private void OnLoaded()
+        public override void OnRoomClientConnect()
         {
-            _gameStateMachine.Enter<GameLoopState>();
-            startPositions = _sceneContextService.GetSceneSpawnPoints();
+            base.OnRoomClientConnect();
+            _gameStateMachine.Enter<LobbyState, int>(minPlayers);
         }
-
-        /*
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
-            GameObject gamePlayer)
-        {
-           
-            Debug.Log("loadedForPlayer");
-            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
-        }
-        */
 
         public override void OnClientSceneChanged()
         {
             base.OnClientSceneChanged();
-            if (SceneManager.GetActiveScene().name == Constants.GAME_LEVEL_NAME)
-            {
+            if (SceneManager.GetActiveScene().name == Constants.GAME_SCENE_NAME)
                 _gameStateMachine.Enter<GameLoopState>();
-                Debug.Log("sceneLoaded");
-            }
         }
-        
-        private void OnGameRestarted(GameRestartMessage obj)
+
+        private void OnGameRestarted(GameRestartMessage msg)
         {
             ServerChangeScene(GameplayScene);
         }
 
-        public override void OnDestroy()
+        public override void OnClientDisconnect()
         {
-            base.OnDestroy();
-            SceneManager.sceneLoaded -= HandleGameLevelLoaded;
+            base.OnClientDisconnect();
+            StopServer();
+            _gameStateMachine.Enter<MainMenuState>();
         }
     }
 }
