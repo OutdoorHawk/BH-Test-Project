@@ -4,6 +4,7 @@ using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
+using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -62,6 +63,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             base.OnRoomClientEnter();
             _gameStateMachine.Enter<LobbyState>();
+        }
+
+        public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
+        {
+            Debug.Log("playerCreate");
+            //NetworkRoomPlayer roomPlayer = Instantiate(roomPlayerPrefab);
+            return base.OnRoomServerCreateRoomPlayer(conn);
         }
 
         private void OnGameRestarted(GameRestartMessage obj)

@@ -3,7 +3,6 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
-using static BH_Test_Project.Code.Infrastructure.Data.Constants;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
@@ -15,14 +14,20 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Transform _playerSlotsParent;
         [SerializeField] private int _minPlayersToStartGame = 2;
 
-        private PlayerSlotView[] _playerSlots;
+        private RoomPlayer[] _playerSlots;
         private readonly List<LobbyPlayer> _playersInLobby = new();
 
         public Transform PlayerSlotsParent => _playerSlotsParent;
 
+        public void InitLobby(bool IsHost)
+        {
+            if (IsHost) 
+                _startGameButton.gameObject.SetActive(true);
+        }
+
         private void InitClient()
         {
-            _playerSlots = PlayerSlotsParent.GetComponentsInChildren<PlayerSlotView>(true);
+            _playerSlots = PlayerSlotsParent.GetComponentsInChildren<RoomPlayer>(true);
             _leaveButton.onClick.AddListener(DisconnectLobby);
 
             /*if (isClient)
@@ -33,7 +38,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             CmdUpdatePlayersList();
         }
 
-       // [Command(requiresAuthority = false)]
+        // [Command(requiresAuthority = false)]
         private void CmdUpdatePlayersList()
         {
             //_playersInLobby.Add(new LobbyPlayer(netId, PlayerPrefs.GetString(PLAYER_NAME), false));
@@ -69,10 +74,9 @@ namespace BH_Test_Project.Code.Runtime.Lobby
                 NetworkServer.DisconnectAll();
             if (isClient)
                 NetworkClient.Disconnect();*/
-           // gameObject.SetActive(false);
+            // gameObject.SetActive(false);
 
             Debug.Log("disconnect");
         }
-        
     }
 }

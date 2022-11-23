@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
-    public class PlayerSlotView : NetworkRoomPlayer
+    public class RoomPlayer : NetworkRoomPlayer
     {
         [SerializeField] private Text _playerName;
         [SerializeField] private Toggle _isReadyToggle;
