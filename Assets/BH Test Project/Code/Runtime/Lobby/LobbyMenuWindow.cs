@@ -52,7 +52,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void CheckGameCanStart()
         {
-            Debug.Log(IsEveryoneReady());
             _startGameButton.interactable = IsEveryoneReady();
         }
 
@@ -66,16 +65,16 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void DisconnectLobby()
         {
             NetworkClient.Disconnect();
-
-
-            Debug.Log("disconnect");
         }
 
         private void CleanUp()
         {
             _leaveButton.onClick.RemoveListener(DisconnectLobby);
             foreach (var pl in _roomPlayers)
+            {
                 pl.OnRoomPlayerStateChanged -= CheckGameCanStart;
+                pl.transform.SetParent(null);
+            }
         }
     }
 }
