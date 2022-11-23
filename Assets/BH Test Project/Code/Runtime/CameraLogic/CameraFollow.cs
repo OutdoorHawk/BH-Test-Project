@@ -1,10 +1,10 @@
-using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.StaticData;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.CameraLogic
 {
+    [RequireComponent(typeof(Camera))]
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform _followTarget;
@@ -13,8 +13,9 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         [SerializeField] private float _smoothTime = 3;
         [SerializeField] private float _lerpRate = 10f;
         [SerializeField] private Vector2 _yClamp;
-        [SerializeField] private LayerMask _obstructionMask;
+        [SerializeField] private LayerMask _collisionMask;
 
+        private Collider[] _colliders;
         private Transform _cachedTransform;
         private IPlayerInput _playerInput;
         private Camera _camera;
@@ -25,23 +26,17 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         private Vector3 _smoothVelocity = Vector3.zero;
         private Vector3 _focusPoint;
 
+        private float _defaultCameraDistance;
         private float xRotation;
         private float yRotation;
 
-        private const float RAYCAST_MAX_DISTANCE = 5;
+        private const float COLLISION_RADIUS = 0.75f;
+        private const float CAMERA_MIN_DISTANCE = 0.85f;
 
-        Vector3 CameraHalfExtends
+        private void Awake()
         {
-            get
-            {
-                Vector3 halfExtends;
-                halfExtends.y =
-                    _camera.nearClipPlane *
-                    Mathf.Tan(0.5f * Mathf.Deg2Rad * _camera.fieldOfView);
-                halfExtends.x = halfExtends.y * _camera.aspect;
-                halfExtends.z = 0f;
-                return halfExtends;
-            }
+            _colliders = new Collider[1];
+            _defaultCameraDistance = _cameraDistance;
         }
 
         public void Init(IPlayerInput playerInput, PlayerStaticData playerStaticData, Transform target)
@@ -64,30 +59,21 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             CalculateCameraPosition();
             CalculateCameraRotation();
             ApplyCameraTransformValues();
-          // CheckCameraCollision();
+            CheckCameraCollision();
         }
 
         private void CheckCameraCollision()
         {
-            Quaternion lookRotation = _cachedTransform.localRotation;
-            Vector3 lookDirection = lookRotation * Vector3.forward;
-            Vector3 lookPosition = _focusPoint - lookDirection * _cameraDistance;
+            Physics.OverlapSphereNonAlloc(_cachedTransform.position, COLLISION_RADIUS, _colliders, _collisionMask);
 
-            Vector3 rectOffset = lookDirection * _camera.nearClipPlane;
-            Vector3 rectPosition = lookPosition + rectOffset;
-            Vector3 castFrom = _focusPoint;
-            Vector3 castLine = rectPosition - castFrom;
-            float castDistance = castLine.magnitude;
-            Vector3 castDirection = castLine / castDistance;
-
-            if (Physics.BoxCast(castFrom, CameraHalfExtends, castDirection, out RaycastHit hit,
-                    lookRotation, castDistance, _obstructionMask))
+            if (_colliders[0] != null)
             {
-                rectPosition = castFrom + castDirection * hit.distance;
-                lookPosition = rectPosition - rectOffset;
+                _cameraDistance =
+                    Mathf.Clamp(Vector3.Distance(_colliders[0].transform.position, _cachedTransform.position),
+                        CAMERA_MIN_DISTANCE, _defaultCameraDistance);
             }
-
-            transform.SetPositionAndRotation(lookPosition, lookRotation);
+            else
+                _cameraDistance = _defaultCameraDistance;
         }
 
         private void CalculateCameraPosition()
@@ -120,6 +106,5 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             _cachedTransform.localEulerAngles = _currentRotation;
             _cachedTransform.localPosition = _currentPosition;
         }
-        
     }
 }

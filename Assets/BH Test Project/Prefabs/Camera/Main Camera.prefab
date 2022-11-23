@@ -94,6 +94,6 @@ MonoBehaviour:
   _smoothTime: 0.08
   _lerpRate: 50
   _yClamp: {x: -5, y: 85}
-  _obstructionMask:
+  _collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
