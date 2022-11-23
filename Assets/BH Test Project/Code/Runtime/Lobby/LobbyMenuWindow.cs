@@ -13,12 +13,14 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
 
-        private int _minPlayersToStartGame;
         private List<RoomPlayer> _roomPlayers;
+        private int _minPlayersToStartGame;
+        private bool _isHost;
 
         public void InitLobby(bool IsHost, int minPlayers)
         {
-            if (IsHost) 
+            _isHost = IsHost;
+            if (_isHost) 
                 EnableStartGameButton();
 
             _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
@@ -80,6 +82,8 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void CleanUp()
         {
+            if (_isHost) 
+                _startGameButton.onClick.RemoveListener(StartGame);
             _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
             foreach (var pl in _roomPlayers)
             {

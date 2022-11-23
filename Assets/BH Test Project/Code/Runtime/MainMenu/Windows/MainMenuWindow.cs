@@ -1,4 +1,4 @@
-using BH_Test_Project.Code.Runtime.MainMenu.Network;
+using BH_Test_Project.Code.Infrastructure.Network;
 using UnityEngine;
 using UnityEngine.UI;
 using static BH_Test_Project.Code.Infrastructure.Data.Constants;

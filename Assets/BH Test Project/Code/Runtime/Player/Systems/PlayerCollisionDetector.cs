@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Runtime.Player
+namespace BH_Test_Project.Code.Runtime.Player.Systems
 {
     public class PlayerCollisionDetector : MonoBehaviour
     {

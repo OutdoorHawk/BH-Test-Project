@@ -18,7 +18,6 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         private Collider[] _colliders;
         private Transform _cachedTransform;
         private IPlayerInput _playerInput;
-        private Camera _camera;
         private Vector3 _currentPosition;
         private Vector3 _currentRotation;
         private PlayerStaticData _playerStaticData;
@@ -45,7 +44,6 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             _playerInput = playerInput;
             _followTarget = target;
             _cachedTransform = transform;
-            _camera = GetComponent<Camera>();
         }
 
         private void LateUpdate()

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Runtime.Player
+namespace BH_Test_Project.Code.Runtime.Player.Systems
 {
     public class PlayerGameStatus
     {

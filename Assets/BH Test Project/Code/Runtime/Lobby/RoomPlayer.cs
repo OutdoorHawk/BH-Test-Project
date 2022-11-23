@@ -61,20 +61,5 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             _playerNameText.text = newValue;
         }
-
-        public void ClearPlayer()
-        {
-            _slot.gameObject.SetActive(false);
-        }
-
-        public void SetReady(bool isReady)
-        {
-            _isReadyToggle.isOn = isReady;
-        }
-
-        private void OnDestroy()
-        {
-            NetworkServer.Destroy(this.gameObject);
-        }
     }
 }
