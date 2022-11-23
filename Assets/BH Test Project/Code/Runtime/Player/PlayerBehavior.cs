@@ -37,12 +37,6 @@ namespace BH_Test_Project.Code.Runtime.Player
             if (!isOwned)
                 return;
             _playerStaticData = staticData;
-            if (isServer)
-            {
-                _playerStaticData.MovementSpeed = 1;
-            }
-
-
             CreateSystems();
             InitSystems();
             _playerInput.OnEscapePressed += ChangeCursorSettings;

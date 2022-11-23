@@ -93,8 +93,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private void ApplyMovement()
         {
-            _characterController.Move(
-                _movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed));
+            _characterController.Move(_movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed));
         }
 
         public void PerformDash()
