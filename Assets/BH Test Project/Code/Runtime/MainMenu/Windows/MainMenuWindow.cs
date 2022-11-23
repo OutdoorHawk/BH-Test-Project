@@ -19,6 +19,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         public void Init(GameNetworkManager gameManager)
         {
             _gameManager = gameManager;
+            Debug.Log("init");
             Subscribe();
         }
 
@@ -28,11 +29,6 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
             _hostGameButton.onClick.AddListener(HostGameClicked);
             _exitGameButton.onClick.AddListener(ExitGame);
             _enterIpWindow.OnJoinGamePressed += JoinGameClicked;
-        }
-
-        private void DisableMainMenu()
-        {
-            gameObject.SetActive(false);
         }
 
         private void HostGameClicked()

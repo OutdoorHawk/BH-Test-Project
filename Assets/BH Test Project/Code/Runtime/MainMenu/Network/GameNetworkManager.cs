@@ -31,7 +31,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         public void CreateLobbyAsHost()
         {
             Debug.Log(NetworkServer.active);
-            if (!NetworkServer.active)
+            if (!NetworkServer.active) 
                 StartHost();
         }
 
