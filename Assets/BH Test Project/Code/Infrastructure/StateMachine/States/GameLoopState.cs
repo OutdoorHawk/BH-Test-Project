@@ -31,7 +31,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         private void InitGameLevel()
         {
-            _sceneContextService.InitSceneContext();
+            _sceneContextService.CollectSceneContext();
             _spawnSystem = new NetworkSpawnSystem(_sceneContextService.GetSceneSpawnPoints());
             NetworkManager.startPositions = _sceneContextService.GetSceneSpawnPoints();
             InitPlayerSystem();

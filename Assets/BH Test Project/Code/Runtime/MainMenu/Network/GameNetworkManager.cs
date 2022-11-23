@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
@@ -7,7 +6,6 @@ using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Runtime.MainMenu.Network
@@ -15,23 +13,18 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
     public class GameNetworkManager : NetworkRoomManager
     {
         private IGameStateMachine _gameStateMachine;
-        private ISceneContextService _sceneContextService;
         private NetworkSpawnSystem _spawnSystem;
-        private IUIFactory _uiFactory;
-        private LobbyMenuWindow _lobbyMenuWindow;
+        private ISceneContextService _sceneContextService;
 
-        public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService,
-            IUIFactory uiFactory)
+        public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService)
         {
-            _uiFactory = uiFactory;
             _sceneContextService = sceneContextService;
             _gameStateMachine = gameStateMachine;
         }
 
         public void CreateLobbyAsHost()
         {
-            Debug.Log(NetworkServer.active);
-            if (!NetworkServer.active) 
+            if (!NetworkServer.active)
                 StartHost();
         }
 
@@ -51,32 +44,15 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         private void OnRoomPlayerAdded(RoomPlayerAddedMessage msg)
         {
-            for (int i = 0; i < roomSlots.Count; i++) 
-                _lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform);
-        }
-
-        /*public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
-        {
-            NetworkRoomPlayer go = Instantiate(roomPlayerPrefab, _lobbyMenuWindow.PlayerSlotsParent);
-            return go.gameObject;
-        }*/
-
-        public override void OnRoomStartClient()
-        {
-            foreach (var roomPlayer in roomSlots)
-                roomPlayer.transform.SetParent(_lobbyMenuWindow.PlayerSlotsParent);
-            base.OnRoomStartClient();
+            LobbyMenuWindow lobbyMenuWindow = _sceneContextService.GetLobbyMenuWindow();
+            for (int i = 0; i < roomSlots.Count; i++)
+                lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform);
         }
 
         public override void OnRoomClientConnect()
         {
             base.OnRoomClientConnect();
-
-            _gameStateMachine.Enter<LobbyState>();
-            _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
-            if (NetworkServer.active)
-                NetworkServer.Spawn(_lobbyMenuWindow.gameObject);
-            _lobbyMenuWindow.InitLobby(NetworkClient.isHostClient, minPlayers);
+            _gameStateMachine.Enter<LobbyState, int>(minPlayers);
         }
 
         public override void OnClientSceneChanged()
@@ -86,7 +62,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
                 _gameStateMachine.Enter<GameLoopState>();
         }
 
-        private void OnGameRestarted(GameRestartMessage obj)
+        private void OnGameRestarted(GameRestartMessage msg)
         {
             ServerChangeScene(GameplayScene);
         }
@@ -97,6 +73,5 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             StopServer();
             _gameStateMachine.Enter<MainMenuState>();
         }
-        
     }
 }
