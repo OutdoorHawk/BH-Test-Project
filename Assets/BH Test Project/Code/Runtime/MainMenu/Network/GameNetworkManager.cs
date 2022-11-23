@@ -19,7 +19,8 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private IUIFactory _uiFactory;
         private LobbyMenuWindow _lobbyMenuWindow;
 
-        public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService, IUIFactory uiFactory)
+        public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService,
+            IUIFactory uiFactory)
         {
             _uiFactory = uiFactory;
             _sceneContextService = sceneContextService;
@@ -42,35 +43,39 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         public override void OnStartClient()
         {
             base.OnStartClient();
+            Debug.Log("reg");
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
+            NetworkClient.RegisterHandler<RoomPlayerAddedMessage>(OnRoomPlayerAdded);
         }
 
-        public override void OnRoomClientEnter()
+        private void OnRoomPlayerAdded(RoomPlayerAddedMessage obj)
         {
-             Debug.Log("enterRoom");
-            base.OnRoomClientEnter();
-       }
+            Debug.Log("roomPlayerAdded");
+            foreach (var roomPlayer in roomSlots)
+                roomPlayer.transform.SetParent(_lobbyMenuWindow.PlayerSlotsParent);
+        }
 
-        public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
+        /*public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
         {
-            Debug.Log("playerCreate");
+            NetworkRoomPlayer go = Instantiate(roomPlayerPrefab, _lobbyMenuWindow.PlayerSlotsParent);
+            return go.gameObject;
+        }*/
+
+        public override void OnRoomStartClient()
+        {
+            foreach (var roomPlayer in roomSlots)
+                roomPlayer.transform.SetParent(_lobbyMenuWindow.PlayerSlotsParent);
+            base.OnRoomStartClient();
+        }
+
+        public override void OnRoomClientConnect()
+        {
+            base.OnRoomClientConnect();
+
             _gameStateMachine.Enter<LobbyState>();
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
             _lobbyMenuWindow.InitLobby(NetworkClient.isHostClient);
-            NetworkRoomPlayer roomPlayer = Instantiate(roomPlayerPrefab,_lobbyMenuWindow.PlayerSlotsParent);
-            return roomPlayer.gameObject;
         }
-
-        /*
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
-            GameObject gamePlayer)
-        {
-           
-            Debug.Log("loadedForPlayer");
-            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
-        }
-        */
-
 
         public override void OnClientSceneChanged()
         {

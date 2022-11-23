@@ -1,4 +1,4 @@
-using System;
+using BH_Test_Project.Code.Infrastructure.Network.Data;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +11,19 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Toggle _isReadyToggle;
         [SerializeField] private GameObject _slot;
         private string _defaultText;
+
+        private new void Start()
+        {
+            base.Start();
+            Debug.Log("send");
+            CmdRefreshLobbyUI();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdRefreshLobbyUI()
+        {
+            NetworkServer.SendToAll(new RoomPlayerAddedMessage());
+        }
 
         private void Awake()
         {
@@ -28,7 +41,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             _playerName.text = _defaultText;
             _slot.gameObject.SetActive(false);
         }
-        
+
         public void SetReady(bool isReady)
         {
             _isReadyToggle.isOn = isReady;

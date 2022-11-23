@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.Lobby
 {
-    public class LobbyMenuWindow : MonoBehaviour
+    public class LobbyMenuWindow : NetworkBehaviour
     {
         [SerializeField] private Button _readyButton;
         [SerializeField] private Button _leaveButton;
