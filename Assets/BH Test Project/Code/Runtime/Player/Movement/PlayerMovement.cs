@@ -16,6 +16,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         private readonly MonoBehaviour _mono;
         private readonly PlayerStaticData _playerStaticData;
 
+        private IEnumerator _dashRoutine;
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
@@ -93,7 +94,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
         public void PerformDash()
         {
             _movementVector = Vector3.zero;
-            _mono.StartCoroutine(Dashing());
+            _dashRoutine = Dashing();
+            _mono.StartCoroutine(_dashRoutine);
         }
 
         private IEnumerator Dashing()
@@ -108,7 +110,14 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
+            _dashRoutine = null;
             OnDashEnded?.Invoke();
+        }
+
+        public void StopDash()
+        {
+            if (_dashRoutine != null) 
+                _mono.StopCoroutine(_dashRoutine);
         }
     }
 }

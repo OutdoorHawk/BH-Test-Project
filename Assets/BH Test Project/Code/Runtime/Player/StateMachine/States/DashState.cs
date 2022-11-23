@@ -73,6 +73,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         public void Exit()
         {
+            _playerMovement.StopDash();
             _playerAnimator.StopDashAnimation();
             _playerMovement.OnDashEnded -= OnDashFinished;
             _playerCollisionDetector.OnPlayerCollided -= OnObjectHit;

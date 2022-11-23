@@ -87,6 +87,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (_playerGameStatus.IsHitNow)
                 return;
+            _playerStateMachine.Enter<BasicMovementState>();
             _playerGameStatus.TargetPlayerHit();
             CmdSuccessHit(hitSenderNetId);
         }
