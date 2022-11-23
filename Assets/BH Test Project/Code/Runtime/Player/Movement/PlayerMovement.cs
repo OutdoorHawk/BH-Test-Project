@@ -71,7 +71,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private void ApplyToCurrentMovementVector()
         {
-            Vector3 nextMovementVector = _cameraTransform.TransformDirection(_inputVector);
+            Vector3 transformedVector = _cameraTransform.TransformDirection(_inputVector);
+            Vector3 nextMovementVector = new Vector3(transformedVector.x, 0, transformedVector.z);
             nextMovementVector.Normalize();
 
             LerpToNewMovementVector(nextMovementVector);
