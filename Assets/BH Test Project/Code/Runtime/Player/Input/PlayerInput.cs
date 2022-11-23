@@ -26,9 +26,9 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
 
         public void EnableAllInput()
         {
+            _playerInput.Player.Escape.Enable();
             _playerInput.Player.Movement.Enable();
             _playerInput.Player.Dash.Enable();
-            _playerInput.Player.Escape.Enable();
             MouseAxis.Enable();
         }
 

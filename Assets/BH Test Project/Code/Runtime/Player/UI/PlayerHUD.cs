@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +15,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         [SerializeField] private GameObject _endGamePlate;
         [SerializeField] private Text _winPlayerText;
         [SerializeField] private Text _countDownText;
+        [SerializeField] private Button _disconnectButton;
 
         private List<ScoreElement> _scoreElements = new();
 
@@ -21,6 +24,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         public void Init(float gameRestartDelay)
         {
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
+            _disconnectButton.onClick.AddListener(Disconnect);
             _restartDelay = gameRestartDelay;
         }
 
@@ -64,6 +68,16 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
                 countdown -= 1;
                 yield return new WaitForSeconds(1);
             } while (countdown > 0);
+        }
+
+        private void Disconnect()
+        {
+            NetworkClient.Disconnect();
+        }
+
+        private void OnDestroy()
+        {
+            _disconnectButton.onClick.RemoveListener(Disconnect);
         }
     }
 }

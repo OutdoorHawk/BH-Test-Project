@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/MainMenu/Windows/MainMenuWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/MainMenu/Windows/MainMenuWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Input/IPlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Input/IPlayerInput.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Input/PlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Input/PlayerInput.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/UI/PlayerHUD.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/StaticData/PlayerStaticData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/StaticData/PlayerStaticData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Input/Player Controls.inputactions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/UI/GameLoop/PlayerUI.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/UI/GameLoop/PlayerUI.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +27,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c399efc08928422d8828d74a2b19ffba158600/9a/7f874da5/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c399efc08928422d8828d74a2b19ffba158600/b0/cf1dc3f0/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c399efc08928422d8828d74a2b19ffba158600/c6/6619cab0/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c399efc08928422d8828d74a2b19ffba158600/f1/a697a161/Cursor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c9d3ffd4b98649ee9989e1908eaca01946a800/cd/878ebb97/Stack`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e7f2b8407dc441f28814515d15959b551a000/2d/a59e6cbb/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f391b866413f4e668a73b3209d3d8b8626e00/ff/b7f45bd2/Animator.cs" root0="SKIP_HIGHLIGHTING" />
@@ -45,6 +48,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/MainMenu/Network/GameNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BH Test Project/Code/StaticData/PlayerStaticData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputAction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionReference.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/InputManager.cs" root0="SKIP_HIGHLIGHTING" />
@@ -132,7 +136,7 @@
       <workItem from="1668870507619" duration="24028000" />
       <workItem from="1668931135024" duration="29804000" />
       <workItem from="1669099759948" duration="25953000" />
-      <workItem from="1669182420348" duration="33066000" />
+      <workItem from="1669182420348" duration="34137000" />
     </task>
     <servers />
   </component>
@@ -155,5 +159,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs</url>
+          <line>44</line>
+          <properties documentPath="L:\GitHub\BH Test Project\Assets\BH Test Project\Code\Runtime\Player\StateMachine\States\BasicMovementState.cs" initialLine="44" containingFunctionPresentation="method 'ChangeCursorSettings'">
+            <startOffsets>
+              <option value="1566" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1567" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

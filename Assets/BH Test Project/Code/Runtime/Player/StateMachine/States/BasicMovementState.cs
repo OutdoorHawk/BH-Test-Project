@@ -26,7 +26,6 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
             _playerInput.EnableAllInput();
             _playerInput.OnDashPressed += ActivateDash;
             _playerInput.OnEscapePressed += ChangeCursorSettings;
-            Debug.Log("enter");
         }
 
         public void Tick()
@@ -44,7 +43,6 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         
         private void ChangeCursorSettings()
         {
-            Debug.Log(Cursor.lockState);
             if (Cursor.lockState != CursorLockMode.Locked)
             {
                 Cursor.lockState = CursorLockMode.Locked;
