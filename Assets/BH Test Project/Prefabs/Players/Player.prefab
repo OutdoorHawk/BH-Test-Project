@@ -5584,15 +5584,12 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  _playerData:
-    MovementSpeed: 4
-    MouseSensitivity: 0.45
+  playerStaticData:
+    MovementSpeed: 3.39
+    MouseSensitivity: 1
     DashPower: 5
-    DashTime: 0.4
-    HitTime: 1
-    PlayerCollisionMask:
-      serializedVersion: 2
-      m_Bits: 64
+    DashTime: 0.35
+    HitTime: 2
   _cameraFollowPrefab: {fileID: 6814131064994553984, guid: f78c4ba29b958ce499dbd0ad575d88fb, type: 3}
 --- !u!114 &5689347882839104929
 MonoBehaviour:
@@ -5606,6 +5603,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5706f6cc3fa742228f76f5887220bc9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerCollisionMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &5994212400904940938
 MonoBehaviour:
   m_ObjectHideFlags: 0

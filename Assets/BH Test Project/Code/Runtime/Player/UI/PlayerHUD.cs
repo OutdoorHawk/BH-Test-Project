@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.Player.UI
 {
-    public class PlayerGameUI : MonoBehaviour
+    public class PlayerHUD : MonoBehaviour
     {
         [SerializeField] private Transform _layoutParent;
         [SerializeField] private GameObject _endGamePlate;
@@ -16,7 +16,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private List<ScoreElement> _scoreElements = new();
 
-        private float _restartDelay = 3;
+        private float _restartDelay;
 
         public void Init(float gameRestartDelay)
         {
@@ -60,9 +60,9 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
             float countdown = _restartDelay;
             do
             {
-                _countDownText.text = countdown.ToString("0");
-                countdown -= Time.deltaTime;
-                yield return new WaitForSeconds(Time.deltaTime);
+                _countDownText.text = Mathf.Round(countdown).ToString("0");
+                countdown -= 1;
+                yield return new WaitForSeconds(1);
             } while (countdown > 0);
         }
     }

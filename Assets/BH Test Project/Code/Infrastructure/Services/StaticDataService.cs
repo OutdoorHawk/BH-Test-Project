@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.Runtime.MainMenu.Network;
+using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
 
@@ -14,34 +16,46 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         private readonly Dictionary<WindowID, WindowConfig> _windows = new();
         private GameNetworkManager _gameNetworkManager;
         private NetworkManager _networkManager;
-        public GameStaticData Data { get; private set; }
+        private PlayerStaticData _playerStaticData;
+        private WorldStaticData _worldStaticData;
+        private GameStaticData _data;
 
         public void Load()
         {
-            Data = Resources.Load<GameStaticData>(GAME_STATIC_DATA_PATH);
+            _data = Resources.Load<GameStaticData>(GAME_STATIC_DATA_PATH);
             LoadWindows();
             LoadNetworkManager();
-        }
-
-        public WindowConfig GetWindow(WindowID id)
-        {
-            return _windows.TryGetValue(id, out var windowConfig) ? windowConfig : null;
-        }
-
-        public GameNetworkManager GetLobbyNetworkManager()
-        {
-            return _gameNetworkManager;
+            LoadPlayerStaticData();
+            LoadWorldStaticData();
         }
 
         private void LoadWindows()
         {
-            foreach (var window in Data.Windows)
+            foreach (var window in _data.Windows)
                 _windows.Add(window.ID, window);
         }
 
-        private void LoadNetworkManager()
-        {
-            _gameNetworkManager = Data.ManagerPrefab;
-        }
+        private void LoadNetworkManager() => 
+            _gameNetworkManager = _data.ManagerPrefab;
+
+        private void LoadPlayerStaticData() => 
+            _playerStaticData = _data.PlayerStaticData;
+
+        private void LoadWorldStaticData() => 
+            _worldStaticData = _data.WorldStaticData;
+
+        public WindowConfig GetWindow(WindowID id) => 
+            _windows.TryGetValue(id, out var windowConfig) ? windowConfig : null;
+
+        public GameNetworkManager GetLobbyNetworkManager() => 
+            _gameNetworkManager;   
+        public NetworkPlayerSystem GetPlayerNetworkSystem() => 
+            _data.PlayerSystem;
+
+        public PlayerStaticData GetPlayerStaticData() => 
+            _playerStaticData;
+
+        public WorldStaticData GetWorldStaticData() => 
+            _worldStaticData;
     }
 }

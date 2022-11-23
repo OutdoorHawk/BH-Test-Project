@@ -11,7 +11,7 @@ namespace BH_Test_Project.Code.Infrastructure.Data
     {
         MainMenu,
         Lobby,
-        GameScore,
+        PlayerHUD,
         UiRoot
     }
     

@@ -10,13 +10,11 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         private SceneContext _sceneContext;
         private List<Transform> _spawnPoints;
         private NetworkPlayerSystem _playerSystem;
-        private PlayerGameUI _playerGameUI;
 
         public void InitSceneContext()
         {
             _sceneContext = Object.FindObjectOfType<SceneContext>(true);
             _playerSystem = _sceneContext.PlayerSystem;
-            _playerGameUI = _sceneContext.GameUI;
             CollectSceneSpawnPoints();
         }
 
@@ -35,10 +33,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services
 
         public NetworkPlayerSystem GetPlayerSystem()
             => _playerSystem;
-
-        public PlayerGameUI GetPlayerUI()
-        {
-            return _playerGameUI;
-        }
+        
     }
 }

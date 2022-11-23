@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using BH_Test_Project.Code.Runtime.CameraLogic;
+using BH_Test_Project.Code.StaticData;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player.Movement
@@ -8,29 +9,29 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
     public class PlayerMovement
     {
         public event Action OnDashEnded;
-        
+
         private readonly CharacterController _characterController;
         private readonly Transform _cameraTransform;
-        private readonly Transform _playerPlayerTransform;
+        private readonly Transform _playerTransform;
         private readonly MonoBehaviour _mono;
+        private readonly PlayerStaticData _playerStaticData;
 
-        private readonly PlayerData _playerData;
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
-        public PlayerMovement(PlayerData playerData, CharacterController characterController,
+        public PlayerMovement(PlayerStaticData playerStaticData, CharacterController characterController,
             Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
         {
             _mono = mono;
-            _playerPlayerTransform = playerTransform;
+            _playerTransform = playerTransform;
             _characterController = characterController;
-            _playerData = playerData;
+            _playerStaticData = playerStaticData;
             _cameraTransform = cameraFollow.transform;
         }
 
         private const float MIN_MOVE_VALUE = 0.01f;
-        private const float SMOOTH_TIME = 0.075f;
-        private const float LERP_RATE = 50f;
+        private const float LERP_RATE = 35f;
+        private const float LERP_SPEED_DEVIATION = 0.655f;
 
         public void UpdateInput(Vector2 movementInput)
         {
@@ -43,10 +44,16 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             ApplyMovement();
         }
 
+        public float GetNormalizedPlayerSpeed()
+        {
+            Vector3 velocity = _characterController.velocity;
+            return new Vector3(velocity.x, 0, velocity.z).normalized.magnitude;
+        }
+
         public float GetPlayerSpeed()
         {
-            return new Vector3(_characterController.velocity.x, 0, _characterController.velocity.y)
-                .normalized.magnitude;
+            Vector3 velocity = _characterController.velocity;
+            return new Vector3(velocity.x, 0, velocity.z).magnitude;
         }
 
         private void ReadCurrentInput(Vector2 input)
@@ -76,7 +83,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             _movementVector.y = 0;
 
             if (nextMovementVector != Vector3.zero)
-                _playerPlayerTransform.forward = _movementVector;
+                _playerTransform.forward = _movementVector;
         }
 
         private void LerpToNewMovementVector(Vector3 nextVector)
@@ -84,8 +91,10 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
             _movementVector = Vector3.Lerp(_movementVector, nextVector, Time.deltaTime * LERP_RATE);
         }
 
-        private void ApplyMovement() =>
-            _characterController.Move(_movementVector * (Time.deltaTime * _playerData.MovementSpeed));
+        private void ApplyMovement()
+        {
+            _characterController.Move(_movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed));
+        }
 
         public void PerformDash()
         {
@@ -95,14 +104,15 @@ namespace BH_Test_Project.Code.Runtime.Player.Movement
 
         private IEnumerator Dashing()
         {
-            Vector3 dashVector = _playerPlayerTransform.forward * _playerData.DashPower;
-            float t = _playerData.DashTime;
-            do
+            Vector3 dashVector = _playerTransform.forward * _playerStaticData.DashDistance;
+            float distance = dashVector.magnitude;
+
+            while (distance > 0)
             {
-                t -= Time.deltaTime;
+                distance -= GetPlayerSpeed() * Time.deltaTime;
                 LerpToNewMovementVector(dashVector);
                 yield return new WaitForSeconds(Time.deltaTime);
-            } while (t > 0);
+            }
 
             OnDashEnded?.Invoke();
         }

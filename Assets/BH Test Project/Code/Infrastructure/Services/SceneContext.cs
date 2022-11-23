@@ -8,12 +8,10 @@ namespace BH_Test_Project.Code.Infrastructure.Services
     {
         [SerializeField] private Transform _spawnPointsParent;
         [SerializeField] private NetworkPlayerSystem _playerSystem;
-        [SerializeField] private PlayerGameUI _playerGameUI;
-        
+
         public Transform SpawnPointsParent => _spawnPointsParent;
 
         public NetworkPlayerSystem PlayerSystem => _playerSystem;
-
-        public PlayerGameUI GameUI => _playerGameUI;
+        
     }
 }

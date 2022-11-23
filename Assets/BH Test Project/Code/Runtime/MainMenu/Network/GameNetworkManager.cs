@@ -1,4 +1,3 @@
-using System.Collections;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
@@ -48,7 +47,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             if (SceneManager.GetActiveScene().name != Constants.GAME_LEVEL_NAME)
                 return;
 
-            OnLoaded();
+            //OnLoaded();
         }
 
         private void OnLoaded()
@@ -57,11 +56,31 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             startPositions = _sceneContextService.GetSceneSpawnPoints();
         }
 
+        /*
+        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
+            GameObject gamePlayer)
+        {
+           
+            Debug.Log("loadedForPlayer");
+            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+        }
+        */
+
+        public override void OnClientSceneChanged()
+        {
+            base.OnClientSceneChanged();
+            if (SceneManager.GetActiveScene().name == Constants.GAME_LEVEL_NAME)
+            {
+                _gameStateMachine.Enter<GameLoopState>();
+                Debug.Log("sceneLoaded");
+            }
+        }
+        
         private void OnGameRestarted(GameRestartMessage obj)
         {
             ServerChangeScene(GameplayScene);
         }
-        
+
         public override void OnDestroy()
         {
             base.OnDestroy();
