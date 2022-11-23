@@ -52,6 +52,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Exit()
         {
+            _uiFactory.ClearUIRoot();
             _playerSystem.UnregisterHandlers();
         }
     }

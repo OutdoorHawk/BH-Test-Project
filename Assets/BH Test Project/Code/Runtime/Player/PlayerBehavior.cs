@@ -27,9 +27,8 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-         private PlayerStaticData _playerStaticData;
+        private PlayerStaticData _playerStaticData;
 
-        private bool _playerIsHitNow => _playerStateMachine.ActiveState is HitState;
 
         [TargetRpc]
         public void TargetInitPlayer(PlayerStaticData staticData)
@@ -56,8 +55,7 @@ namespace BH_Test_Project.Code.Runtime.Player
                 new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
-                    netId, _playerGameStatus);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId);
         }
 
         private void InitSystems()
@@ -87,9 +85,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void TargetPlayerHit(uint hitSenderNetId)
         {
-            if (_playerIsHitNow)
+            if (_playerGameStatus.IsHitNow)
                 return;
-            _playerStateMachine.Enter<HitState>();
+            _playerGameStatus.TargetPlayerHit();
             CmdSuccessHit(hitSenderNetId);
         }
 

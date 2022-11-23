@@ -73,7 +73,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 {
                     if (conn.identity.TryGetComponent(out PlayerBehavior player))
                     {
-                        Debug.Log("InitPlayer");
                         player.TargetInitPlayer(playerStaticData);
                     }
                 }

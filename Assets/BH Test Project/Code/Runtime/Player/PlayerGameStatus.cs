@@ -8,11 +8,11 @@ namespace BH_Test_Project.Code.Runtime.Player
 {
     public class PlayerGameStatus
     {
-        public event Action OnHitEnded;
-        
         private readonly PlayerStaticData _playerStaticData;
         private readonly MonoBehaviour _mono;
         private readonly ColorChangeComponent _colorChangeComponent;
+
+        public bool IsHitNow { get; private set; }
 
         public PlayerGameStatus(PlayerStaticData playerStaticData, MonoBehaviour mono, ColorChangeComponent changeComponent)
         {
@@ -30,9 +30,10 @@ namespace BH_Test_Project.Code.Runtime.Player
         private IEnumerator PlayerHitRoutine()
         {
             _colorChangeComponent.CmdSetPlayerHitColor();
+            IsHitNow = true;
             yield return new WaitForSeconds(_playerStaticData.HitTime);
             _colorChangeComponent.CmdSetPlayerDefaultColor();
-            OnHitEnded?.Invoke();
+            IsHitNow = false;
         }
     }
 }

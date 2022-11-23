@@ -1,11 +1,13 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
-    public class LoadMainMenuState : IState
+    public class MainMenuState : IState
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
@@ -13,7 +15,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         private readonly ISceneContextService _sceneContextService;
         private GameNetworkManager _gameNetworkManager;
 
-        public LoadMainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
+        public MainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
             IStaticDataService staticDataService, ISceneContextService sceneContextService)
         {
             _gameStateMachine = gameStateMachine;
@@ -24,21 +26,27 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Enter()
         {
-            _uiFactory.CreateUiRoot();
-            InitializeMainMenu();
+            SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+            InitNetworkManager();
+            InitMainMenu();
         }
 
-        private void InitializeMainMenu()
+        private void InitMainMenu()
         {
-            MainMenuWindow window = _uiFactory.CreateMainMenuWindow();
-            _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
-            window.Init(_gameNetworkManager);
-            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService);
+            MainMenuWindow mainMenuWindow = _uiFactory.CreateMainMenuWindow();
+            mainMenuWindow.Init(_gameNetworkManager);
+        }
+
+        private void InitNetworkManager()
+        {
+            if (_gameNetworkManager == null)
+                _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
+            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService, _uiFactory);
         }
 
         public void Exit()
         {
-    
+           _uiFactory.ClearUIRoot();
         }
     }
 }
