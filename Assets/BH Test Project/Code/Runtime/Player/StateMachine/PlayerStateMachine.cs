@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.Player.Input;
-using BH_Test_Project.Code.Runtime.Player.Movement;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
+using BH_Test_Project.Code.Runtime.Player.Systems;
 using BH_Test_Project.Code.StaticData;
 using UnityEngine;
 

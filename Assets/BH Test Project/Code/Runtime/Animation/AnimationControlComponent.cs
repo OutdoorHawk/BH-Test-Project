@@ -22,16 +22,6 @@ namespace BH_Test_Project.Code.Runtime.Animation
                 _parametersHashes.Add(trigger, Animator.StringToHash(trigger.ToString()));
             }
         }
-        
-        public void SetTrigger(T parameter)
-        {
-            if (_isTriggered) 
-                _animator.ResetTrigger(_parametersHashes[_lastTriggerType]);
-
-            _animator.SetTrigger(_parametersHashes[parameter]);
-            _lastTriggerType = parameter;
-            _isTriggered = true;
-        }
 
         public void SetBool(T parameter, bool value)
         {

@@ -1,6 +1,6 @@
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
-using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using UnityEngine;
 using UnityEngine.SceneManagement;
