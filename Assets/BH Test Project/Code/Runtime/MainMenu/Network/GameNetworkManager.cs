@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
@@ -43,16 +44,16 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         public override void OnStartClient()
         {
             base.OnStartClient();
-            Debug.Log("reg");
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
             NetworkClient.RegisterHandler<RoomPlayerAddedMessage>(OnRoomPlayerAdded);
         }
 
-        private void OnRoomPlayerAdded(RoomPlayerAddedMessage obj)
+        private void OnRoomPlayerAdded(RoomPlayerAddedMessage msg)
         {
-            Debug.Log("roomPlayerAdded");
-            foreach (var roomPlayer in roomSlots)
-                roomPlayer.transform.SetParent(_lobbyMenuWindow.PlayerSlotsParent);
+            for (int i = 0; i < roomSlots.Count; i++)
+            {
+                _lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform, msg.PlayerName);
+            }
         }
 
         /*public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
@@ -74,6 +75,8 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
             _gameStateMachine.Enter<LobbyState>();
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
+            if (NetworkServer.active)
+                NetworkServer.Spawn(_lobbyMenuWindow.gameObject);
             _lobbyMenuWindow.InitLobby(NetworkClient.isHostClient);
         }
 

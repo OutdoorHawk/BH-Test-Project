@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using Mirror;
 using UnityEngine;
@@ -10,24 +11,45 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Text _playerName;
         [SerializeField] private Toggle _isReadyToggle;
         [SerializeField] private GameObject _slot;
-        private string _defaultText;
+
+        [SyncVar(hook = nameof(UpdateToggle))] private bool _isReady;
 
         private new void Start()
         {
             base.Start();
-            Debug.Log("send");
-            CmdRefreshLobbyUI();
+            if (isOwned)
+                CmdRefreshLobbyUI(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+
+            _isReadyToggle.onValueChanged.AddListener(OnToggleChanged);
+        }
+        
+
+        [Command(requiresAuthority = false)]
+        private void CmdRefreshLobbyUI(string playerName)
+        {
+            RoomPlayerAddedMessage msg = new RoomPlayerAddedMessage
+            {
+                NetId = netId,
+                PlayerName = playerName
+            };
+            NetworkServer.SendToAll(msg);
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdRefreshLobbyUI()
+        private void OnToggleChanged(bool value)
         {
-            NetworkServer.SendToAll(new RoomPlayerAddedMessage());
+            _isReady = value;
         }
 
-        private void Awake()
+        private void UpdateToggle(bool oldValue, bool newValue)
         {
-            _defaultText = _playerName.text;
+            _isReadyToggle.isOn = newValue;
+        }
+        
+        public void SetPlayerName(string msgPlayerName)
+        {
+            if (isOwned) 
+                _playerName.text = msgPlayerName;
         }
 
         public void ConnectPlayer(string playerName)
@@ -38,7 +60,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         public void ClearPlayer()
         {
-            _playerName.text = _defaultText;
             _slot.gameObject.SetActive(false);
         }
 
