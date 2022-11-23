@@ -1,4 +1,6 @@
-﻿using BH_Test_Project.Code.Runtime.Player.Input;
+﻿using BH_Test_Project.Code.Runtime.Animation;
+using BH_Test_Project.Code.Runtime.Player.Input;
+using BH_Test_Project.Code.Runtime.Player.Movement;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Runtime.Player.StateMachine
@@ -7,16 +9,21 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
     {
         private readonly IPlayerStateMachine _playerStateMachine;
         private readonly PlayerInput _playerInput;
+        private readonly PlayerMovement _playerMovement;
+        private readonly PlayerAnimator _playerAnimator;
 
-        public EndGameState(IPlayerStateMachine playerStateMachine, PlayerInput playerInput)
+        public EndGameState(IPlayerStateMachine playerStateMachine, PlayerInput playerInput,
+            PlayerMovement playerMovement, PlayerAnimator playerAnimator)
         {
             _playerStateMachine = playerStateMachine;
             _playerInput = playerInput;
+            _playerMovement = playerMovement;
+            _playerAnimator = playerAnimator;
         }
 
         public void Enter()
         {
-            _playerInput.DisableAllInput();
+            _playerInput.DisableDash();
         }
 
         public void Exit()
@@ -25,7 +32,10 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         public void Tick()
         {
-            
+            Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
+            _playerMovement.UpdateInput(currentInput);
+            _playerMovement.Tick();
+            _playerAnimator.SetPlayerSpeed(_playerMovement.GetNormalizedPlayerSpeed());
         }
     }
 }

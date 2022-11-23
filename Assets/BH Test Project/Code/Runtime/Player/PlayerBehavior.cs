@@ -28,7 +28,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
         private PlayerStaticData _playerStaticData;
-        
+
         [TargetRpc]
         public void TargetInitPlayer(PlayerStaticData staticData)
         {
@@ -54,7 +54,8 @@ namespace BH_Test_Project.Code.Runtime.Player
                 new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId, this,
+                    _playerStaticData);
         }
 
         private void InitSystems()
@@ -107,7 +108,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             _playerStateMachine.Enter<EndGameState>();
         }
-        
+
         public override void OnStopLocalPlayer()
         {
             DisposePlayer();

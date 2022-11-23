@@ -33,6 +33,16 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
             MouseAxis.Enable();
         }
 
+        public void EnableDash()
+        {
+            _playerInput.Player.Dash.Enable();
+        }
+
+        public void DisableDash()
+        {
+            _playerInput.Player.Dash.Disable();
+        }
+
         public void DisableAllInput()
         {
             _playerInput.Player.Movement.Disable();
