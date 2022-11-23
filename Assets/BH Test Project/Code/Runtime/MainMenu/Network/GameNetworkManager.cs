@@ -30,6 +30,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
 
         public void CreateLobbyAsHost()
         {
+            Debug.Log(NetworkServer.active);
             if (!NetworkServer.active)
                 StartHost();
         }
@@ -93,9 +94,9 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         public override void OnClientDisconnect()
         {
             base.OnClientDisconnect();
-            Destroy(gameObject);
-            SceneManager.LoadScene((int)LevelID.MainMenu);
+            StopServer();
             _gameStateMachine.Enter<MainMenuState>();
         }
+        
     }
 }

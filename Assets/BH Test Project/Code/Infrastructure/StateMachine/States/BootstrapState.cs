@@ -7,6 +7,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly DIContainer _diContainer;
+        private IUIFactory _uiFactory;
 
         public BootstrapState(IGameStateMachine gameStateMachine, DIContainer diContainer)
         {
@@ -32,6 +33,8 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
+            _uiFactory = _diContainer.Resolve<IUIFactory>();
+            _uiFactory.CreateUiRoot();
             _gameStateMachine.Enter<MainMenuState>();
         }
 

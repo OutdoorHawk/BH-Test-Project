@@ -1,7 +1,9 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.MainMenu.Network;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
@@ -24,7 +26,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Enter()
         {
-            _uiFactory.CreateUiRoot();
+            SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
             InitNetworkManager();
             InitMainMenu();
         }
