@@ -41,6 +41,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         public void AddNewPlayerToLobby(Transform roomPlayer)
         {
             roomPlayer.SetParent(_playerSlotsParent);
+            roomPlayer.localScale = Vector3.one;;
             roomPlayer.SetSiblingIndex(0);
             roomPlayer.TryGetComponent(out RoomPlayer player);
             if (!_roomPlayers.Contains(player))
@@ -65,6 +66,16 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void DisconnectLobby()
         {
             NetworkClient.Disconnect();
+            UpdatePlayersList();
+        }
+
+        private void UpdatePlayersList()
+        {
+            for (int i = 0; i < _roomPlayers.Count; i++)
+            {
+                if (_roomPlayers[i] == null)
+                    _roomPlayers.RemoveAt(i);
+            }
         }
 
         private void CleanUp()
