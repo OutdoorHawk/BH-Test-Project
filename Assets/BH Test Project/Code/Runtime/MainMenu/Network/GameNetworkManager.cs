@@ -16,9 +16,12 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         private IGameStateMachine _gameStateMachine;
         private ISceneContextService _sceneContextService;
         private NetworkSpawnSystem _spawnSystem;
+        private IUIFactory _uiFactory;
+        private LobbyMenuWindow _lobbyMenuWindow;
 
-        public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService)
+        public void Init(IGameStateMachine gameStateMachine, ISceneContextService sceneContextService, IUIFactory uiFactory)
         {
+            _uiFactory = uiFactory;
             _sceneContextService = sceneContextService;
             _gameStateMachine = gameStateMachine;
         }
@@ -42,6 +45,22 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
         }
 
+        public override void OnRoomClientEnter()
+        {
+             Debug.Log("enterRoom");
+            base.OnRoomClientEnter();
+       }
+
+        public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
+        {
+            Debug.Log("playerCreate");
+            _gameStateMachine.Enter<LobbyState>();
+            _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
+            _lobbyMenuWindow.InitLobby(NetworkClient.isHostClient);
+            NetworkRoomPlayer roomPlayer = Instantiate(roomPlayerPrefab,_lobbyMenuWindow.PlayerSlotsParent);
+            return roomPlayer.gameObject;
+        }
+
         /*
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
             GameObject gamePlayer)
@@ -52,24 +71,12 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         }
         */
 
+
         public override void OnClientSceneChanged()
         {
             base.OnClientSceneChanged();
             if (SceneManager.GetActiveScene().name == Constants.GAME_SCENE_NAME)
                 _gameStateMachine.Enter<GameLoopState>();
-        }
-
-        public override void OnRoomClientEnter()
-        {
-            base.OnRoomClientEnter();
-            _gameStateMachine.Enter<LobbyState>();
-        }
-
-        public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
-        {
-            Debug.Log("playerCreate");
-            //NetworkRoomPlayer roomPlayer = Instantiate(roomPlayerPrefab);
-            return base.OnRoomServerCreateRoomPlayer(conn);
         }
 
         private void OnGameRestarted(GameRestartMessage obj)

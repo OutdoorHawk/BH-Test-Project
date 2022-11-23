@@ -24,6 +24,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Enter()
         {
+            _uiFactory.CreateUiRoot();
             InitializeMainMenu();
         }
 
@@ -32,12 +33,12 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
             MainMenuWindow window = _uiFactory.CreateMainMenuWindow();
             _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
             window.Init(_gameNetworkManager);
-            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService);
+            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService, _uiFactory);
         }
 
         public void Exit()
         {
-           
+           _uiFactory.ClearUIRoot();
         }
     }
 }

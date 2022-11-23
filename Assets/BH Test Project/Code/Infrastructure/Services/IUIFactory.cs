@@ -11,5 +11,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         MainMenuWindow CreateMainMenuWindow();
         LobbyMenuWindow CreateLobbyMenuWindow();
         PlayerHUD CreatePlayerHUD();
+        void CreateUiRoot();
+        void ClearUIRoot();
     }
 }

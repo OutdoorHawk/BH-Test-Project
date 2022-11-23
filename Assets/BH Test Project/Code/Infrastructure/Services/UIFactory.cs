@@ -20,7 +20,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         public MainMenuWindow CreateMainMenuWindow()
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.MainMenu);
-            MainMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, GetUIRoot())
+            MainMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<MainMenuWindow>();
             return window;
         }
@@ -28,7 +28,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         public LobbyMenuWindow CreateLobbyMenuWindow()
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.Lobby);
-            LobbyMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, GetUIRoot())
+            LobbyMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab,_uiRoot)
                 .GetComponent<LobbyMenuWindow>();
             return window;
         }
@@ -36,20 +36,28 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         public PlayerHUD CreatePlayerHUD()
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.PlayerHUD);
-            PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, GetUIRoot())
+            PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<PlayerHUD>();
             return window;
         }
 
-        private Transform GetUIRoot()
+        public void CreateUiRoot()
         {
-            return _uiRoot != null ? _uiRoot : CreateUiRoot();
+            WindowConfig config = _staticDataService.GetWindow(WindowID.UiRoot);
+            GameObject uiRoot = Object.Instantiate(config.WindowPrefab.gameObject);
+            Object.DontDestroyOnLoad(uiRoot);
+            _uiRoot = uiRoot.transform;
         }
 
-        private Transform CreateUiRoot()
+        public void ClearUIRoot()
         {
-            WindowConfig root = _staticDataService.GetWindow(WindowID.UiRoot);
-            return Object.Instantiate(root.WindowPrefab).transform;
+            for (int i = 0; i < _uiRoot.childCount; i++)
+            {
+                if (_uiRoot.GetChild(i).gameObject.TryGetComponent(out RoomPlayer roomPlayer))
+                    roomPlayer.transform.SetParent(null);
+                else
+                    Object.Destroy(_uiRoot.GetChild(i).gameObject);
+            }
         }
     }
 }
