@@ -23,16 +23,10 @@ namespace BH_Test_Project.Code.Runtime.Lobby
                 _startGameButton.gameObject.SetActive(true);
         }
 
-        private void InitClient()
-        {
-    
-        }
-        
-        public void AddNewPlayerToLobby(Transform roomPlayer, string msgPlayerName)
+        public void AddNewPlayerToLobby(Transform roomPlayer)
         {
             roomPlayer.SetParent(_playerSlotsParent);
             roomPlayer.SetSiblingIndex(0);
-            roomPlayer.GetComponent<RoomPlayer>().SetPlayerName(msgPlayerName);
         }
         
         private bool IsEveryoneReady()

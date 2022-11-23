@@ -11,9 +11,8 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Text _playerNameText;
         [SerializeField] private Toggle _isReadyToggle;
         [SerializeField] private GameObject _slot;
-
-        [SyncVar(hook = nameof(UpdateToggle))] private bool _isReady;
-        [SyncVar(hook = nameof(UpdatePlayerName))] private string _playerName;
+        
+        [SyncVar(hook = nameof(PlayerNameChanged))] private string _playerName;
 
         private new void Start()
         {
@@ -29,10 +28,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [Command(requiresAuthority = false)]
         private void CmdRefreshLobbyUI()
         {
-            RoomPlayerAddedMessage msg = new RoomPlayerAddedMessage
-            {
-                NetId = netId
-            };
+            RoomPlayerAddedMessage msg = new RoomPlayerAddedMessage();
             NetworkServer.SendToAll(msg);
         }
 
@@ -45,25 +41,19 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [Command(requiresAuthority = false)]
         private void CmdToggleChanged(bool value)
         {
-            _isReady = value;
+            readyToBegin = value;
         }
 
-        private void UpdateToggle(bool oldValue, bool newValue)
+        public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
         {
-            _isReadyToggle.isOn = newValue;
+            base.ReadyStateChanged(oldReadyState, newReadyState);
+            _isReadyToggle.isOn = newReadyState;
         }
 
-        private void UpdatePlayerName(string oldValue, string newValue)
+        private void PlayerNameChanged(string oldValue, string newValue)
         {
             _playerNameText.text = newValue;
         }
-
-        public void SetPlayerName(string msgPlayerName)
-        {
-            //if (isOwned)
-                // _playerName.text = msgPlayerName;
-        }
-
 
         public void ClearPlayer()
         {

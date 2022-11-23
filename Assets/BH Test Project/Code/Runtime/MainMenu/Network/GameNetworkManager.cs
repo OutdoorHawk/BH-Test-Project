@@ -52,7 +52,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Network
         {
             for (int i = 0; i < roomSlots.Count; i++)
             {
-                _lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform, msg.PlayerName);
+                _lobbyMenuWindow.AddNewPlayerToLobby(roomSlots[i].transform);
             }
         }
 
