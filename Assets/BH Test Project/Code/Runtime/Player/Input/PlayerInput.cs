@@ -12,7 +12,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
         public InputAction MouseAxis { get; private set; }
 
         public event Action OnDashPressed;
-        public event Action OnEscapePressed;
+        private event Action OnEscapePressed;
 
         public void Init()
         {
@@ -22,6 +22,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
 
             _playerInput.Player.Dash.started += (c) => OnDashPressed?.Invoke();
             _playerInput.Player.Escape.started += (c) => OnEscapePressed?.Invoke();
+            OnEscapePressed += ChangeCursorLock;
         }
 
         public void EnableAllInput()
@@ -44,6 +45,33 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
         {
             _playerInput.Player.Movement.Disable();
             _playerInput.Player.Dash.Disable();
+        }
+        
+        public void DisableMovementAndMouseInput()
+        {
+            _playerInput.Player.Movement.Disable();
+            _playerInput.Player.Dash.Disable();
+            MouseAxis.Disable();
+        }
+        
+        private void ChangeCursorLock()
+        {
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                EnableAllInput();
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+                DisableMovementAndMouseInput();
+            }
+        }
+
+        public void CleanUp()
+        {
+            OnEscapePressed -= ChangeCursorLock;
         }
     }
 }

@@ -32,6 +32,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         [TargetRpc]
         public void TargetInitPlayer(PlayerStaticData staticData)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             if (!isOwned)
                 return;
             _playerStaticData = staticData;
@@ -114,6 +115,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void DisposePlayer()
         {
             _playerStateMachine.CleanUp();
+            _playerInput.CleanUp();
         }
     }
 }
