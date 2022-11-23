@@ -14,10 +14,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     {
         private readonly List<PlayerOnServer> _players = new();
         private PlayerHUD _playerHUD;
-
-        private int _gameEndScore;
-        private float _gameRestartDelay;
+        
         private PlayerStaticData _playerStaticData;
+        
+        private float _gameRestartDelay;
+        private int _gameEndScore;
 
         public void RegisterHandlers()
         {
@@ -33,8 +34,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
 
-        public void Init(PlayerHUD playerHUD, WorldStaticData worldStaticData,
-            PlayerStaticData playerStaticData)
+        public void Init(PlayerHUD playerHUD, WorldStaticData worldStaticData, PlayerStaticData playerStaticData)
         {
             _gameEndScore = worldStaticData.GameEndScore;
             _gameRestartDelay = worldStaticData.GameRestartDelay;
@@ -42,11 +42,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerHUD = playerHUD;
             _playerHUD.Init(_gameRestartDelay);
             ResetPlayersScore();
-            Debug.Log("InitSystem");
-           // Debug.Log(isClient); //Null?
-            
-           // if (isClient) 
-            //    CmdInitPlayers(_playerStaticData); for instantiate
         }
 
         private void ResetPlayersScore()
@@ -64,18 +59,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Command(requiresAuthority = false)]
         private void CmdInitPlayers(PlayerStaticData playerStaticData)
         {
-            Debug.Log("InitializePlayers");
             foreach (var conn in NetworkServer.connections.Values)
             {
                 if (conn.identity == null)
                     return;
-                if (!PlayerWasInitialized(conn.identity.netId))
-                {
-                    if (conn.identity.TryGetComponent(out PlayerBehavior player))
-                    {
-                        player.TargetInitPlayer(playerStaticData);
-                    }
-                }
+                if (PlayerWasInitialized(conn.identity.netId)) 
+                    continue;
+                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                    player.TargetInitPlayer(playerStaticData);
             }
         }
 
