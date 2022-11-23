@@ -13,7 +13,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         [SerializeField] private Text _playerNameText;
         [SerializeField] private Toggle _isReadyToggle;
-        [SerializeField] private GameObject _slot;
 
         [SyncVar(hook = nameof(PlayerNameChanged))] private string _playerName;
         [SyncVar(hook = nameof(ReadyToggleChanged))] private bool _isReady;

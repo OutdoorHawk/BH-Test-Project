@@ -29,6 +29,8 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
             SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
             InitNetworkManager();
             InitMainMenu();
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
         }
 
         private void InitMainMenu()

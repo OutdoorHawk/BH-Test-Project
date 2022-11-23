@@ -2,9 +2,9 @@
 {
     public class PlayerOnServer
     {
-        public uint NetID;
+        public readonly string Name;
+        public readonly uint NetID;
         public int Score;
-        public string Name;
 
         public PlayerOnServer(uint netID, string playerName)
         {

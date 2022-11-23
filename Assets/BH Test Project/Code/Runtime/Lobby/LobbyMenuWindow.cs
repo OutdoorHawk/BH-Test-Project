@@ -45,6 +45,8 @@ namespace BH_Test_Project.Code.Runtime.Lobby
                 _roomPlayers.Add(player);
                 player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
             }
+
+            CheckStartButtonAvailable();
         }
 
         private void StartGame()

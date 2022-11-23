@@ -13,7 +13,6 @@ namespace BH_Test_Project.Code.Infrastructure
         {
             _gameStateMachine = new GameStateMachine(DIContainer.Container);
             _gameStateMachine.Enter<BootstrapState>();
-            Cursor.lockState = CursorLockMode.Confined;
         }
     }
 }
