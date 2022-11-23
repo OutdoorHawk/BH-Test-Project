@@ -60,6 +60,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void InitSystems()
         {
             _playerInput.Init();
+            _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
         }

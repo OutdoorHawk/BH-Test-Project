@@ -23,7 +23,6 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
 
         public void Enter()
         {
-            _playerInput.EnableAllInput();
             _playerInput.OnDashPressed += ActivateDash;
         }
 
@@ -43,7 +42,6 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         public void Exit()
         {
             _playerInput.OnDashPressed -= ActivateDash;
-            _playerInput.DisableMovementInput();
         }
     }
 }
