@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Network;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,17 +16,17 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private List<RoomPlayer> _roomPlayers;
         private int _minPlayersToStartGame;
-        private bool _isHost;
+        private bool _isServer;
 
-        public void InitLobby(bool IsHost, int minPlayers)
+        public void InitLobby(bool isServer, int minPlayers)
         {
-            _isHost = IsHost;
-            if (_isHost) 
-                EnableStartGameButton();
-
-            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
+            _isServer = isServer;
             _roomPlayers = new List<RoomPlayer>();
             _minPlayersToStartGame = minPlayers;
+            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
+
+            if (_isServer)
+                EnableStartGameButton();
         }
 
         private void EnableStartGameButton()
@@ -34,25 +35,41 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             _startGameButton.onClick.AddListener(StartGame);
         }
 
-        public void AddNewPlayerToLobby(Transform roomPlayer)
+        private void LeaveLobbyButtonPressed()
         {
-            roomPlayer.SetParent(_playerSlotsParent);
-            roomPlayer.localScale = Vector3.one;;
-            roomPlayer.SetSiblingIndex(0);
-            roomPlayer.TryGetComponent(out RoomPlayer player);
-            if (!_roomPlayers.Contains(player))
+            NetworkClient.Disconnect();
+            UpdatePlayersList();
+        }
+
+        private void StartGame()
+        {
+            _startGameButton.onClick.RemoveListener(StartGame);
+            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+        }
+
+        public void UpdatePlayersInLobby(List<NetworkRoomPlayer> roomSlots)
+        {
+            for (var i = 0; i < roomSlots.Count; i++)
             {
-                _roomPlayers.Add(player);
-                player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
+                RoomPlayer player = SetPlayerToSlotPosition(roomSlots, i);
+                if (!_roomPlayers.Contains(player))
+                {
+                    _roomPlayers.Add(player);
+                    player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
+                }
             }
 
             CheckStartButtonAvailable();
         }
 
-        private void StartGame()
+        private RoomPlayer SetPlayerToSlotPosition(List<NetworkRoomPlayer> roomSlots, int i)
         {
-            CleanUp();
-            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+            Transform playerTransform = roomSlots[i].transform;
+            playerTransform.transform.SetParent(_playerSlotsParent);
+            playerTransform.transform.localScale = Vector3.one;
+            playerTransform.transform.SetSiblingIndex(i);
+            playerTransform.TryGetComponent(out RoomPlayer player);
+            return player;
         }
 
         private void CheckStartButtonAvailable()
@@ -67,12 +84,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             return _roomPlayers.All(player => player.IsReady);
         }
 
-        private void LeaveLobbyButtonPressed()
-        {
-            NetworkClient.Disconnect();
-            UpdatePlayersList();
-        }
-
         private void UpdatePlayersList()
         {
             for (int i = 0; i < _roomPlayers.Count; i++)
@@ -82,15 +93,21 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             }
         }
 
+        private void OnDestroy()
+        {
+            CleanUp();
+        }
+
         private void CleanUp()
         {
-            if (_isHost) 
-                _startGameButton.onClick.RemoveListener(StartGame);
             _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
             foreach (var pl in _roomPlayers)
             {
+                if (pl == null)
+                    return;
                 pl.OnRoomPlayerStateChanged -= CheckStartButtonAvailable;
                 pl.transform.SetParent(null);
+                DontDestroyOnLoad(pl);
             }
         }
     }

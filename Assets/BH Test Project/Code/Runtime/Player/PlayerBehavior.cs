@@ -1,4 +1,4 @@
-using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
@@ -16,6 +16,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
+    [RequireComponent(typeof(PlayerNameComponent))]
     public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private CameraFollow _cameraFollowPrefab;
@@ -27,6 +28,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
+        private PlayerNameComponent _playerNameComponent;
         private PlayerStaticData _playerStaticData;
 
         [TargetRpc]
@@ -38,7 +40,8 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerStaticData = staticData;
             CreateSystems();
             InitSystems();
-            CmdAddNewPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            CheckIsPlayerNameValid();
+            CmdAddNewPlayerToScoreTable(netId, _playerNameComponent.GetPlayerName());
         }
 
         private void CreateSystems()
@@ -47,6 +50,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
+            _playerNameComponent = GetComponent<PlayerNameComponent>();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
@@ -64,6 +68,20 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
+        }
+
+        private void CheckIsPlayerNameValid()
+        {
+            string playerName = _playerNameComponent.GetPlayerName();
+            if (!string.IsNullOrEmpty(playerName))
+            {
+                if (!GameNetworkManager.PlayerNames.ContainsKey(connectionToServer.connectionId))
+                    GameNetworkManager.PlayerNames.Add(connectionToServer.connectionId, playerName);
+            }
+            else
+                playerName = GameNetworkManager.PlayerNames[connectionToServer.connectionId];
+
+            _playerNameComponent.SetPlayerName(playerName);
         }
 
         [Command]

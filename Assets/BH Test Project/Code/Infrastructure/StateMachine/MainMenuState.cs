@@ -12,16 +12,14 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
         private readonly IStaticDataService _staticDataService;
-        private readonly ISceneContextService _sceneContextService;
         private GameNetworkManager _gameNetworkManager;
 
         public MainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
-            IStaticDataService staticDataService, ISceneContextService sceneContextService)
+            IStaticDataService staticDataService)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
             _staticDataService = staticDataService;
-            _sceneContextService = sceneContextService;
         }
 
         public void Enter()
@@ -43,7 +41,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         {
             if (_gameNetworkManager == null)
                 _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
-            _gameNetworkManager.Init(_gameStateMachine, _sceneContextService);
+            _gameNetworkManager.Init(_gameStateMachine);
         }
 
         public void Exit()

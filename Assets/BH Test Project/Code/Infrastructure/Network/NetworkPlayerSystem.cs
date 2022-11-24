@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Runtime.Player;
+using BH_Test_Project.Code.Runtime.Player.Systems;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
@@ -13,10 +14,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     public class NetworkPlayerSystem : NetworkBehaviour
     {
         private readonly List<PlayerOnServer> _players = new();
+        private Dictionary<int, string> _playerNames;
         private PlayerHUD _playerHUD;
-        
+
         private PlayerStaticData _playerStaticData;
-        
+
         private float _gameRestartDelay;
         private int _gameEndScore;
 
@@ -63,7 +65,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 if (conn.identity == null)
                     return;
-                if (PlayerWasInitialized(conn.identity.netId)) 
+                if (PlayerWasInitialized(conn.identity.netId))
                     continue;
                 if (conn.identity.TryGetComponent(out PlayerBehavior player))
                     player.TargetInitPlayer(playerStaticData);
@@ -77,8 +79,16 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private void OnPlayerConnected(PlayerConnectedMessage MSG)
         {
+            if (PlayerAlreadyAdded(MSG))
+                return;
+
             _playerHUD.AddPlayerToScoreTable(MSG);
             _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
+        }
+
+        private bool PlayerAlreadyAdded(PlayerConnectedMessage MSG)
+        {
+            return _players.Any(pl => pl.Name == MSG.PlayerName && pl.NetID == MSG.NetId);
         }
 
         private void OnPlayerHit(NetworkConnection connection, PlayerAskHitMessage message)
@@ -128,6 +138,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
 
             _playerHUD.EnableEndGamePanel(player.Name);
+            CollectPlayerNames();
             if (isServer)
                 StartCoroutine(RestartGameRoutine());
         }
@@ -141,5 +152,18 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Command(requiresAuthority = false)]
         private void CmdRestartGame() =>
             NetworkServer.SendToAll(new GameRestartMessage());
+
+        private void CollectPlayerNames()
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.TryGetComponent(out PlayerNameComponent nameSender))
+                {
+                    if (!GameNetworkManager.PlayerNames.ContainsKey(conn.connectionId) &&
+                        nameSender.GetPlayerName() != null)
+                        GameNetworkManager.PlayerNames.Add(conn.connectionId, nameSender.GetPlayerName());
+                }
+            }
+        }
     }
 }
