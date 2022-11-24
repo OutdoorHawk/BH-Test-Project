@@ -23,7 +23,4 @@ namespace BH_Test_Project.Code.Infrastructure.Network.Data
     {
     }
     
-    public struct RoomPlayerAddedMessage : NetworkMessage
-    {
-    }
 }

@@ -5585,6 +5585,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _cameraFollowPrefab: {fileID: 6814131064994553984, guid: f78c4ba29b958ce499dbd0ad575d88fb, type: 3}
+  _playerHUDPrefab: {fileID: 2763079019457763397, guid: 6000b0a6b216feb4081e43f499aa0b28, type: 3}
 --- !u!114 &5689347882839104929
 MonoBehaviour:
   m_ObjectHideFlags: 0
