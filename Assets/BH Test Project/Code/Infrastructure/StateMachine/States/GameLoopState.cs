@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -24,9 +25,9 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            InitGameLevel();
+           InitGameLevel();
         }
-
+        
         private void InitGameLevel()
         {
             _sceneContextService.CollectSceneContext();

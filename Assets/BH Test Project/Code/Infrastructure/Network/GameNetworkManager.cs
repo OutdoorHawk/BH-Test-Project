@@ -3,7 +3,6 @@ using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
-using BH_Test_Project.Code.Runtime.Lobby;
 using BH_Test_Project.Code.Runtime.Player.Systems;
 using Mirror;
 using UnityEngine;
@@ -14,7 +13,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     public class GameNetworkManager : NetworkRoomManager
     {
         private IGameStateMachine _gameStateMachine;
-        private LobbyMenuWindow _lobbyMenuWindow;
         public static Dictionary<int, string> PlayerNames { get; } = new();
 
         public void Init(IGameStateMachine gameStateMachine)
@@ -23,10 +21,17 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             SceneManager.sceneLoaded += HandleSceneLoaded;
         }
 
+        private void HandleSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            if (SceneManager.GetActiveScene().name == Constants.GAME_SCENE_NAME)
+                _gameStateMachine.Enter<GameLoopState>();
+        }
+
         public void CreateLobbyAsHost()
         {
             if (NetworkServer.active)
                 return;
+            _gameStateMachine.Enter<LobbyState>();
             StartHost();
         }
 
@@ -35,6 +40,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             networkAddress = address;
             if (NetworkClient.active || NetworkServer.active)
                 return;
+            _gameStateMachine.Enter<LobbyState>();
             StartClient();
         }
 
@@ -42,14 +48,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             base.OnStartClient();
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
-        }
-
-        private void HandleSceneLoaded(Scene arg0, LoadSceneMode arg1)
-        {
-            if (SceneManager.GetActiveScene().name == Constants.LOBBY_SCENE_NAME)
-                _gameStateMachine.Enter<LobbyState>();
-            if (SceneManager.GetActiveScene().name == Constants.GAME_SCENE_NAME)
-                _gameStateMachine.Enter<GameLoopState>();
         }
 
         public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
@@ -87,9 +85,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             base.OnClientDisconnect();
             PlayerNames.Clear();
-            SceneManager.sceneLoaded -= HandleSceneLoaded;
             StopServer();
             _gameStateMachine.Enter<MainMenuState>();
+            SceneManager.sceneLoaded -= HandleSceneLoaded;
         }
     }
 }

@@ -1,5 +1,7 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Runtime.Lobby;
+using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
@@ -12,11 +14,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
         public LobbyState(IUIFactory uiFactory)
         {
             _uiFactory = uiFactory;
-        
         }
 
         public void Enter()
         {
+            SceneManager.LoadScene(Constants.LOBBY_SCENE_NAME);
         }
 
         public void Exit()

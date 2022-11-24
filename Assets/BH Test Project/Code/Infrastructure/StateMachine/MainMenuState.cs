@@ -24,11 +24,16 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Enter()
         {
-            SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
-            InitNetworkManager();
-            InitMainMenu();
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
+            SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+            SceneManager.sceneLoaded += OnLoaded;
+        }
+
+        private void OnLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            InitNetworkManager();
+            InitMainMenu();
         }
 
         private void InitMainMenu()
@@ -46,6 +51,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 
         public void Exit()
         {
+            SceneManager.sceneLoaded -= OnLoaded;
             _uiFactory.ClearUIRoot();
         }
     }
