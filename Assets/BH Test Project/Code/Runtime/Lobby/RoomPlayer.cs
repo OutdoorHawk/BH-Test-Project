@@ -1,6 +1,5 @@
 using System;
 using BH_Test_Project.Code.Infrastructure.Data;
-using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
@@ -27,11 +26,12 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private IGameStateMachine _gameStateMachine;
 
         public bool IsReady => _isReady;
-        
+
         public void Init(IGameStateMachine gameStateMachine, IUIFactory uiFactory)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
+            Debug.Log(_gameStateMachine);
         }
 
         private new void Start()

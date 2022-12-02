@@ -38,7 +38,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             if (NetworkServer.active)
                 return;
-            _gameStateMachine.Enter<LoadLobbyState>();
             StartHost();
         }
 
@@ -47,7 +46,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             networkAddress = address;
             if (NetworkClient.active || NetworkServer.active)
                 return;
-            _gameStateMachine.Enter<LoadLobbyState>();
             StartClient();
         }
 
@@ -60,7 +58,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
             base.OnServerReady(conn);
-            _playerFactory.CreateRoomPlayer(conn);
+            _playerFactory.CreateRoomPlayer(conn, RoomPlayerPrefab);
         }
 
         public override void OnClientSceneChanged()

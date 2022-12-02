@@ -30,10 +30,10 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         private void BindServices()
         {
+            _diContainer.BindSingle(_gameStateMachine);
             BindStaticDataService();
             BindFactories();
             BindNetworkManagerService();
-            _diContainer.BindSingle(_gameStateMachine);
             _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
             _diContainer.BindSingle(_coroutineRunner);
             _diContainer.BindSingle<ISceneLoader>(new SceneLoader(_coroutineRunner));
@@ -42,8 +42,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void BindFactories()
         {
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
-            _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(
-                _diContainer.Resolve<INetworkManagerService>(), _diContainer.Resolve<IUIFactory>(),
+            _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(_diContainer.Resolve<IUIFactory>(),
                 _diContainer.Resolve<IGameStateMachine>()));
         }
 

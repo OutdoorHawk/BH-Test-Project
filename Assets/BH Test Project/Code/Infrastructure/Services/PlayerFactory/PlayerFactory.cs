@@ -1,4 +1,3 @@
-using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
@@ -8,21 +7,20 @@ namespace BH_Test_Project.Code.Infrastructure.Services.PlayerFactory
 {
     public class PlayerFactory : IPlayerFactory
     {
-        private readonly INetworkManagerService _networkManagerService;
         private readonly IUIFactory _uiFactory;
         private readonly IGameStateMachine _gameStateMachine;
+        private IPlayerFactory _playerFactoryImplementation;
 
-        public PlayerFactory(INetworkManagerService networkManagerService, IUIFactory uiFactory,
+        public PlayerFactory(IUIFactory uiFactory,
             IGameStateMachine gameStateMachine)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
-            _networkManagerService = networkManagerService;
         }
 
-        public RoomPlayer CreateRoomPlayer(NetworkConnectionToClient conn)
+        public RoomPlayer CreateRoomPlayer(NetworkConnectionToClient conn, RoomPlayer roomPlayer)
         {
-            RoomPlayer player = Object.Instantiate(_networkManagerService.RoomPlayerPrefab);
+            RoomPlayer player = Object.Instantiate(roomPlayer);
             player.Init(_gameStateMachine, _uiFactory);
             NetworkServer.Spawn(player.gameObject, conn);
             return player;
