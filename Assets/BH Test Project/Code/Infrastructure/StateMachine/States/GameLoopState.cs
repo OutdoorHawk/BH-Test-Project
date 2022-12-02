@@ -1,6 +1,7 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
@@ -16,7 +17,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private NetworkPlayerSystem _playerSystem;
 
         public GameLoopState(IStaticDataService staticDataService,
-            ISceneContextService sceneContextService, IUIFactory uiFactory)
+            ISceneContextService sceneContextService, IUIFactory uiFactory, ISceneLoader sceneLoader)
         {
             _staticDataService = staticDataService;
             _sceneContextService = sceneContextService;

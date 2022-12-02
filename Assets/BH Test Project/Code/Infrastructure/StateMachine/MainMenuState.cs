@@ -1,6 +1,8 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,49 +11,38 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
 {
     public class MainMenuState : IState
     {
-        private readonly IGameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
-        private readonly IStaticDataService _staticDataService;
-        private GameNetworkManager _gameNetworkManager;
+        private readonly INetworkManagerService _networkManagerService;
+        private readonly ISceneLoader _sceneLoader;
 
-        public MainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
-            IStaticDataService staticDataService)
+        public MainMenuState(IUIFactory uiFactory, INetworkManagerService networkManagerService,
+            ISceneLoader sceneLoader)
         {
-            _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
-            _staticDataService = staticDataService;
+            _networkManagerService = networkManagerService;
+            _sceneLoader = sceneLoader;
         }
 
         public void Enter()
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
-            SceneManager.sceneLoaded += OnLoaded;
+            _sceneLoader.LoadScene(Constants.MAIN_MENU_SCENE_NAME, OnLoaded);
         }
 
-        private void OnLoaded(Scene arg0, LoadSceneMode arg1)
+        private void OnLoaded()
         {
-            InitNetworkManager();
             InitMainMenu();
         }
 
         private void InitMainMenu()
         {
             MainMenuWindow mainMenuWindow = _uiFactory.CreateMainMenuWindow();
-            mainMenuWindow.Init(_gameNetworkManager);
-        }
-
-        private void InitNetworkManager()
-        {
-            if (_gameNetworkManager == null)
-                _gameNetworkManager = Object.Instantiate(_staticDataService.GetLobbyNetworkManager());
-            _gameNetworkManager.Init(_gameStateMachine);
+            mainMenuWindow.Init(_networkManagerService);
         }
 
         public void Exit()
         {
-            SceneManager.sceneLoaded -= OnLoaded;
             _uiFactory.ClearUIRoot();
         }
     }

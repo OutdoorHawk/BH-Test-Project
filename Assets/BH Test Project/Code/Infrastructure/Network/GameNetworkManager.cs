@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.Systems;
@@ -10,7 +12,7 @@ using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class GameNetworkManager : NetworkRoomManager
+    public class GameNetworkManager : NetworkRoomManager, INetworkManagerService
     {
         private IGameStateMachine _gameStateMachine;
         public static Dictionary<int, string> PlayerNames { get; } = new();
@@ -90,4 +92,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             SceneManager.sceneLoaded -= HandleSceneLoaded;
         }
     }
+
+  
 }

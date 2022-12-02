@@ -3,7 +3,6 @@ using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.StaticData;
-using Mirror;
 
 namespace BH_Test_Project.Code.Infrastructure.Services
 {

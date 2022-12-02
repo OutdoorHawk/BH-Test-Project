@@ -9,13 +9,13 @@ namespace BH_Test_Project.Code.Infrastructure.StaticData
     public class GameStaticData : ScriptableObject
     {
         [SerializeField] private WindowConfig[] _windows;
-        [SerializeField] private GameNetworkManager _gameManagerPrefab;
+        [SerializeField] private GameNetworkManager managerPrefab;
         [SerializeField] private NetworkPlayerSystem _networkPlayerSystem;
         [SerializeField, Header("PlayerStaticData")] private PlayerStaticData _playerStaticData;
         [SerializeField, Header("WorldStaticData")] private WorldStaticData _worldStaticData;
 
         public IEnumerable<WindowConfig> Windows => _windows;
-        public GameNetworkManager ManagerPrefab => _gameManagerPrefab;
+        public GameNetworkManager ManagerPrefab => managerPrefab;
         public PlayerStaticData PlayerStaticData => _playerStaticData;
         public WorldStaticData WorldStaticData => _worldStaticData;
         public NetworkPlayerSystem PlayerSystem => _networkPlayerSystem;

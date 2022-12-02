@@ -1,5 +1,11 @@
 using BH_Test_Project.Code.Infrastructure.DI;
+using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.Infrastructure.Services.CoroutineRunner;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
+using BH_Test_Project.Code.Infrastructure.Services.StaticData;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -7,10 +13,15 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly DIContainer _diContainer;
+        private readonly ICoroutineRunner _coroutineRunner;
         private IUIFactory _uiFactory;
 
-        public BootstrapState(IGameStateMachine gameStateMachine, DIContainer diContainer)
+        private GameNetworkManager _networkManager;
+
+        public BootstrapState(IGameStateMachine gameStateMachine, DIContainer diContainer,
+            ICoroutineRunner coroutineRunner)
         {
+            _coroutineRunner = coroutineRunner;
             _gameStateMachine = gameStateMachine;
             _diContainer = diContainer;
             BindServices();
@@ -19,9 +30,12 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void BindServices()
         {
             BindStaticDataService();
+            BindNetworkManagerService();
             _diContainer.BindSingle(_gameStateMachine);
             _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
+            _diContainer.BindSingle(_coroutineRunner);
+            _diContainer.BindSingle<ISceneLoader>(new SceneLoader(_coroutineRunner));
         }
 
         private void BindStaticDataService()
@@ -29,6 +43,14 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             IStaticDataService staticDataService = new StaticDataService();
             staticDataService.Load();
             _diContainer.BindSingle(staticDataService);
+        }
+
+        private void BindNetworkManagerService()
+        {
+            var staticDataService = _diContainer.Resolve<IStaticDataService>();
+            _networkManager = Object.Instantiate(staticDataService.GetLobbyNetworkManager());
+            _networkManager.Init(_gameStateMachine);
+            _diContainer.BindSingle<INetworkManagerService>(_networkManager);
         }
 
         public void Enter()
@@ -40,6 +62,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Exit()
         {
+            
         }
     }
 }
