@@ -1,5 +1,6 @@
 using System;
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Network.Lobby;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
@@ -24,27 +25,50 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private PlayerNameComponent _playerNameComponent;
         private LobbyMenuWindow _lobbyMenuWindow;
         private IGameStateMachine _gameStateMachine;
+        private ServerInfoComponent _serverInfo;
 
+        public bool Initialized { get; private set; }
         public bool IsReady => _isReady;
 
-        public void Init(IGameStateMachine gameStateMachine, IUIFactory uiFactory)
+        public void Construct(IGameStateMachine gameStateMachine, IUIFactory uiFactory)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
-            Debug.Log(_gameStateMachine);
+        }
+
+        public void Init()
+        {
+            InitNameComponent();
+            if (!isOwned)
+                return;
+            Debug.Log("init");
+            InitPlayer();
+            CreateLobbyUI();
+            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
+            Initialized = true;
+        }
+
+        public void UpdateUI()
+        {
+            if (!isOwned) 
+                return;
+            UpdateLobbyUI();
         }
 
         private new void Start()
         {
             base.Start();
-            InitNameComponent();
-            if (isOwned)
-                InitPlayer();
-
-            InitLobbyUI();
-            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
+            Debug.Log("start");
+           
+            /*InitNameComponent();
+            if (!isOwned)
+                return;
+            InitPlayer();
+            CreateLobbyUI();
+            UpdateLobbyUI();
+            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);*/
         }
-
+        
         private void InitNameComponent()
         {
             _playerNameComponent = GetComponent<PlayerNameComponent>();
@@ -60,17 +84,20 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void InitPlayerNameComponent()
         {
-            SetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
         }
 
-        private void InitLobbyUI()
+        private void CreateLobbyUI()
         {
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
             if (NetworkManager.singleton is NetworkRoomManager room)
-            {
                 _lobbyMenuWindow.InitLobby(isServer, room.minPlayers);
+        }
+
+        private void UpdateLobbyUI()
+        {
+            if (NetworkManager.singleton is NetworkRoomManager room)
                 _lobbyMenuWindow.UpdatePlayersInLobby(room.roomSlots);
-            }
         }
 
         [Command(requiresAuthority = false)]
@@ -80,7 +107,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         }
 
         [Command(requiresAuthority = false)]
-        private void SetPlayerName(string playerName)
+        private void CmdSetPlayerName(string playerName)
         {
             _playerNameComponent.SetPlayerName(playerName);
         }

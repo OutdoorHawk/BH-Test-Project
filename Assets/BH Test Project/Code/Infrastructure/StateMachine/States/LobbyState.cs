@@ -21,7 +21,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            Debug.Log("enter lobby");
+         
         }
 
         public void Enter(NetworkDataPayload payload)
@@ -32,7 +32,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         public void Exit()
         {
             _uiFactory.ClearUIRoot();
-            Debug.Log("exit");
         }
     }
 }

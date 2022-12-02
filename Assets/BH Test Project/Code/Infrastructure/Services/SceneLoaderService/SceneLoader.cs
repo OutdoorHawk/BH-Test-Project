@@ -9,6 +9,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
     public class SceneLoader : ISceneLoader
     {
         private readonly ICoroutineRunner _coroutineRunner;
+        private IEnumerator _loadingRoutine;
 
         public SceneLoader(ICoroutineRunner coroutineRunner)
         {
@@ -17,7 +18,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
 
         public void LoadScene(string sceneName, Action onLoaded = null)
         {
-            _coroutineRunner.StartCoroutine(LoadingScreenStartRoutine(sceneName, onLoaded));
+           _loadingRoutine = LoadingScreenStartRoutine(sceneName, onLoaded);
+            _coroutineRunner.StartCoroutine(_loadingRoutine);
         }
         
         private IEnumerator LoadingScreenStartRoutine(string sceneName, Action onLoaded)
@@ -25,9 +27,11 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
             AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
             while (!operation.isDone)
             {
+                Debug.Log(operation);
                 yield return 0;
             }
 
+            _loadingRoutine = null;
             onLoaded?.Invoke();
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
@@ -9,10 +10,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services.PlayerFactory
     {
         private readonly IUIFactory _uiFactory;
         private readonly IGameStateMachine _gameStateMachine;
-        private IPlayerFactory _playerFactoryImplementation;
 
-        public PlayerFactory(IUIFactory uiFactory,
-            IGameStateMachine gameStateMachine)
+        public PlayerFactory(IUIFactory uiFactory, IGameStateMachine gameStateMachine)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
@@ -20,10 +19,24 @@ namespace BH_Test_Project.Code.Infrastructure.Services.PlayerFactory
 
         public RoomPlayer CreateRoomPlayer(NetworkConnectionToClient conn, RoomPlayer roomPlayer)
         {
-            RoomPlayer player = Object.Instantiate(roomPlayer);
-            player.Init(_gameStateMachine, _uiFactory);
-            NetworkServer.Spawn(player.gameObject, conn);
-            return player;
+            RoomPlayer spawnedPlayer = Object.Instantiate(roomPlayer);
+            NetworkServer.AddPlayerForConnection(conn, spawnedPlayer.gameObject);
+            return spawnedPlayer;
+        }
+
+        public void InitializePlayers(List<NetworkRoomPlayer> slotPlayers)
+        {
+            Debug.Log(slotPlayers.Count);
+            foreach (var pl in slotPlayers)
+            {
+                if (pl.TryGetComponent(out RoomPlayer player))
+                {
+                    player.Construct(_gameStateMachine, _uiFactory);
+                    if (!player.Initialized) 
+                        player.Init();
+                    player.UpdateUI();
+                }
+            }
         }
     }
 }

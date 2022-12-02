@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
@@ -6,7 +7,6 @@ using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Lobby;
-using BH_Test_Project.Code.Runtime.Player.Systems;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +17,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     {
         private IGameStateMachine _gameStateMachine;
         private IPlayerFactory _playerFactory;
-        
+
         public static Dictionary<int, string> PlayerNames { get; } = new();
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
 
@@ -49,6 +49,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             StartClient();
         }
 
+        public RoomPlayer GetPlayerForConnection(NetworkConnectionToClient conn)
+        {
+            foreach (var connection in NetworkServer.connections.Values.Where(connection => connection == conn))
+                if (connection.identity.TryGetComponent(out RoomPlayer player))
+                    return player;
+            return null;
+        }
+
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -59,6 +67,16 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             base.OnServerReady(conn);
             _playerFactory.CreateRoomPlayer(conn, RoomPlayerPrefab);
+            Debug.Log(roomSlots.Count);
+            //_playerFactory.InitPlayer(conn.identity.GetComponent<RoomPlayer>());
+        }
+        
+
+        public override void OnRoomClientEnter() // new client spawned & added to room slot
+        {
+            base.OnRoomClientEnter();
+            Debug.Log(roomSlots.Count);
+            _playerFactory.InitializePlayers(roomSlots);
         }
 
         public override void OnClientSceneChanged()
@@ -79,10 +97,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             base.OnClientDisconnect();
             PlayerNames.Clear();
             StopServer();
-            _gameStateMachine.Enter<MainMenuState>();
+            //_gameStateMachine.Enter<MainMenuState>();
             SceneManager.sceneLoaded -= HandleSceneLoaded;
         }
-        
+
         /*public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
             GameObject roomPlayer)
         {
