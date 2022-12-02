@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
-using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
@@ -92,6 +91,4 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             SceneManager.sceneLoaded -= HandleSceneLoaded;
         }
     }
-
-  
 }

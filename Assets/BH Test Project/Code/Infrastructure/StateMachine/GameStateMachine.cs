@@ -21,7 +21,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
                 [typeof(MainMenuState)] = new MainMenuState( diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<INetworkManagerService>(), diContainer.Resolve<ISceneLoader>()),
                 [typeof(LobbyState)] = new LobbyState(diContainer.Resolve<IUIFactory>(),
-                    diContainer.Resolve<ISceneLoader>()),
+                    diContainer.Resolve<ISceneLoader>(),diContainer.Resolve<INetworkManagerService>()),
                 [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
                     diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<ISceneLoader>())
