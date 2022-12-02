@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
+using BH_Test_Project.Code.Runtime.Lobby;
 using BH_Test_Project.Code.Runtime.Player.Systems;
 using Mirror;
 using UnityEngine;
@@ -14,10 +16,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     public class GameNetworkManager : NetworkRoomManager, INetworkManagerService
     {
         private IGameStateMachine _gameStateMachine;
+        private IPlayerFactory _playerFactory;
+        
         public static Dictionary<int, string> PlayerNames { get; } = new();
+        public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
 
-        public void Init(IGameStateMachine gameStateMachine)
+        public void Init(IGameStateMachine gameStateMachine, IPlayerFactory playerFactory)
         {
+            _playerFactory = playerFactory;
             _gameStateMachine = gameStateMachine;
             SceneManager.sceneLoaded += HandleSceneLoaded;
         }
@@ -32,7 +38,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             if (NetworkServer.active)
                 return;
-            _gameStateMachine.Enter<LobbyState>();
+            _gameStateMachine.Enter<LoadLobbyState>();
             StartHost();
         }
 
@@ -41,7 +47,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             networkAddress = address;
             if (NetworkClient.active || NetworkServer.active)
                 return;
-            _gameStateMachine.Enter<LobbyState>();
+            _gameStateMachine.Enter<LoadLobbyState>();
             StartClient();
         }
 
@@ -51,22 +57,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
         }
 
-        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
-            GameObject roomPlayer)
+        public override void OnServerReady(NetworkConnectionToClient conn)
         {
-            GameObject player =
-                Instantiate(playerPrefab, GetStartPosition().position, GetStartPosition().rotation);
-            TransferNamesToGameScene(roomPlayer, player);
-
-            NetworkServer.ReplacePlayerForConnection(conn, player);
-            return player;
-        }
-
-        private static void TransferNamesToGameScene(GameObject roomPlayer, GameObject player)
-        {
-            if (roomPlayer.TryGetComponent(out PlayerNameComponent nameSender) &&
-                player.TryGetComponent(out PlayerNameComponent nameReceiver))
-                nameReceiver.SetPlayerName(nameSender.GetPlayerName());
+            base.OnServerReady(conn);
+            _playerFactory.CreateRoomPlayer(conn);
         }
 
         public override void OnClientSceneChanged()
@@ -90,5 +84,23 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _gameStateMachine.Enter<MainMenuState>();
             SceneManager.sceneLoaded -= HandleSceneLoaded;
         }
+        
+        /*public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
+            GameObject roomPlayer)
+        {
+            GameObject player =
+                Instantiate(playerPrefab, GetStartPosition().position, GetStartPosition().rotation);
+            TransferNamesToGameScene(roomPlayer, player);
+
+            NetworkServer.ReplacePlayerForConnection(conn, player);
+            return player;
+        }*/
+
+        /*private static void TransferNamesToGameScene(GameObject roomPlayer, GameObject player)
+        {
+            if (roomPlayer.TryGetComponent(out PlayerNameComponent nameSender) &&
+                player.TryGetComponent(out PlayerNameComponent nameReceiver))
+                nameReceiver.SetPlayerName(nameSender.GetPlayerName());
+        }*/
     }
 }

@@ -2,6 +2,8 @@ using System;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.Infrastructure.StateMachine;
+using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.Systems;
 using Mirror;
 using UnityEngine;
@@ -22,30 +24,38 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private IUIFactory _uiFactory;
         private PlayerNameComponent _playerNameComponent;
         private LobbyMenuWindow _lobbyMenuWindow;
+        private IGameStateMachine _gameStateMachine;
 
         public bool IsReady => _isReady;
-
-        private void Awake()
+        
+        public void Init(IGameStateMachine gameStateMachine, IUIFactory uiFactory)
         {
-            _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
+            _gameStateMachine = gameStateMachine;
+            _uiFactory = uiFactory;
         }
 
         private new void Start()
         {
             base.Start();
-            _playerNameComponent = GetComponent<PlayerNameComponent>();
-            _playerNameComponent.OnNameChanged += OnPlayerNameChanged;
+            InitNameComponent();
             if (isOwned)
-                InitSlot();
+                InitPlayer();
 
             InitLobbyUI();
             _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
         }
 
-        private void InitSlot()
+        private void InitNameComponent()
+        {
+            _playerNameComponent = GetComponent<PlayerNameComponent>();
+            _playerNameComponent.OnNameChanged += OnPlayerNameChanged;
+        }
+
+        private void InitPlayer()
         {
             InitPlayerNameComponent();
             _isReadyToggle.interactable = true;
+            _gameStateMachine.Enter<LobbyState>();
         }
 
         private void InitPlayerNameComponent()

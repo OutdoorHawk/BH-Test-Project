@@ -18,10 +18,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, diContainer, coroutineRunner),
-                [typeof(MainMenuState)] = new MainMenuState( diContainer.Resolve<IUIFactory>(),
+                [typeof(MainMenuState)] = new MainMenuState(diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<INetworkManagerService>(), diContainer.Resolve<ISceneLoader>()),
+                [typeof(LoadLobbyState)] = new LoadLobbyState(diContainer.Resolve<ISceneLoader>()),
                 [typeof(LobbyState)] = new LobbyState(diContainer.Resolve<IUIFactory>(),
-                    diContainer.Resolve<ISceneLoader>(),diContainer.Resolve<INetworkManagerService>()),
+                    diContainer.Resolve<INetworkManagerService>()),
                 [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
                     diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<ISceneLoader>())

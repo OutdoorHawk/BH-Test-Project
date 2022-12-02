@@ -3,6 +3,7 @@ using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.Services.CoroutineRunner;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Infrastructure.Services.StaticData;
 using UnityEngine;
@@ -30,12 +31,20 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void BindServices()
         {
             BindStaticDataService();
+            BindFactories();
             BindNetworkManagerService();
             _diContainer.BindSingle(_gameStateMachine);
             _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
-            _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
             _diContainer.BindSingle(_coroutineRunner);
             _diContainer.BindSingle<ISceneLoader>(new SceneLoader(_coroutineRunner));
+        }
+
+        private void BindFactories()
+        {
+            _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
+            _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(
+                _diContainer.Resolve<INetworkManagerService>(), _diContainer.Resolve<IUIFactory>(),
+                _diContainer.Resolve<IGameStateMachine>()));
         }
 
         private void BindStaticDataService()
@@ -49,7 +58,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             var staticDataService = _diContainer.Resolve<IStaticDataService>();
             _networkManager = Object.Instantiate(staticDataService.GetLobbyNetworkManager());
-            _networkManager.Init(_gameStateMachine);
+            _networkManager.Init(_gameStateMachine, _diContainer.Resolve<IPlayerFactory>());
             _diContainer.BindSingle<INetworkManagerService>(_networkManager);
         }
 
@@ -62,7 +71,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Exit()
         {
-            
         }
     }
 }

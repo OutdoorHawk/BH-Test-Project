@@ -15,19 +15,20 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
             _coroutineRunner = coroutineRunner;
         }
 
-        public void LoadScene(string sceneName, Action OnLoaded = null)
+        public void LoadScene(string sceneName, Action onLoaded = null)
         {
-            _coroutineRunner.StartCoroutine(LoadingScreenStartRoutine(sceneName, OnLoaded));
+            _coroutineRunner.StartCoroutine(LoadingScreenStartRoutine(sceneName, onLoaded));
         }
-
+        
         private IEnumerator LoadingScreenStartRoutine(string sceneName, Action onLoaded)
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
             while (!operation.isDone)
-                yield return null;
+            {
+                yield return 0;
+            }
 
             onLoaded?.Invoke();
         }
     }
-
 }

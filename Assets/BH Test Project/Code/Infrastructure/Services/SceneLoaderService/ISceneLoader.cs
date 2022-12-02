@@ -5,6 +5,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
 {
     public interface ISceneLoader : IService
     {
-        void LoadScene(string sceneName, Action OnLoaded = null);
+        void LoadScene(string sceneName, Action onLoaded = null);
     }
 }
