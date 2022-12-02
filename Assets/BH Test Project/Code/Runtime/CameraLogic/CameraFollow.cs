@@ -60,20 +60,6 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             CheckCameraCollision();
         }
 
-        private void CheckCameraCollision()
-        {
-            Physics.OverlapSphereNonAlloc(_cachedTransform.position, COLLISION_RADIUS, _colliders, _collisionMask);
-
-            if (_colliders[0] != null)
-            {
-                _cameraDistance =
-                    Mathf.Clamp(Vector3.Distance(_colliders[0].transform.position, _cachedTransform.position),
-                        CAMERA_MIN_DISTANCE, _defaultCameraDistance);
-            }
-            else
-                _cameraDistance = _defaultCameraDistance;
-        }
-
         private void CalculateCameraPosition()
         {
             Vector3 targetPosition = _followTarget.position;
@@ -103,6 +89,20 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         {
             _cachedTransform.localEulerAngles = _currentRotation;
             _cachedTransform.localPosition = _currentPosition;
+        }
+
+        private void CheckCameraCollision()
+        {
+            Physics.OverlapSphereNonAlloc(_cachedTransform.position, COLLISION_RADIUS, _colliders, _collisionMask);
+
+            if (_colliders[0] != null)
+            {
+                _cameraDistance =
+                    Mathf.Clamp(Vector3.Distance(_colliders[0].transform.position, _cachedTransform.position),
+                        CAMERA_MIN_DISTANCE, _defaultCameraDistance);
+            }
+            else
+                _cameraDistance = _defaultCameraDistance;
         }
     }
 }
