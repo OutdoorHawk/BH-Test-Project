@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
@@ -15,11 +16,15 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class GameNetworkManager : NetworkRoomManager, INetworkManagerService
     {
+        public event Action<NetworkConnectionToClient> OnServerReadyEvent;
+        public event Action OnRoomClientEnterEvent;
+        
         private IGameStateMachine _gameStateMachine;
         private IPlayerFactory _playerFactory;
 
         public static Dictionary<int, string> PlayerNames { get; } = new();
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
+
 
         public void Init(IGameStateMachine gameStateMachine, IPlayerFactory playerFactory)
         {
@@ -39,6 +44,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             if (NetworkServer.active)
                 return;
             StartHost();
+            _gameStateMachine.Enter<LobbyState>();
         }
 
         public void JoinLobbyAsClient(string address)
@@ -47,6 +53,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             if (NetworkClient.active || NetworkServer.active)
                 return;
             StartClient();
+            _gameStateMachine.Enter<LobbyState>();
         }
 
         public RoomPlayer GetPlayerForConnection(NetworkConnectionToClient conn)
@@ -66,17 +73,15 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
             base.OnServerReady(conn);
-            _playerFactory.CreateRoomPlayer(conn, RoomPlayerPrefab);
-            Debug.Log(roomSlots.Count);
-            //_playerFactory.InitPlayer(conn.identity.GetComponent<RoomPlayer>());
+            OnServerReadyEvent?.Invoke(conn);
+           //_playerFactory.CreateRoomPlayer(conn, RoomPlayerPrefab);
         }
-        
-
+    
         public override void OnRoomClientEnter() // new client spawned & added to room slot
         {
             base.OnRoomClientEnter();
-            Debug.Log(roomSlots.Count);
-            _playerFactory.InitializePlayers(roomSlots);
+            OnRoomClientEnterEvent?.Invoke();
+            //_playerFactory.InitializePlayers(roomSlots);
         }
 
         public override void OnClientSceneChanged()

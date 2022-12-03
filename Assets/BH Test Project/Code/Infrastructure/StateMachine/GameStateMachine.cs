@@ -4,6 +4,7 @@ using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.Services.CoroutineRunner;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 
@@ -21,7 +22,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
                 [typeof(MainMenuState)] = new MainMenuState(diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<INetworkManagerService>(), diContainer.Resolve<ISceneLoader>()),
                 [typeof(LobbyState)] = new LobbyState(diContainer.Resolve<IUIFactory>(),
-                    diContainer.Resolve<INetworkManagerService>()),
+                    diContainer.Resolve<INetworkManagerService>(), diContainer.Resolve<IPlayerFactory>()),
                 [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
                     diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<ISceneLoader>())

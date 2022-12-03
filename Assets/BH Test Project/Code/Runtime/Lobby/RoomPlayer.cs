@@ -30,10 +30,12 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         public bool Initialized { get; private set; }
         public bool IsReady => _isReady;
 
-        public void Construct(IGameStateMachine gameStateMachine, IUIFactory uiFactory)
+        //[ClientRpc]
+        public void Construct(IUIFactory uiFactory)
         {
-            _gameStateMachine = gameStateMachine;
+          //  _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
+            Debug.Log(uiFactory);
         }
 
         public void Init()
@@ -79,7 +81,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             InitPlayerNameComponent();
             _isReadyToggle.interactable = true;
-            _gameStateMachine.Enter<LobbyState>();
+            //_gameStateMachine.Enter<LobbyState>();
         }
 
         private void InitPlayerNameComponent()
