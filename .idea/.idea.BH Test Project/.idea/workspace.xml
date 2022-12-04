@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/PlayerFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/PlayerFactory.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/LobbyMenuWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/LobbyMenuWindow.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/RoomPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/RoomPlayer.cs" afterDir="false" />
     </list>
@@ -140,7 +139,7 @@
       <workItem from="1669327401375" duration="1497000" />
       <workItem from="1669803189549" duration="1059000" />
       <workItem from="1669974983400" duration="23703000" />
-      <workItem from="1670147281112" duration="19547000" />
+      <workItem from="1670147281112" duration="20488000" />
     </task>
     <servers />
   </component>

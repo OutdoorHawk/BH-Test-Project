@@ -11,6 +11,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
     public class LobbyMenuWindow : MonoBehaviour
     {
         public event Action OnLeaveButtonPressed;
+        public event Action OnStartButtonPressed;
 
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
@@ -25,16 +26,28 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             _isServer = isServer;
             _roomPlayers = new List<RoomPlayer>();
             _minPlayersToStartGame = minPlayers;
-            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
-
-            if (_isServer)
-                EnableStartGameButton();
+            CheckStartGameButton();
+            Subscribe();
         }
 
-        private void EnableStartGameButton()
+        private void CheckStartGameButton()
         {
-            _startGameButton.gameObject.SetActive(true);
-            _startGameButton.onClick.AddListener(StartGame);
+            if (_isServer)
+                _startGameButton.gameObject.SetActive(true);
+        }
+
+        private void Subscribe()
+        {
+            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
+            if (_isServer)
+                _startGameButton.onClick.AddListener(StartGameButtonPressed);
+        } 
+        
+        private void Unsubscribe()
+        {
+            _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
+            if (_isServer)
+                _startGameButton.onClick.RemoveListener(StartGameButtonPressed);
         }
 
         private void LeaveLobbyButtonPressed()
@@ -43,10 +56,9 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             OnLeaveButtonPressed?.Invoke();
         }
 
-        private void StartGame()
+        private void StartGameButtonPressed()
         {
-            _startGameButton.onClick.RemoveListener(StartGame);
-            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+            OnStartButtonPressed?.Invoke();
         }
 
         public void UpdatePlayersInLobby(List<NetworkRoomPlayer> roomSlots)
@@ -94,7 +106,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         public void CleanUp()
         {
-            _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
+            Unsubscribe();
             foreach (var pl in _roomPlayers)
             {
                 if (pl == null)

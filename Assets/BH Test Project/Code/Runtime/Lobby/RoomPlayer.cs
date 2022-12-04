@@ -68,12 +68,34 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
             _lobbyMenuWindow.OnLeaveButtonPressed += DisconnectFromLobby;
+            _lobbyMenuWindow.OnStartButtonPressed += StartGame;
+        }
+
+        private void StartGame()
+        {
+            _lobbyMenuWindow.CleanUp();
+            CmdStartGame();
+        }
+
+        [Command]
+        private void CmdStartGame()
+        {
+            RpcStartGameLoop();
+        }
+
+        [ClientRpc]
+        private void RpcStartGameLoop()
+        {
+            if (!isOwned)
+                return;
+            _gameStateMachine.Enter<GameLoopState>();
         }
 
         private void Unsubscribe()
         {
             _isReadyToggle.onValueChanged.RemoveListener(CmdChangePlayerReadyState);
             _lobbyMenuWindow.OnLeaveButtonPressed -= DisconnectFromLobby;
+            _lobbyMenuWindow.OnStartButtonPressed -= StartGame;
         }
 
         [Command]
@@ -103,26 +125,28 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         }
 
         [TargetRpc]
-        public void TargetCheckStartButton()
+        private void TargetCheckStartButton()
         {
             if (!isOwned)
                 return;
             _lobbyMenuWindow.CheckStartButtonAvailable();
         }
 
-        public void HandleToggleChanged(bool oldReadyState, bool newReadyState)
-        {
-            _isReadyToggle.isOn = newReadyState;
-        }
-
-        private void HandleNameChanged(string _, string newValue)
-        {
+        private void HandleNameChanged(string _, string newValue) =>
             _playerNameText.text = newValue;
-        }
+
+        public void HandleToggleChanged(bool oldReadyState, bool newReadyState) =>
+            _isReadyToggle.isOn = newReadyState;
 
         public override void OnStopServer()
         {
             base.OnStopServer();
+            DisconnectFromLobby();
+        }
+
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
             DisconnectFromLobby();
         }
 
