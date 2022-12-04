@@ -11,6 +11,8 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 {
     public class LobbyMenuWindow : MonoBehaviour
     {
+        public event Action OnLeaveButtonPressed;
+        
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
@@ -38,8 +40,8 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void LeaveLobbyButtonPressed()
         {
-            NetworkClient.Disconnect();
             UpdatePlayersList();
+            OnLeaveButtonPressed?.Invoke();
         }
 
         private void StartGame()

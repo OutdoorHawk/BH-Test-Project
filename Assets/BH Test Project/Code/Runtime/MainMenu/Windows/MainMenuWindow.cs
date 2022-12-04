@@ -37,21 +37,21 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         private void HostGameClicked()
         {
             _gameManager.CreateLobbyAsHost();
-            SavePlayerName();
+            SavePlayerName("Host");
             _gameStateMachine.Enter<LobbyState>();
         }
 
         private void JoinGameClicked(string networkAddress)
         {
             _gameManager.JoinLobbyAsClient(networkAddress);
-            SavePlayerName();
+            SavePlayerName("Client");
             _gameStateMachine.Enter<LobbyState>();
         }
 
-        private void SavePlayerName()
+        private void SavePlayerName(string namePostfix)
         {
             PlayerPrefs.SetString(PLAYER_NAME,
-                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)}");
+                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)} {namePostfix}");
         }
 
         private void JoinGameClicked()

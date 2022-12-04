@@ -5,6 +5,7 @@ using BH_Test_Project.Code.Infrastructure.Network.Lobby;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
+using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.Systems;
 using Mirror;
 using UnityEngine;
@@ -20,8 +21,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [SerializeField] private Text _playerNameText;
         [SerializeField] private Toggle _isReadyToggle;
 
-        [SyncVar(hook = nameof(ReadyToggleChanged))] private bool _isReady;
-
         private IUIFactory _uiFactory;
         private PlayerNameComponent _playerNameComponent;
         private LobbyMenuWindow _lobbyMenuWindow;
@@ -29,7 +28,8 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private ServerInfoComponent _serverInfo;
         private INetworkManagerService _networkService;
 
-        public bool IsReady => _isReady;
+        [field: SyncVar(hook = nameof(ReadyToggleChanged))] public bool IsReady { get; private set; }
+        [field: SyncVar(hook = nameof(PlayerNameChanged))] public string PlayerName { get; private set; }
 
         /*
     At the moment, I have not found any way to transfer the dependency from the outside. 
@@ -44,6 +44,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             if (!isOwned)
                 return;
+            _playerNameComponent = GetComponent<PlayerNameComponent>();
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<INetworkManagerService>();
@@ -52,7 +53,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [ClientRpc]
         public void RpcInitializePlayer()
         {
-            InitNameComponent();
             if (!isOwned)
                 return;
 
@@ -61,27 +61,23 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
         }
 
-        private void InitNameComponent()
-        {
-            _playerNameComponent = GetComponent<PlayerNameComponent>();
-            _playerNameComponent.OnNameChanged += OnPlayerNameChanged;
-        }
-
         private void InitPlayer()
         {
-            InitPlayerNameComponent();
+            CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
             _isReadyToggle.interactable = true;
         }
 
-        private void InitPlayerNameComponent()
+        [Command]
+        private void CmdSetPlayerName(string playerName)
         {
-            CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            PlayerName = playerName;
         }
 
         private void CreateLobbyUI()
         {
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
             _lobbyMenuWindow.InitLobby(isServer, _networkService.MinPlayersToStart);
+            _lobbyMenuWindow.OnLeaveButtonPressed += DisconnectFromLobby;
         }
 
         public void UpdatePlayerUI()
@@ -94,13 +90,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [Command(requiresAuthority = false)]
         private void CmdChangePlayerReadyState(bool value)
         {
-            _isReady = value;
-        }
-
-        [Command(requiresAuthority = false)]
-        private void CmdSetPlayerName(string playerName)
-        {
-            _playerNameComponent.SetPlayerName(playerName);
+            IsReady = value;
         }
 
         public void ReadyToggleChanged(bool oldReadyState, bool newReadyState)
@@ -109,16 +99,25 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             OnRoomPlayerStateChanged?.Invoke();
         }
 
-        private void OnPlayerNameChanged(string newValue)
+        private void PlayerNameChanged(string _, string newValue)
         {
             _playerNameText.text = newValue;
         }
 
-        private void OnDestroy()
+        public override void OnStopServer()
         {
-            if (isOwned && _playerNameComponent != null)
-                _playerNameComponent.OnNameChanged -= OnPlayerNameChanged;
-          
+            base.OnStopServer();
+            DisconnectFromLobby();
         }
+
+        private void DisconnectFromLobby()
+        {
+            if (isServer && isOwned)
+                _networkService.StopServer();
+            _lobbyMenuWindow.OnLeaveButtonPressed -= DisconnectFromLobby;
+            _gameStateMachine.Enter<MainMenuState>();
+            NetworkClient.Disconnect();
+        }
+
     }
 }

@@ -19,11 +19,18 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
             _playerName = playerName;
         }
 
+        [Command]
+        public void CmdSetPlayerName(string playerName)
+        {
+            _playerName = playerName;
+        }
+
         public string GetPlayerName()
         {
             return _playerName;
         }
 
+        [Command(requiresAuthority = false)]
         private void PlayerNameChanged(string oldValue, string newValue)
         {
             OnNameChanged?.Invoke(newValue);

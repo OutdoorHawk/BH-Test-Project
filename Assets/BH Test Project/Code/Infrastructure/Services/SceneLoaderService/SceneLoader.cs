@@ -26,10 +26,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
             while (!operation.isDone)
-            {
-                Debug.Log(operation);
                 yield return 0;
-            }
 
             _loadingRoutine = null;
             onLoaded?.Invoke();
