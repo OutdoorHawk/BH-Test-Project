@@ -73,10 +73,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         public void CheckStartButtonAvailable()
         {
-            Debug.Log("check" + _isServer);
-            Debug.Log(IsEveryoneReady());
-            if (_isServer)
-                _startGameButton.interactable = IsEveryoneReady();
+            _startGameButton.interactable = IsEveryoneReady();
         }
 
         private bool IsEveryoneReady()

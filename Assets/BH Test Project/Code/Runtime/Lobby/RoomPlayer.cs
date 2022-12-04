@@ -36,9 +36,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         [ClientRpc]
         public void RpcConstruct()
         {
-            if (!isOwned)
-                return;
-
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<INetworkManagerService>();
@@ -91,27 +88,31 @@ namespace BH_Test_Project.Code.Runtime.Lobby
                 return;
 
             _lobbyMenuWindow.UpdatePlayersInLobby(_networkService.PlayersInRoom);
-            _lobbyMenuWindow.CheckStartButtonAvailable();
         }
 
         [Command]
         private void CmdChangePlayerReadyState(bool value)
         {
             IsReady = value;
+
+            foreach (var player in _networkService.PlayersInRoom)
+            {
+                if (player.isServer && player is RoomPlayer roomPlayer)
+                    roomPlayer.TargetCheckStartButton();
+            }
+        }
+
+        [TargetRpc]
+        public void TargetCheckStartButton()
+        {
+            if (!isOwned)
+                return;
+            _lobbyMenuWindow.CheckStartButtonAvailable();
         }
 
         public void HandleToggleChanged(bool oldReadyState, bool newReadyState)
         {
             _isReadyToggle.isOn = newReadyState;
-            CmdCheckStartButton();
-        }
-
-        [Command(requiresAuthority = false)]
-        private void CmdCheckStartButton()
-        {
-            if (!isOwned)
-                return;
-            _lobbyMenuWindow.CheckStartButtonAvailable();
         }
 
         private void HandleNameChanged(string _, string newValue)
