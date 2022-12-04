@@ -6,6 +6,7 @@ using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Infrastructure.Services.StaticData;
+using BH_Test_Project.Code.Infrastructure.Services.UI;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
@@ -57,7 +58,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             var staticDataService = _diContainer.Resolve<IStaticDataService>();
             _networkManager = Object.Instantiate(staticDataService.GetLobbyNetworkManager());
-            _networkManager.Init(_gameStateMachine, _diContainer.Resolve<IPlayerFactory>());
             _diContainer.BindSingle<INetworkManagerService>(_networkManager);
         }
 

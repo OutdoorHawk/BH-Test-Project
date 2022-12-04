@@ -5,7 +5,7 @@ using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Infrastructure.Services
+namespace BH_Test_Project.Code.Infrastructure.Services.UI
 {
     public class UIFactory : IUIFactory
     {
@@ -15,6 +15,11 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         public UIFactory(IStaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
+        }
+
+        public UIFactory()
+        {
+            
         }
 
         public MainMenuWindow CreateMainMenuWindow()

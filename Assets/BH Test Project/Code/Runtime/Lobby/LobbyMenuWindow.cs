@@ -94,12 +94,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             }
         }
 
-        private void OnDestroy()
-        {
-            CleanUp();
-        }
-
-        private void CleanUp()
+        public void CleanUp()
         {
             _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
             foreach (var pl in _roomPlayers)

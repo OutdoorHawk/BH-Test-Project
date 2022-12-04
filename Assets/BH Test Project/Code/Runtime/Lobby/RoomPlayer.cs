@@ -1,9 +1,10 @@
 using System;
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network.Lobby;
-using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
-using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.Systems;
 using Mirror;
 using UnityEngine;
@@ -26,51 +27,40 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private LobbyMenuWindow _lobbyMenuWindow;
         private IGameStateMachine _gameStateMachine;
         private ServerInfoComponent _serverInfo;
+        private INetworkManagerService _networkService;
 
-        public bool Initialized { get; private set; }
         public bool IsReady => _isReady;
 
-        //[ClientRpc]
-        public void Construct(IUIFactory uiFactory)
+        /*
+    At the moment, I have not found any way to transfer the dependency from the outside. 
+    Since client or target rpc does not allow to transfer complex data. Through custom writer, I also can't serialize complex services. 
+    There are two options left, to get the service from static or 
+    reinitialize all players each time, when a new player is connected. (bool check will be required).
+    https://mirror-networking.gitbook.io/docs/guides/data-types
+      */
+
+        [ClientRpc]
+        public void RpcConstruct()
         {
-          //  _gameStateMachine = gameStateMachine;
-            _uiFactory = uiFactory;
-            Debug.Log(uiFactory);
+            if (!isOwned)
+                return;
+            _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
+            _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
+            _networkService = DIContainer.Container.Resolve<INetworkManagerService>();
         }
 
-        public void Init()
+        [ClientRpc]
+        public void RpcInitializePlayer()
         {
             InitNameComponent();
             if (!isOwned)
                 return;
-            Debug.Log("init");
+
             InitPlayer();
             CreateLobbyUI();
             _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
-            Initialized = true;
         }
 
-        public void UpdateUI()
-        {
-            if (!isOwned) 
-                return;
-            UpdateLobbyUI();
-        }
-
-        private new void Start()
-        {
-            base.Start();
-            Debug.Log("start");
-           
-            /*InitNameComponent();
-            if (!isOwned)
-                return;
-            InitPlayer();
-            CreateLobbyUI();
-            UpdateLobbyUI();
-            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);*/
-        }
-        
         private void InitNameComponent()
         {
             _playerNameComponent = GetComponent<PlayerNameComponent>();
@@ -81,7 +71,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             InitPlayerNameComponent();
             _isReadyToggle.interactable = true;
-            //_gameStateMachine.Enter<LobbyState>();
         }
 
         private void InitPlayerNameComponent()
@@ -92,14 +81,14 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void CreateLobbyUI()
         {
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
-            if (NetworkManager.singleton is NetworkRoomManager room)
-                _lobbyMenuWindow.InitLobby(isServer, room.minPlayers);
+            _lobbyMenuWindow.InitLobby(isServer, _networkService.MinPlayersToStart);
         }
 
-        private void UpdateLobbyUI()
+        public void UpdatePlayerUI()
         {
-            if (NetworkManager.singleton is NetworkRoomManager room)
-                _lobbyMenuWindow.UpdatePlayersInLobby(room.roomSlots);
+            if (!isOwned)
+                return;
+            _lobbyMenuWindow.UpdatePlayersInLobby(_networkService.PlayersInRoom);
         }
 
         [Command(requiresAuthority = false)]
@@ -129,6 +118,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             if (isOwned && _playerNameComponent != null)
                 _playerNameComponent.OnNameChanged -= OnPlayerNameChanged;
+          
         }
     }
 }

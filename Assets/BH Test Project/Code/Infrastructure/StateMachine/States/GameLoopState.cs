@@ -2,6 +2,7 @@ using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
+using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;

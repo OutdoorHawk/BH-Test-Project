@@ -1,6 +1,7 @@
 using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
+using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
 using UnityEngine;
@@ -26,26 +27,36 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            _networkManagerService.OnServerReadyEvent += CreateNewPlayer;
+            _networkManagerService.OnServerReadyEvent += CreateNewRoomPlayer;
+            _networkManagerService.OnRoomClientEnterEvent += UpdatePlayersUI;
+        }
+
+        private void UpdatePlayersUI()
+        {
+            foreach (var player in _networkManagerService.PlayersInRoom)
+            {
+                if (player is RoomPlayer roomPlayer) 
+                    roomPlayer.UpdatePlayerUI();
+            }
         }
 
         public void Enter(NetworkDataPayload payload)
         {
-            _networkManagerService.OnServerReadyEvent += CreateNewPlayer;
+            _networkManagerService.OnServerReadyEvent += CreateNewRoomPlayer;
             _payload = payload;
         }
 
         [Server]
-        private void CreateNewPlayer(NetworkConnectionToClient conn)
+        private void CreateNewRoomPlayer(NetworkConnectionToClient conn)
         {
             RoomPlayer player = _networkManagerService.RoomPlayerPrefab;
             _playerFactory.CreateRoomPlayer(conn, player);
-    
         }
         
         public void Exit()
         {
-            _networkManagerService.OnServerReadyEvent -= CreateNewPlayer;
+            _networkManagerService.OnServerReadyEvent -= CreateNewRoomPlayer;
+            _networkManagerService.OnRoomClientEnterEvent -= UpdatePlayersUI;
             _uiFactory.ClearUIRoot();
         }
     }
