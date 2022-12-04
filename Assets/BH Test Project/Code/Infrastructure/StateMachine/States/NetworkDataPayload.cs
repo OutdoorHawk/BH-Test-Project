@@ -4,11 +4,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
     public struct NetworkDataPayload
     {
-        public readonly bool IsServer;
+        public readonly bool IsHost;
 
-        public NetworkDataPayload( bool isServer)
+        public NetworkDataPayload( bool isHost)
         {
-            IsServer = isServer;
+            IsHost = isHost;
         }
     }
 }

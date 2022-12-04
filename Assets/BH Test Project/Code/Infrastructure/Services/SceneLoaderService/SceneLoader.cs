@@ -18,14 +18,14 @@ namespace BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService
 
         public void LoadScene(string sceneName, Action onLoaded = null)
         {
-           _loadingRoutine = LoadingScreenStartRoutine(sceneName, onLoaded);
+            _loadingRoutine = LoadingScreenStartRoutine(sceneName, onLoaded);
             _coroutineRunner.StartCoroutine(_loadingRoutine);
         }
-        
+
         private IEnumerator LoadingScreenStartRoutine(string sceneName, Action onLoaded)
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-            while (!operation.isDone)
+            while (operation != null && !operation.isDone)
                 yield return 0;
 
             _loadingRoutine = null;

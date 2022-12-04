@@ -1,7 +1,5 @@
-using System;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
-using BH_Test_Project.Code.Infrastructure.Network.Lobby;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
@@ -16,20 +14,16 @@ namespace BH_Test_Project.Code.Runtime.Lobby
     [RequireComponent(typeof(PlayerNameComponent))]
     public class RoomPlayer : NetworkRoomPlayer
     {
-        public event Action OnRoomPlayerStateChanged;
-
         [SerializeField] private Text _playerNameText;
         [SerializeField] private Toggle _isReadyToggle;
 
         private IUIFactory _uiFactory;
-        private PlayerNameComponent _playerNameComponent;
         private LobbyMenuWindow _lobbyMenuWindow;
         private IGameStateMachine _gameStateMachine;
-        private ServerInfoComponent _serverInfo;
         private INetworkManagerService _networkService;
 
-        [field: SyncVar(hook = nameof(ReadyToggleChanged))] public bool IsReady { get; private set; }
-        [field: SyncVar(hook = nameof(PlayerNameChanged))] public string PlayerName { get; private set; }
+        [field: SyncVar(hook = nameof(HandleNameChanged))] public string PlayerName { get; private set; }
+        [field: SyncVar(hook = nameof(HandleToggleChanged))] public bool IsReady { get; private set; }
 
         /*
     At the moment, I have not found any way to transfer the dependency from the outside. 
@@ -44,7 +38,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             if (!isOwned)
                 return;
-            _playerNameComponent = GetComponent<PlayerNameComponent>();
+
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<INetworkManagerService>();
@@ -58,7 +52,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
             InitPlayer();
             CreateLobbyUI();
-            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
+            Subscribe();
         }
 
         private void InitPlayer()
@@ -67,39 +61,60 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             _isReadyToggle.interactable = true;
         }
 
+        private void CreateLobbyUI()
+        {
+            _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
+            _lobbyMenuWindow.InitLobby(isServer, _networkService.MinPlayersToStart);
+        }
+
+        private void Subscribe()
+        {
+            _isReadyToggle.onValueChanged.AddListener(CmdChangePlayerReadyState);
+            _lobbyMenuWindow.OnLeaveButtonPressed += DisconnectFromLobby;
+        }
+
+        private void Unsubscribe()
+        {
+            _isReadyToggle.onValueChanged.RemoveListener(CmdChangePlayerReadyState);
+            _lobbyMenuWindow.OnLeaveButtonPressed -= DisconnectFromLobby;
+        }
+
         [Command]
         private void CmdSetPlayerName(string playerName)
         {
             PlayerName = playerName;
         }
 
-        private void CreateLobbyUI()
-        {
-            _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
-            _lobbyMenuWindow.InitLobby(isServer, _networkService.MinPlayersToStart);
-            _lobbyMenuWindow.OnLeaveButtonPressed += DisconnectFromLobby;
-        }
-
         public void UpdatePlayerUI()
         {
             if (!isOwned)
                 return;
+
             _lobbyMenuWindow.UpdatePlayersInLobby(_networkService.PlayersInRoom);
+            _lobbyMenuWindow.CheckStartButtonAvailable();
         }
 
-        [Command(requiresAuthority = false)]
+        [Command]
         private void CmdChangePlayerReadyState(bool value)
         {
             IsReady = value;
         }
 
-        public void ReadyToggleChanged(bool oldReadyState, bool newReadyState)
+        public void HandleToggleChanged(bool oldReadyState, bool newReadyState)
         {
             _isReadyToggle.isOn = newReadyState;
-            OnRoomPlayerStateChanged?.Invoke();
+            CmdCheckStartButton();
         }
 
-        private void PlayerNameChanged(string _, string newValue)
+        [Command(requiresAuthority = false)]
+        private void CmdCheckStartButton()
+        {
+            if (!isOwned)
+                return;
+            _lobbyMenuWindow.CheckStartButtonAvailable();
+        }
+
+        private void HandleNameChanged(string _, string newValue)
         {
             _playerNameText.text = newValue;
         }
@@ -112,12 +127,13 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 
         private void DisconnectFromLobby()
         {
-            if (isServer && isOwned)
+            if (!isOwned)
+                return;
+            if (isServer)
                 _networkService.StopServer();
-            _lobbyMenuWindow.OnLeaveButtonPressed -= DisconnectFromLobby;
+            Unsubscribe();
             _gameStateMachine.Enter<MainMenuState>();
             NetworkClient.Disconnect();
         }
-
     }
 }

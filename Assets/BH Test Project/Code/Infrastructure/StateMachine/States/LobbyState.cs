@@ -1,4 +1,3 @@
-using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
@@ -8,14 +7,13 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
-    public class LobbyState : IState, IPayloadedState<NetworkDataPayload>
+    public class LobbyState : IState
     {
         private readonly IUIFactory _uiFactory;
         private readonly INetworkManagerService _networkManagerService;
         private readonly IPlayerFactory _playerFactory;
 
         private LobbyMenuWindow _lobbyMenuWindow;
-        private NetworkDataPayload _payload;
 
         public LobbyState(IUIFactory uiFactory, INetworkManagerService networkManagerService,
             IPlayerFactory playerFactory)
@@ -24,26 +22,11 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _networkManagerService = networkManagerService;
             _playerFactory = playerFactory;
         }
-
+        
         public void Enter()
         {
             _networkManagerService.OnServerReadyEvent += CreateNewRoomPlayer;
             _networkManagerService.OnRoomClientEnterEvent += UpdatePlayersUI;
-        }
-
-        private void UpdatePlayersUI()
-        {
-            foreach (var player in _networkManagerService.PlayersInRoom)
-            {
-                if (player is RoomPlayer roomPlayer) 
-                    roomPlayer.UpdatePlayerUI();
-            }
-        }
-
-        public void Enter(NetworkDataPayload payload)
-        {
-            _networkManagerService.OnServerReadyEvent += CreateNewRoomPlayer;
-            _payload = payload;
         }
 
         [Server]
@@ -52,7 +35,17 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             RoomPlayer player = _networkManagerService.RoomPlayerPrefab;
             _playerFactory.CreateRoomPlayer(conn, player);
         }
-        
+
+        [Client]
+        private void UpdatePlayersUI()
+        {
+            foreach (var player in _networkManagerService.PlayersInRoom)
+            {
+                if (player is RoomPlayer roomPlayer)
+                    roomPlayer.UpdatePlayerUI();
+            }
+        }
+
         public void Exit()
         {
             _networkManagerService.OnServerReadyEvent -= CreateNewRoomPlayer;

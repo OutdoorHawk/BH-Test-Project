@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
-using BH_Test_Project.Code.Infrastructure.Network;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +11,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
     public class LobbyMenuWindow : MonoBehaviour
     {
         public event Action OnLeaveButtonPressed;
-        
+
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
@@ -56,10 +55,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             {
                 RoomPlayer player = SetPlayerToSlotPosition(roomSlots, i);
                 if (!_roomPlayers.Contains(player))
-                {
                     _roomPlayers.Add(player);
-                    player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
-                }
             }
 
             CheckStartButtonAvailable();
@@ -75,9 +71,12 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             return player;
         }
 
-        private void CheckStartButtonAvailable()
+        public void CheckStartButtonAvailable()
         {
-            _startGameButton.interactable = IsEveryoneReady();
+            Debug.Log("check" + _isServer);
+            Debug.Log(IsEveryoneReady());
+            if (_isServer)
+                _startGameButton.interactable = IsEveryoneReady();
         }
 
         private bool IsEveryoneReady()
@@ -103,7 +102,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             {
                 if (pl == null)
                     return;
-                pl.OnRoomPlayerStateChanged -= CheckStartButtonAvailable;
                 pl.transform.SetParent(null);
                 DontDestroyOnLoad(pl);
             }
