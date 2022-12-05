@@ -58,6 +58,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             var staticDataService = _diContainer.Resolve<IStaticDataService>();
             _networkManager = Object.Instantiate(staticDataService.GetLobbyNetworkManager());
+            _networkManager.Init(_diContainer.Resolve<IPlayerFactory>());
             _diContainer.BindSingle<INetworkManagerService>(_networkManager);
         }
 

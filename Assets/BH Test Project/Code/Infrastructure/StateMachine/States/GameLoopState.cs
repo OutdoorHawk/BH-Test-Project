@@ -1,6 +1,8 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Player.UI;
@@ -17,15 +19,20 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly ISceneContextService _sceneContextService;
         private readonly IUIFactory _uiFactory;
         private readonly ISceneLoader _sceneLoader;
+        private readonly INetworkManagerService _networkManagerService;
+        private readonly IPlayerFactory _playerFactory;
         private NetworkPlayerSystem _playerSystem;
 
         public GameLoopState(IStaticDataService staticDataService,
-            ISceneContextService sceneContextService, IUIFactory uiFactory, ISceneLoader sceneLoader)
+            ISceneContextService sceneContextService, IUIFactory uiFactory, ISceneLoader sceneLoader,
+            INetworkManagerService networkManagerService, IPlayerFactory playerFactory)
         {
             _staticDataService = staticDataService;
             _sceneContextService = sceneContextService;
             _uiFactory = uiFactory;
             _sceneLoader = sceneLoader;
+            _networkManagerService = networkManagerService;
+            _playerFactory = playerFactory;
         }
 
         public void Enter()
@@ -36,8 +43,19 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void OnLoaded(Scene arg0, LoadSceneMode loadSceneMode)
         {
             InitGameLevel();
+            Subscribe();
         }
 
+        private void Subscribe()
+        {
+     
+        }
+
+        private void Unsubscribe()
+        {
+            
+        }
+        
         private void InitGameLevel()
         {
             _sceneContextService.CollectSceneContext();

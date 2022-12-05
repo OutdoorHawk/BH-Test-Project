@@ -4,7 +4,6 @@ using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
-using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 {
@@ -26,12 +25,24 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _networkManagerService = networkManagerService;
             _playerFactory = playerFactory;
         }
-        
+
         public void Enter()
+        {
+            Subscribe();
+        }
+
+        private void Subscribe()
         {
             _networkManagerService.OnServerReadyEvent += CreateNewRoomPlayer;
             _networkManagerService.OnRoomClientEnterEvent += UpdatePlayersUI;
             _networkManagerService.OnRoomClientSceneChangedEvent += CheckSceneLoaded;
+        }
+
+        private void Unsubscribe()
+        {
+            _networkManagerService.OnServerReadyEvent -= CreateNewRoomPlayer;
+            _networkManagerService.OnRoomClientEnterEvent -= UpdatePlayersUI;
+            _networkManagerService.OnRoomClientSceneChangedEvent -= CheckSceneLoaded;
         }
 
         [Server]
@@ -53,15 +64,13 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         private void CheckSceneLoaded(string sceneName)
         {
-            if (sceneName == Constants.GAME_SCENE_NAME) 
+            if (sceneName == Constants.GAME_SCENE_NAME)
                 _gameStateMachine.Enter<GameLoopState>();
         }
 
         public void Exit()
         {
-            _networkManagerService.OnServerReadyEvent -= CreateNewRoomPlayer;
-            _networkManagerService.OnRoomClientEnterEvent -= UpdatePlayersUI;
-            _networkManagerService.OnRoomClientSceneChangedEvent -= CheckSceneLoaded;
+            Unsubscribe();
             _uiFactory.ClearUIRoot();
         }
     }
