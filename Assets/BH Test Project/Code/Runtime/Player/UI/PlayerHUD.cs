@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace BH_Test_Project.Code.Runtime.Player.UI
 {
-    public class PlayerHUD : MonoBehaviour
+    public class PlayerHUD : NetworkBehaviour
     {
         [SerializeField] private Transform _layoutParent;
         [SerializeField] private GameObject _endGamePlate;
@@ -35,6 +35,20 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
                 {
                     _scoreElements[i].SetNetId((int)msg.NetId);
                     _scoreElements[i].SetName(msg.PlayerName);
+                    _scoreElements[i].ActivateElement();
+                    break;
+                }
+            }
+        } 
+        
+        public void AddPlayerToScoreTable(uint netID, string playerName)
+        {
+            for (int i = 0; i < _scoreElements.Count; i++)
+            {
+                if (!_scoreElements[i].Active)
+                {
+                    _scoreElements[i].SetNetId((int)netID);
+                    _scoreElements[i].SetName(playerName);
                     _scoreElements[i].ActivateElement();
                     break;
                 }

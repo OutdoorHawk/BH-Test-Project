@@ -82,8 +82,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public override void OnClientSceneChanged()
         {
-            base.OnClientSceneChanged();
             NetworkClient.connection.owned.RemoveWhere(NullIdentity);
+            base.OnClientSceneChanged();
         }
 
         private void OnGameRestarted(GameRestartMessage msg)

@@ -18,11 +18,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services.UI
             _staticDataService = staticDataService;
         }
 
-        public UIFactory()
-        {
-            
-        }
-
         public MainMenuWindow CreateMainMenuWindow()
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.MainMenu);
@@ -44,6 +39,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services.UI
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.PlayerHUD);
             PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<PlayerHUD>();
+            if (NetworkServer.active) 
+                NetworkServer.Spawn(window.gameObject);
             return window;
         }
 

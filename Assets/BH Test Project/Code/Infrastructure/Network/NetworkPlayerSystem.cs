@@ -36,13 +36,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
 
-        public void Init(PlayerHUD playerHUD, WorldStaticData worldStaticData, PlayerStaticData playerStaticData)
+        public void Init(WorldStaticData worldStaticData, PlayerStaticData playerStaticData)
         {
             _gameEndScore = worldStaticData.GameEndScore;
             _gameRestartDelay = worldStaticData.GameRestartDelay;
             _playerStaticData = playerStaticData;
-            _playerHUD = playerHUD;
-            _playerHUD.Init(_gameRestartDelay);
             ResetPlayersScore();
         }
 
@@ -55,7 +53,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         private void Start()
         {
             //if (isClient)
-                //CmdInitPlayers(_playerStaticData);
+            //CmdInitPlayers(_playerStaticData);
         }
 
         [Command(requiresAuthority = false)]

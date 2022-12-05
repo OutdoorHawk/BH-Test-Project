@@ -1,3 +1,4 @@
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
@@ -8,6 +9,7 @@ using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.StateMachine;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.Systems;
+using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
@@ -32,8 +34,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
         private PlayerNameComponent _playerNameComponent;
+        private PlayerHUD _playerHUD;
         private IUIFactory _uiFactory;
-        
+
         [ClientRpc]
         public void RpcConstruct(PlayerStaticData staticData)
         {
@@ -46,11 +49,11 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (!isOwned)
                 return;
-            
+
             CreateSystems();
             InitSystems();
             //CheckIsPlayerNameValid();
-            CmdAddNewPlayerToScoreTable(netId, _playerNameComponent.GetPlayerName());
+            //CmdAddNewPlayerToScoreTable(netId, _playerNameComponent.GetPlayerName());
         }
 
         private void CreateSystems()
@@ -60,6 +63,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerNameComponent = GetComponent<PlayerNameComponent>();
+            _playerHUD = _uiFactory.CreatePlayerHUD();
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
@@ -76,9 +80,11 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.Init();
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
+            _playerHUD.Init(5);
+            _playerHUD.AddPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
             _playerStateMachine.Enter<BasicMovementState>();
         }
-
+        
         private void CheckIsPlayerNameValid()
         {
             string playerName = _playerNameComponent.GetPlayerName();
