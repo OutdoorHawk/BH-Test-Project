@@ -22,7 +22,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
                 [typeof(BootstrapState)] = new BootstrapState(this, diContainer, coroutineRunner),
                 [typeof(MainMenuState)] = new MainMenuState(this,diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<INetworkManagerService>(), diContainer.Resolve<ISceneLoader>()),
-                [typeof(LobbyState)] = new LobbyState(diContainer.Resolve<IUIFactory>(),
+                [typeof(LobbyState)] = new LobbyState(this,diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<INetworkManagerService>(), diContainer.Resolve<IPlayerFactory>()),
                 [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
                     diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>(),

@@ -10,12 +10,15 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
     {
         event Action<NetworkConnectionToClient> OnServerReadyEvent;
         event Action OnRoomClientEnterEvent;
+        event Action<string>  OnRoomClientSceneChangedEvent;
 
+        List<NetworkRoomPlayer> PlayersInRoom { get; }
+        RoomPlayer RoomPlayerPrefab { get; }
+        int MinPlayersToStart { get; }
+        
         void CreateLobbyAsHost();
         void JoinLobbyAsClient(string address);
         void StopServer();
-        int MinPlayersToStart { get; }
-        RoomPlayer RoomPlayerPrefab { get; }
-        List<NetworkRoomPlayer> PlayersInRoom { get; }
+        void LoadGameLevel();
     }
 }

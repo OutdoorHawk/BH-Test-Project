@@ -6,6 +6,7 @@ using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
@@ -15,6 +16,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly IStaticDataService _staticDataService;
         private readonly ISceneContextService _sceneContextService;
         private readonly IUIFactory _uiFactory;
+        private readonly ISceneLoader _sceneLoader;
         private NetworkPlayerSystem _playerSystem;
 
         public GameLoopState(IStaticDataService staticDataService,
@@ -23,13 +25,19 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             _staticDataService = staticDataService;
             _sceneContextService = sceneContextService;
             _uiFactory = uiFactory;
+            _sceneLoader = sceneLoader;
         }
 
         public void Enter()
         {
-           InitGameLevel();
+            SceneManager.sceneLoaded += OnLoaded;
         }
-        
+
+        private void OnLoaded(Scene arg0, LoadSceneMode loadSceneMode)
+        {
+            InitGameLevel();
+        }
+
         private void InitGameLevel()
         {
             _sceneContextService.CollectSceneContext();
@@ -49,6 +57,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Exit()
         {
+            SceneManager.sceneLoaded -= OnLoaded;
             _uiFactory.ClearUIRoot();
             _playerSystem.UnregisterHandlers();
         }

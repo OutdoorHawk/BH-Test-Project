@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Runtime.Lobby;
 using Mirror;
+using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
@@ -11,11 +13,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
     {
         public event Action<NetworkConnectionToClient> OnServerReadyEvent;
         public event Action OnRoomClientEnterEvent;
+        public event Action<string> OnRoomClientSceneChangedEvent;
 
         public static Dictionary<int, string> PlayerNames { get; } = new();
-        public int MinPlayersToStart => minPlayers;
-        public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
         public List<NetworkRoomPlayer> PlayersInRoom => roomSlots;
+        public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
+        public int MinPlayersToStart => minPlayers;
         
         public void CreateLobbyAsHost()
         {
@@ -30,6 +33,11 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             if (NetworkClient.active || NetworkServer.active)
                 return;
             StartClient();
+        }
+
+        public void LoadGameLevel()
+        {
+            ServerChangeScene(Constants.GAME_SCENE_NAME);
         }
 
         public override void OnStartClient()
@@ -54,6 +62,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             base.OnClientSceneChanged();
             NetworkClient.connection.owned.RemoveWhere(NullIdentity);
+        }
+        
+        public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
+        {
+            base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
+            OnRoomClientSceneChangedEvent?.Invoke(newSceneName);
         }
 
         private void OnGameRestarted(GameRestartMessage msg)

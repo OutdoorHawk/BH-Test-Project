@@ -74,21 +74,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void StartGame()
         {
             _lobbyMenuWindow.CleanUp();
-            CmdStartGame();
-        }
-
-        [Command]
-        private void CmdStartGame()
-        {
-            RpcStartGameLoop();
-        }
-
-        [ClientRpc]
-        private void RpcStartGameLoop()
-        {
-            if (!isOwned)
-                return;
-            _gameStateMachine.Enter<GameLoopState>();
+            _networkService.LoadGameLevel();
         }
 
         private void Unsubscribe()

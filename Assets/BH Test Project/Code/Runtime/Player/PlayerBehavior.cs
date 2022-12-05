@@ -40,7 +40,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerStaticData = staticData;
             CreateSystems();
             InitSystems();
-            CheckIsPlayerNameValid();
+            //CheckIsPlayerNameValid();
             CmdAddNewPlayerToScoreTable(netId, _playerNameComponent.GetPlayerName());
         }
 
