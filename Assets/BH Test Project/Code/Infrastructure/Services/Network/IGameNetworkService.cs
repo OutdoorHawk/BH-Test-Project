@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Services.Network
 {
-    public interface INetworkManagerService : IService
+    public interface IGameNetworkService : IService
     {
         event Action<NetworkConnectionToClient> OnServerReadyEvent;
         event Action OnRoomClientEnterEvent;

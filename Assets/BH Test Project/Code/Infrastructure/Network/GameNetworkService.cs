@@ -10,14 +10,14 @@ using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.Network
 {
-    public class GameNetworkManager : NetworkRoomManager, INetworkManagerService
+    public class GameNetworkService : NetworkRoomManager, IGameNetworkService
     {
         public event Action<NetworkConnectionToClient> OnServerReadyEvent;
         public event Action OnRoomClientEnterEvent;
         public event Action<string> OnRoomClientSceneChangedEvent;
 
         private IPlayerFactory _playerFactory;
-        
+
         public static Dictionary<int, string> PlayerNames { get; } = new();
         public List<NetworkRoomPlayer> PlayersInRoom => roomSlots;
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
@@ -57,8 +57,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
-            OnServerReadyEvent?.Invoke(conn);
             base.OnServerReady(conn);
+            OnServerReadyEvent?.Invoke(conn);
         }
 
         public override void OnRoomClientEnter() // new client spawned & added to room slot
@@ -78,13 +78,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             GameObject roomPlayer)
         {
             return _playerFactory.CreateGamePlayer(conn, playerPrefab).gameObject;
-        }
-
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn,
-            GameObject roomPlayer,
-            GameObject gamePlayer)
-        {
-            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
         }
 
         public override void OnClientSceneChanged()

@@ -54,8 +54,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private void Start()
         {
-            if (isClient)
-                CmdInitPlayers(_playerStaticData);
+            //if (isClient)
+                //CmdInitPlayers(_playerStaticData);
         }
 
         [Command(requiresAuthority = false)]
@@ -68,7 +68,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 if (PlayerWasInitialized(conn.identity.netId))
                     continue;
                 if (conn.identity.TryGetComponent(out PlayerBehavior player))
-                    player.TargetInitPlayer(playerStaticData);
+                    player.RpcInitializePlayer();
             }
         }
 
@@ -159,9 +159,9 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 if (conn.identity.TryGetComponent(out PlayerNameComponent nameSender))
                 {
-                    if (!GameNetworkManager.PlayerNames.ContainsKey(conn.connectionId) &&
+                    if (!GameNetworkService.PlayerNames.ContainsKey(conn.connectionId) &&
                         nameSender.GetPlayerName() != null)
-                        GameNetworkManager.PlayerNames.Add(conn.connectionId, nameSender.GetPlayerName());
+                        GameNetworkService.PlayerNames.Add(conn.connectionId, nameSender.GetPlayerName());
                 }
             }
         }

@@ -19,19 +19,19 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly ISceneContextService _sceneContextService;
         private readonly IUIFactory _uiFactory;
         private readonly ISceneLoader _sceneLoader;
-        private readonly INetworkManagerService _networkManagerService;
+        private readonly IGameNetworkService _gameNetworkService;
         private readonly IPlayerFactory _playerFactory;
         private NetworkPlayerSystem _playerSystem;
 
         public GameLoopState(IStaticDataService staticDataService,
             ISceneContextService sceneContextService, IUIFactory uiFactory, ISceneLoader sceneLoader,
-            INetworkManagerService networkManagerService, IPlayerFactory playerFactory)
+            IGameNetworkService gameNetworkService, IPlayerFactory playerFactory)
         {
             _staticDataService = staticDataService;
             _sceneContextService = sceneContextService;
             _uiFactory = uiFactory;
             _sceneLoader = sceneLoader;
-            _networkManagerService = networkManagerService;
+            _gameNetworkService = gameNetworkService;
             _playerFactory = playerFactory;
         }
 

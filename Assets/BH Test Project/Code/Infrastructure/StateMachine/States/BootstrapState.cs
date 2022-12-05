@@ -18,7 +18,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly ICoroutineRunner _coroutineRunner;
         private IUIFactory _uiFactory;
 
-        private GameNetworkManager _networkManager;
+        private GameNetworkService _gameNetworkService;
 
         public BootstrapState(IGameStateMachine gameStateMachine, DIContainer diContainer,
             ICoroutineRunner coroutineRunner)
@@ -44,7 +44,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         {
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
             _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(_diContainer.Resolve<IUIFactory>(),
-                _diContainer.Resolve<IGameStateMachine>()));
+                _diContainer.Resolve<IGameStateMachine>(), _diContainer.Resolve<IStaticDataService>()));
         }
 
         private void BindStaticDataService()
@@ -57,9 +57,9 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void BindNetworkManagerService()
         {
             var staticDataService = _diContainer.Resolve<IStaticDataService>();
-            _networkManager = Object.Instantiate(staticDataService.GetLobbyNetworkManager());
-            _networkManager.Init(_diContainer.Resolve<IPlayerFactory>());
-            _diContainer.BindSingle<INetworkManagerService>(_networkManager);
+            _gameNetworkService = Object.Instantiate(staticDataService.GetLobbyNetworkManager());
+            _gameNetworkService.Init(_diContainer.Resolve<IPlayerFactory>());
+            _diContainer.BindSingle<IGameNetworkService>(_gameNetworkService);
         }
 
         public void Enter()

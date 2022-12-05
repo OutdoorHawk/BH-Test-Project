@@ -16,13 +16,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         [SerializeField] private Button _exitGameButton;
         [SerializeField] private EnterIpView _enterIpWindow;
 
-        private INetworkManagerService _gameManager;
+        private IGameNetworkService _game;
         private IGameStateMachine _gameStateMachine;
 
-        public void Init(INetworkManagerService gameManager, IGameStateMachine gameStateMachine)
+        public void Init(IGameNetworkService game, IGameStateMachine gameStateMachine)
         {
             _gameStateMachine = gameStateMachine;
-            _gameManager = gameManager;
+            _game = game;
             Subscribe();
         }
 
@@ -36,14 +36,14 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void HostGameClicked()
         {
-            _gameManager.CreateLobbyAsHost();
+            _game.CreateLobbyAsHost();
             SavePlayerName("Host");
             _gameStateMachine.Enter<LobbyState>();
         }
 
         private void JoinGameClicked(string networkAddress)
         {
-            _gameManager.JoinLobbyAsClient(networkAddress);
+            _game.JoinLobbyAsClient(networkAddress);
             SavePlayerName("Client");
             _gameStateMachine.Enter<LobbyState>();
         }

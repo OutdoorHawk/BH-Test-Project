@@ -20,7 +20,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private IUIFactory _uiFactory;
         private LobbyMenuWindow _lobbyMenuWindow;
         private IGameStateMachine _gameStateMachine;
-        private INetworkManagerService _networkService;
+        private IGameNetworkService _gameNetworkService;
 
         [field: SyncVar(hook = nameof(HandleNameChanged))] public string PlayerName { get; private set; }
         [field: SyncVar(hook = nameof(HandleToggleChanged))] public bool IsReady { get; private set; }
@@ -38,7 +38,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
-            _networkService = DIContainer.Container.Resolve<INetworkManagerService>();
+            _gameNetworkService = DIContainer.Container.Resolve<IGameNetworkService>();
         }
 
         [ClientRpc]
@@ -61,7 +61,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void CreateLobbyUI()
         {
             _lobbyMenuWindow = _uiFactory.CreateLobbyMenuWindow();
-            _lobbyMenuWindow.InitLobby(isServer, _networkService.MinPlayersToStart);
+            _lobbyMenuWindow.InitLobby(isServer, _gameNetworkService.MinPlayersToStart);
         }
 
         private void Subscribe()
@@ -74,7 +74,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void StartGame()
         {
             _lobbyMenuWindow.CleanUp();
-            _networkService.LoadGameLevel();
+            _gameNetworkService.LoadGameLevel();
         }
 
         private void Unsubscribe()
@@ -95,7 +95,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             if (!isOwned)
                 return;
 
-            _lobbyMenuWindow.UpdatePlayersInLobby(_networkService.PlayersInRoom);
+            _lobbyMenuWindow.UpdatePlayersInLobby(_gameNetworkService.PlayersInRoom);
         }
 
         [Command]
@@ -103,7 +103,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             IsReady = value;
 
-            foreach (var player in _networkService.PlayersInRoom)
+            foreach (var player in _gameNetworkService.PlayersInRoom)
             {
                 if (player.isServer && player is RoomPlayer roomPlayer)
                     roomPlayer.TargetCheckStartButton();
@@ -141,7 +141,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             if (!isOwned)
                 return;
             if (isServer)
-                _networkService.StopServer();
+                _gameNetworkService.StopServer();
             Unsubscribe();
             _gameStateMachine.Enter<MainMenuState>();
             NetworkClient.Disconnect();

@@ -11,16 +11,16 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
-        private readonly INetworkManagerService _networkManagerService;
+        private readonly IGameNetworkService _gameNetworkService;
         private readonly ISceneLoader _sceneLoader;
 
         public MainMenuState(IGameStateMachine gameStateMachine, IUIFactory uiFactory,
-            INetworkManagerService networkManagerService,
+            IGameNetworkService gameNetworkService,
             ISceneLoader sceneLoader)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
-            _networkManagerService = networkManagerService;
+            _gameNetworkService = gameNetworkService;
             _sceneLoader = sceneLoader;
         }
 
@@ -39,7 +39,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void InitMainMenu()
         {
             MainMenuWindow mainMenuWindow = _uiFactory.CreateMainMenuWindow();
-            mainMenuWindow.Init(_networkManagerService,_gameStateMachine);
+            mainMenuWindow.Init(_gameNetworkService,_gameStateMachine);
         }
 
         public void Exit()

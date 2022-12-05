@@ -1,5 +1,7 @@
+using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
+using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
@@ -20,6 +22,7 @@ namespace BH_Test_Project.Code.Runtime.Player
     public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private CameraFollow _cameraFollowPrefab;
+        [SerializeField, SyncVar] private PlayerStaticData _playerStaticData;
 
         private CameraFollow _cameraFollow;
         private PlayerInput _playerInput;
@@ -29,15 +32,21 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
         private PlayerNameComponent _playerNameComponent;
-        private PlayerStaticData _playerStaticData;
-
-        [TargetRpc]
-        public void TargetInitPlayer(PlayerStaticData staticData)
+        private IUIFactory _uiFactory;
+        
+        [ClientRpc]
+        public void RpcConstruct(PlayerStaticData staticData)
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            _playerStaticData = staticData;
+            _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
+        }
+
+        [ClientRpc]
+        public void RpcInitializePlayer()
+        {
             if (!isOwned)
                 return;
-            _playerStaticData = staticData;
+            
             CreateSystems();
             InitSystems();
             //CheckIsPlayerNameValid();
@@ -75,11 +84,11 @@ namespace BH_Test_Project.Code.Runtime.Player
             string playerName = _playerNameComponent.GetPlayerName();
             if (!string.IsNullOrEmpty(playerName))
             {
-                if (!GameNetworkManager.PlayerNames.ContainsKey(connectionToServer.connectionId))
-                    GameNetworkManager.PlayerNames.Add(connectionToServer.connectionId, playerName);
+                if (!GameNetworkService.PlayerNames.ContainsKey(connectionToServer.connectionId))
+                    GameNetworkService.PlayerNames.Add(connectionToServer.connectionId, playerName);
             }
             else
-                playerName = GameNetworkManager.PlayerNames[connectionToServer.connectionId];
+                playerName = GameNetworkService.PlayerNames[connectionToServer.connectionId];
 
             _playerNameComponent.SetPlayerName(playerName);
         }

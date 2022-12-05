@@ -12,7 +12,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services.StaticData
         private const string GAME_STATIC_DATA_PATH = "GameStaticData";
 
         private readonly Dictionary<WindowID, WindowConfig> _windows = new();
-        private GameNetworkManager _networkManager;
+        private GameNetworkService _gameNetworkService;
         private PlayerStaticData _playerStaticData;
         private WorldStaticData _worldStaticData;
         private GameStaticData _data;
@@ -33,7 +33,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services.StaticData
         }
 
         private void LoadNetworkManager() =>
-            _networkManager = _data.ManagerPrefab;
+            _gameNetworkService = _data.ServicePrefab;
 
         private void LoadPlayerStaticData() =>
             _playerStaticData = _data.PlayerStaticData;
@@ -44,8 +44,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services.StaticData
         public WindowConfig GetWindow(WindowID id) =>
             _windows.TryGetValue(id, out var windowConfig) ? windowConfig : null;
 
-        public GameNetworkManager GetLobbyNetworkManager() =>
-            _networkManager;
+        public GameNetworkService GetLobbyNetworkManager() =>
+            _gameNetworkService;
 
         public NetworkPlayerSystem GetPlayerNetworkSystem() =>
             _data.PlayerSystem;

@@ -11,18 +11,18 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly IUIFactory _uiFactory;
-        private readonly INetworkManagerService _networkManagerService;
+        private readonly IGameNetworkService _gameNetworkService;
         private readonly IPlayerFactory _playerFactory;
 
         private LobbyMenuWindow _lobbyMenuWindow;
 
         public LobbyState(GameStateMachine gameStateMachine, IUIFactory uiFactory,
-            INetworkManagerService networkManagerService,
+            IGameNetworkService gameNetworkService,
             IPlayerFactory playerFactory)
         {
             _gameStateMachine = gameStateMachine;
             _uiFactory = uiFactory;
-            _networkManagerService = networkManagerService;
+            _gameNetworkService = gameNetworkService;
             _playerFactory = playerFactory;
         }
 
@@ -33,29 +33,29 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         private void Subscribe()
         {
-            _networkManagerService.OnServerReadyEvent += CreateNewRoomPlayer;
-            _networkManagerService.OnRoomClientEnterEvent += UpdatePlayersUI;
-            _networkManagerService.OnRoomClientSceneChangedEvent += CheckSceneLoaded;
+            _gameNetworkService.OnServerReadyEvent += CreateNewRoomPlayer;
+            _gameNetworkService.OnRoomClientEnterEvent += UpdatePlayersUI;
+            _gameNetworkService.OnRoomClientSceneChangedEvent += CheckSceneLoaded;
         }
 
         private void Unsubscribe()
         {
-            _networkManagerService.OnServerReadyEvent -= CreateNewRoomPlayer;
-            _networkManagerService.OnRoomClientEnterEvent -= UpdatePlayersUI;
-            _networkManagerService.OnRoomClientSceneChangedEvent -= CheckSceneLoaded;
+            _gameNetworkService.OnServerReadyEvent -= CreateNewRoomPlayer;
+            _gameNetworkService.OnRoomClientEnterEvent -= UpdatePlayersUI;
+            _gameNetworkService.OnRoomClientSceneChangedEvent -= CheckSceneLoaded;
         }
 
         [Server]
         private void CreateNewRoomPlayer(NetworkConnectionToClient conn)
         {
-            RoomPlayer player = _networkManagerService.RoomPlayerPrefab;
+            RoomPlayer player = _gameNetworkService.RoomPlayerPrefab;
             _playerFactory.CreateRoomPlayer(conn, player);
         }
 
         [Client]
         private void UpdatePlayersUI()
         {
-            foreach (var player in _networkManagerService.PlayersInRoom)
+            foreach (var player in _gameNetworkService.PlayersInRoom)
             {
                 if (player is RoomPlayer roomPlayer)
                     roomPlayer.UpdatePlayerUI();

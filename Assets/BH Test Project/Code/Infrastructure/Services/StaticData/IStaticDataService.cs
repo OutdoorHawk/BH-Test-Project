@@ -10,7 +10,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
     {
         void Load();
         WindowConfig GetWindow(WindowID id);
-        GameNetworkManager GetLobbyNetworkManager();
+        GameNetworkService GetLobbyNetworkManager();
         NetworkPlayerSystem GetPlayerNetworkSystem();
         PlayerStaticData GetPlayerStaticData();
         WorldStaticData GetWorldStaticData();

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3657566080650770623}
   - component: {fileID: 3657566080650770620}
   m_Layer: 0
-  m_Name: GameNetworkManager
+  m_Name: GameNetworkService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
