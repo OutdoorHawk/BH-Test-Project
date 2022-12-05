@@ -3,6 +3,7 @@ using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
 using BH_Test_Project.Code.Runtime.Lobby;
 using BH_Test_Project.Code.Runtime.Player;
+using BH_Test_Project.Code.Runtime.Player.Systems;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
@@ -38,7 +39,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services.PlayerFactory
         public PlayerBehavior CreateGamePlayer(NetworkConnectionToClient conn, GameObject gamePlayer)
         {
             PlayerBehavior spawnedPlayer = SpawnGamePlayerOnServer(conn, gamePlayer);
-            InitSpawnedPlayer(spawnedPlayer);
+            InitSpawnedPlayer(spawnedPlayer,conn);
             return spawnedPlayer;
         }
 
@@ -54,11 +55,13 @@ namespace BH_Test_Project.Code.Infrastructure.Services.PlayerFactory
         }
 
         [Server]
-        private void InitSpawnedPlayer(PlayerBehavior spawnedPlayer)
+        private void InitSpawnedPlayer(PlayerBehavior spawnedPlayer, NetworkConnectionToClient conn)
         {
             PlayerStaticData staticData = _staticDataService.GetPlayerStaticData();
             spawnedPlayer.RpcConstruct(staticData);
             spawnedPlayer.RpcInitializePlayer();
         }
+        
+        
     }
 }

@@ -5,6 +5,7 @@ using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Runtime.Lobby;
+using BH_Test_Project.Code.Runtime.Player;
 using Mirror;
 using UnityEngine;
 
@@ -17,8 +18,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public event Action<string> OnRoomClientSceneChangedEvent;
 
         private IPlayerFactory _playerFactory;
+        private List<PlayerProfile> _profiles = new();
 
         public static Dictionary<int, string> PlayerNames { get; } = new();
+
         public List<NetworkRoomPlayer> PlayersInRoom => roomSlots;
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
         public GameObject GamePlayerPrefab => playerPrefab;
@@ -65,6 +68,22 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             base.OnRoomClientEnter();
             OnRoomClientEnterEvent?.Invoke();
+        }
+
+        [Server]
+        public void AddPlayerProfile(string playerName)
+        {
+            _profiles.Add( new PlayerProfile(playerName));
+        }
+
+        [Server]
+        public void UpdateScoreTables()
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                    player.RpcUpdateScoreTable(_profiles);
+            }
         }
 
         public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,

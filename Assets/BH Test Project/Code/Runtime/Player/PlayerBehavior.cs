@@ -1,7 +1,8 @@
-using BH_Test_Project.Code.Infrastructure.Data;
+using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
@@ -36,22 +37,24 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerNameComponent _playerNameComponent;
         private PlayerHUD _playerHUD;
         private IUIFactory _uiFactory;
+        private IGameNetworkService _networkService;
 
         [ClientRpc]
         public void RpcConstruct(PlayerStaticData staticData)
         {
             _playerStaticData = staticData;
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
+            _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
         }
 
         [ClientRpc]
         public void RpcInitializePlayer()
         {
-            if (isOwned)
-            {
-                CreateSystems();
-                InitSystems();
-            }
+            if (!isOwned) 
+                return;
+            CreateSystems();
+            InitSystems();
+            CmdAskForScoreTableUpdate();
         }
 
         private void CreateSystems()
@@ -78,47 +81,21 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.Init();
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
-            _playerNameComponent.CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
-            CmdUpdatePlayersScores();
             _playerStateMachine.Enter<BasicMovementState>();
         }
 
         [Command]
-        private void CmdUpdatePlayersScores()
+        private void CmdAskForScoreTableUpdate()
         {
-            UpdateScoreTable();
+            _networkService.UpdateScoreTables();
         }
-
+        
         [ClientRpc]
-        private void UpdateScoreTable()
+        public void RpcUpdateScoreTable(List<PlayerProfile> profiles)
         {
-            if (isOwned) 
-                _playerHUD.Init(5, NetworkServer.connections);
-        }
-
-        private void CheckIsPlayerNameValid()
-        {
-            string playerName = _playerNameComponent.GetPlayerName();
-            if (!string.IsNullOrEmpty(playerName))
-            {
-                if (!GameNetworkService.PlayerNames.ContainsKey(connectionToServer.connectionId))
-                    GameNetworkService.PlayerNames.Add(connectionToServer.connectionId, playerName);
-            }
-            else
-                playerName = GameNetworkService.PlayerNames[connectionToServer.connectionId];
-
-            _playerNameComponent.SetPlayerName(playerName);
-        }
-
-        [Command]
-        private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
-        {
-            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
-            {
-                NetId = netID,
-                PlayerName = $"{playerName}"
-            };
-            NetworkServer.SendToAll(playerConnectedMessage);
+            if (!isOwned) 
+                return;
+            _playerHUD.Init(5, profiles);
         }
 
         private void Update()
@@ -164,5 +141,6 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerStateMachine.CleanUp();
             _playerInput.CleanUp();
         }
+
     }
 }

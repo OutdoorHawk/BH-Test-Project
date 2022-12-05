@@ -20,7 +20,9 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
 
         void CreateLobbyAsHost();
         void JoinLobbyAsClient(string address);
+        void AddPlayerProfile( string playerName);
         void StopServer();
         void LoadGameLevel();
+        void UpdateScoreTables();
     }
 }

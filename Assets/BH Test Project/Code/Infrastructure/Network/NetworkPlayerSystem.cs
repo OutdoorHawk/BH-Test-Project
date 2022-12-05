@@ -65,23 +65,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                     return;
                 if (PlayerWasInitialized(conn.identity.netId))
                     continue;
-                if (conn.identity.TryGetComponent(out PlayerBehavior player))
-                    player.RpcInitializePlayer();
+                //if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                   // player.RpcInitializePlayer();
             }
         }
 
         private bool PlayerWasInitialized(uint identityNetId)
         {
             return _players.Any(player => player.NetID == identityNetId);
-        }
-
-        private void OnPlayerConnected(PlayerConnectedMessage MSG)
-        {
-            if (PlayerAlreadyAdded(MSG))
-                return;
-
-            _playerHUD.AddPlayerToScoreTable(MSG);
-          //  _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
         }
 
         private bool PlayerAlreadyAdded(PlayerConnectedMessage MSG)

@@ -1,6 +1,5 @@
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.DI;
-using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Infrastructure.StateMachine;
@@ -51,12 +50,27 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             InitPlayer();
             CreateLobbyUI();
             Subscribe();
+            CmdAddPlayerProfile(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+        }
+
+        [Command]
+        private void CmdAddPlayerProfile( string playerName)
+        {
+            _gameNetworkService.AddPlayerProfile( playerName);
+        }
+        
+        public void RpcUpdatePlayerUI()
+        {
+            if (!isOwned)
+                return;
+
+            _lobbyMenuWindow.UpdatePlayersInLobby(_gameNetworkService.PlayersInRoom);
         }
 
         private void InitPlayer()
         {
-           CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
-           _isReadyToggle.interactable = true;
+            CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            _isReadyToggle.interactable = true;
         }
 
         private void CreateLobbyUI()
@@ -89,14 +103,6 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         private void CmdSetPlayerName(string playerName)
         {
             PlayerName = playerName;
-        }
-
-        public void UpdatePlayerUI()
-        {
-            if (!isOwned)
-                return;
-
-            _lobbyMenuWindow.UpdatePlayersInLobby(_gameNetworkService.PlayersInRoom);
         }
 
         [Command]

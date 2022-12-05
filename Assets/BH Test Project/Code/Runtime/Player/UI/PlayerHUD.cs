@@ -21,42 +21,21 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private float _restartDelay;
 
-        public void Init(float gameRestartDelay,
-            Dictionary<int, NetworkConnectionToClient> connections)
+        public void Init(float gameRestartDelay, List<PlayerProfile> profiles)
         {
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
             _disconnectButton.onClick.AddListener(Disconnect);
             _restartDelay = gameRestartDelay;
-            CheckPlayers(connections);
+            UpdateScoreTable(profiles);
         }
 
-        private void CheckPlayers(Dictionary<int, NetworkConnectionToClient> connections)
+        private void UpdateScoreTable(List<PlayerProfile> profiles)
         {
-            int i = 0;
-            foreach (var conn in connections.Values)
+            for (var i = 0; i < profiles.Count; i++)
             {
-                if (conn.identity.TryGetComponent(out PlayerNameComponent playerName))
-                {
-                    _scoreElements[i].SetName(playerName.GetPlayerName());
-                    _scoreElements[i].SetNetId((int)conn.identity.netId);
-                    _scoreElements[i].ActivateElement();
-                }
-
-                i++;
-            }
-        }
-
-        public void AddPlayerToScoreTable(PlayerConnectedMessage msg)
-        {
-            for (int i = 0; i < _scoreElements.Count; i++)
-            {
-                if (!_scoreElements[i].Active)
-                {
-                    _scoreElements[i].SetNetId((int)msg.NetId);
-                    _scoreElements[i].SetName(msg.PlayerName);
-                    _scoreElements[i].ActivateElement();
-                    break;
-                }
+                var profile = profiles[i];
+                _scoreElements[i].SetName(profile.PlayerName);
+                _scoreElements[i].ActivateElement();
             }
         }
 
@@ -97,15 +76,6 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         {
             _disconnectButton.onClick.RemoveListener(Disconnect);
         }
-
-        public void UpdateScoreTable(SyncList<PlayerScores> players)
-        {
-            for (int i = 0; i < players.Count; i++)
-            {
-                _scoreElements[i].SetName(players[i].Name);
-                _scoreElements[i].SetNetId((int)players[i].NetID);
-                _scoreElements[i].ActivateElement();
-            }
-        }
+        
     }
 }

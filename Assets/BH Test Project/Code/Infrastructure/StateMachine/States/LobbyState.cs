@@ -59,7 +59,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
             foreach (var player in _gameNetworkService.PlayersInRoom)
             {
                 if (player is RoomPlayer roomPlayer)
-                    roomPlayer.UpdatePlayerUI();
+                    roomPlayer.RpcUpdatePlayerUI();
             }
         }
 
