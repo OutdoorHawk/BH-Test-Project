@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 {
     public class NetworkPlayerSystem : NetworkBehaviour
     {
-        private readonly List<PlayerOnServer> _players = new();
+        private readonly List<PlayerScores> _players = new();
         private Dictionary<int, string> _playerNames;
         private PlayerHUD _playerHUD;
 
@@ -24,14 +24,14 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         public void RegisterHandlers()
         {
-            NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
+            //NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
             NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerHit);
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
         }
 
         public void UnregisterHandlers()
         {
-            NetworkClient.UnregisterHandler<PlayerConnectedMessage>();
+           // NetworkClient.UnregisterHandler<PlayerConnectedMessage>();
             NetworkServer.UnregisterHandler<PlayerAskHitMessage>();
             NetworkClient.UnregisterHandler<PlayerHitSuccessMessage>();
         }
@@ -46,8 +46,8 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private void ResetPlayersScore()
         {
-            for (int i = 0; i < _players.Count; i++)
-                _players[i].ResetScore();
+           // for (int i = 0; i < _players.Count; i++)
+            //    _players[i].ResetScore();
         }
 
         private void Start()
@@ -81,7 +81,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 return;
 
             _playerHUD.AddPlayerToScoreTable(MSG);
-            _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
+          //  _players.Add(new PlayerOnServer(MSG.NetId, MSG.PlayerName));
         }
 
         private bool PlayerAlreadyAdded(PlayerConnectedMessage MSG)
@@ -110,7 +110,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         {
             foreach (var player in _players.Where(player => player.NetID == msg.HitSenderNetId))
             {
-                player.IncreasePlayerScore();
+               // player.IncreasePlayerScore();
                 UpdatePlayersScoreUI(msg.HitSenderNetId, player.Score);
                 CheckGameEndConditions(player);
             }
@@ -121,13 +121,13 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerHUD.UpdatePlayerScore(successPlayerNetId, newScore);
         }
 
-        private void CheckGameEndConditions(PlayerOnServer player)
+        private void CheckGameEndConditions(PlayerScores player)
         {
             if (player.Score == _gameEndScore)
                 NotifyGameEnded(player);
         }
 
-        private void NotifyGameEnded(PlayerOnServer player)
+        private void NotifyGameEnded(PlayerScores player)
         {
             foreach (var conn in NetworkServer.connections.Values)
             {

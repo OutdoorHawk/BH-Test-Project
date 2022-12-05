@@ -47,13 +47,11 @@ namespace BH_Test_Project.Code.Runtime.Player
         [ClientRpc]
         public void RpcInitializePlayer()
         {
-            if (!isOwned)
-                return;
-
-            CreateSystems();
-            InitSystems();
-            //CheckIsPlayerNameValid();
-            //CmdAddNewPlayerToScoreTable(netId, _playerNameComponent.GetPlayerName());
+            if (isOwned)
+            {
+                CreateSystems();
+                InitSystems();
+            }
         }
 
         private void CreateSystems()
@@ -63,7 +61,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerNameComponent = GetComponent<PlayerNameComponent>();
-            _playerHUD = _uiFactory.CreatePlayerHUD();
+            _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
@@ -80,11 +78,24 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.Init();
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
-            _playerHUD.Init(5);
-            _playerHUD.AddPlayerToScoreTable(netId, PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            _playerNameComponent.CmdSetPlayerName(PlayerPrefs.GetString(Constants.PLAYER_NAME));
+            CmdUpdatePlayersScores();
             _playerStateMachine.Enter<BasicMovementState>();
         }
-        
+
+        [Command]
+        private void CmdUpdatePlayersScores()
+        {
+            UpdateScoreTable();
+        }
+
+        [ClientRpc]
+        private void UpdateScoreTable()
+        {
+            if (isOwned) 
+                _playerHUD.Init(5, NetworkServer.connections);
+        }
+
         private void CheckIsPlayerNameValid()
         {
             string playerName = _playerNameComponent.GetPlayerName();

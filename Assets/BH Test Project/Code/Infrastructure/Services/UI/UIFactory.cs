@@ -29,24 +29,22 @@ namespace BH_Test_Project.Code.Infrastructure.Services.UI
         public LobbyMenuWindow CreateLobbyMenuWindow()
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.Lobby);
-            LobbyMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab,_uiRoot)
+            LobbyMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<LobbyMenuWindow>();
             return window;
         }
 
-        public PlayerHUD CreatePlayerHUD()
+        public PlayerHUD CreatePlayerHUD(NetworkConnectionToClient conn)
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.PlayerHUD);
             PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<PlayerHUD>();
-            if (NetworkServer.active) 
-                NetworkServer.Spawn(window.gameObject);
             return window;
         }
 
         public void CreateUiRoot()
         {
-            if (_uiRoot != null) 
+            if (_uiRoot != null)
                 Object.Destroy(_uiRoot.gameObject);
             WindowConfig config = _staticDataService.GetWindow(WindowID.UiRoot);
             GameObject uiRoot = Object.Instantiate(config.WindowPrefab.gameObject);
