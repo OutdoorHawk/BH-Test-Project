@@ -3,6 +3,7 @@ using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.SceneLoaderService;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
+using Mirror;
 using UnityEngine;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
@@ -34,6 +35,8 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private void OnLoaded()
         {
             InitMainMenu();
+            if (NetworkServer.active) 
+                NetworkServer.Shutdown();
         }
 
         private void InitMainMenu()

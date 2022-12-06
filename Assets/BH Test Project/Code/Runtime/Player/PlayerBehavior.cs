@@ -123,7 +123,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (_playerGameStatus.IsHitNow)
                 return;
-            
+
             _playerStateMachine.Enter<BasicMovementState>();
             _playerGameStatus.PlayerHit();
             CmdSuccessHit(senderID);
@@ -144,19 +144,22 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void DisconnectFromGame()
         {
-            if (isServer)
-                NetworkServer.Shutdown();
-            else
-                NetworkClient.Disconnect();
-
             _gameStateMachine.Enter<MainMenuState>();
+            NetworkClient.Disconnect();
         }
 
-        [ClientRpc]
-        public void RpcDisconnect()
+        public override void OnStopServer()
         {
+            base.OnStopServer();
+           
+        }
+
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
             if (!isOwned)
                 return;
+            
             _gameStateMachine.Enter<MainMenuState>();
         }
 

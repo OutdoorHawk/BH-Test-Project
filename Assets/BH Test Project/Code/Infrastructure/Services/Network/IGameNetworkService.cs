@@ -15,7 +15,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
 
         List<NetworkRoomPlayer> PlayersInRoom { get; }
         RoomPlayer RoomPlayerPrefab { get; }
-        GameObject GamePlayerPrefab { get; }
         int MinPlayersToStart { get; }
 
         bool CreateLobbyAsHost();

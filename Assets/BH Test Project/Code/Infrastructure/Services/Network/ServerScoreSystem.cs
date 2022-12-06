@@ -28,7 +28,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
         {
             foreach (var conn in NetworkServer.connections.Values)
             {
-                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                if (conn.identity != null && conn.identity.TryGetComponent(out PlayerBehavior player))
                     player.TargetUpdateHUD(_profiles);
             }
         }
@@ -70,14 +70,14 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
                     player.TargetGameEnd(winnerName);
             }
         }
-        
+
         [Server]
         public void ResetPlayersScore()
         {
             foreach (var pr in _profiles)
                 pr.ResetPlayerScore();
         }
-        
+
         [Server]
         public void RemovePlayerProfile(int connID)
         {

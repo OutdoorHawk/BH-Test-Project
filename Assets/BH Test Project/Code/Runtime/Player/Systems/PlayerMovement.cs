@@ -32,7 +32,6 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
 
         private const float MIN_MOVE_VALUE = 0.01f;
         private const float LERP_RATE = 35f;
-        private const float LERP_SPEED_DEVIATION = 0.655f;
 
         public void UpdateInput(Vector2 movementInput)
         {
