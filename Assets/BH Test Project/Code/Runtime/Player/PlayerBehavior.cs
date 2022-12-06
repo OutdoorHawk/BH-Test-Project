@@ -93,12 +93,9 @@ namespace BH_Test_Project.Code.Runtime.Player
             _networkService.UpdateScoreTables();
         }
 
-        [ClientRpc]
-        public void RpcUpdateScoreTable(List<PlayerProfile> profiles)
+        [TargetRpc]
+        public void TargetUpdateScoreTable(List<PlayerProfile> profiles)
         {
-            if (!isOwned)
-                return;
-
             _playerHUD.UpdateScoreTable(profiles);
         }
 
@@ -121,11 +118,9 @@ namespace BH_Test_Project.Code.Runtime.Player
             _networkService.AskForPlayerHit(targetID, senderID);
         }
 
-        [ClientRpc]
-        public void RpcPlayerHit(int senderID)
+        [TargetRpc]
+        public void TargetPlayerHit(int senderID)
         {
-            if (!isOwned)
-                return;
             if (_playerGameStatus.IsHitNow)
                 return;
             _playerStateMachine.Enter<BasicMovementState>();

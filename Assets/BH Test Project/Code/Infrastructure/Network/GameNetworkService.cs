@@ -83,7 +83,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             foreach (var conn in NetworkServer.connections.Values)
             {
                 if (conn.identity.TryGetComponent(out PlayerBehavior player))
-                    player.RpcUpdateScoreTable(_profiles);
+                    player.TargetUpdateScoreTable(_profiles);
             }
         }
 
@@ -91,7 +91,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public void AskForPlayerHit(int targetID, int senderID)
         {
             if (NetworkServer.connections[targetID].identity.TryGetComponent(out PlayerBehavior player))
-                player.RpcPlayerHit(senderID);
+                player.TargetPlayerHit(senderID);
         }
 
         [Server]
@@ -179,7 +179,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             base.OnServerDisconnect(conn);
-            if (conn.identity.TryGetComponent(out PlayerBehavior player))
+            if (conn.identity != null && conn.identity.TryGetComponent(out PlayerBehavior player))
                 player.RpcDisconnect();
             RemovePlayerProfile(conn.connectionId);
             UpdateScoreTables();
