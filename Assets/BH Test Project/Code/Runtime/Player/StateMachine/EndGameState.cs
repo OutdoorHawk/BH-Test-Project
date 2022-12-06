@@ -8,11 +8,11 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
     public class EndGameState : ITickableState
     {
         private readonly IPlayerStateMachine _playerStateMachine;
-        private readonly PlayerInput _playerInput;
+        private readonly IPlayerInput _playerInput;
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerAnimator _playerAnimator;
 
-        public EndGameState(IPlayerStateMachine playerStateMachine, PlayerInput playerInput,
+        public EndGameState(IPlayerStateMachine playerStateMachine, IPlayerInput playerInput,
             PlayerMovement playerMovement, PlayerAnimator playerAnimator)
         {
             _playerStateMachine = playerStateMachine;

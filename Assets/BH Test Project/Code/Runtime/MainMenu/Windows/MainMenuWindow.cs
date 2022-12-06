@@ -1,4 +1,6 @@
-using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.StateMachine;
+using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using UnityEngine;
 using UnityEngine.UI;
 using static BH_Test_Project.Code.Infrastructure.Data.Constants;
@@ -13,11 +15,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         [SerializeField] private Button _exitGameButton;
         [SerializeField] private EnterIpView _enterIpWindow;
 
-        private GameNetworkManager _gameManager;
+        private IGameNetworkService _networkService;
+        private IGameStateMachine _gameStateMachine;
 
-        public void Init(GameNetworkManager gameManager)
+        public void Init(IGameNetworkService game, IGameStateMachine gameStateMachine)
         {
-            _gameManager = gameManager;
+            _gameStateMachine = gameStateMachine;
+            _networkService = game;
             Subscribe();
         }
 
@@ -31,14 +35,18 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void HostGameClicked()
         {
-            _gameManager.CreateLobbyAsHost();
+            if (!_networkService.CreateLobbyAsHost())
+                return;
             SavePlayerName();
+            _gameStateMachine.Enter<LobbyState>();
         }
 
         private void JoinGameClicked(string networkAddress)
         {
-            _gameManager.JoinLobbyAsClient(networkAddress);
+            if (!_networkService.JoinLobbyAsClient(networkAddress))
+                return;
             SavePlayerName();
+            _gameStateMachine.Enter<LobbyState>();
         }
 
         private void SavePlayerName()

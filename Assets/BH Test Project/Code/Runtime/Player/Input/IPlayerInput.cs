@@ -8,6 +8,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
         InputAction Movement { get; }
         InputAction MouseAxis { get; }
         event Action OnDashPressed;
+        event Action OnEscapePressed;
         void EnableAllInput();
         void EnableDash();
         void DisableDash();

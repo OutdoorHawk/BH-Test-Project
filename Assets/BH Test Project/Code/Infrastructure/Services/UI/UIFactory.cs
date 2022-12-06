@@ -1,11 +1,14 @@
 using BH_Test_Project.Code.Infrastructure.Data;
+using BH_Test_Project.Code.Infrastructure.Services.SceneContext;
+using BH_Test_Project.Code.Infrastructure.Services.StaticData;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.Runtime.Lobby;
 using BH_Test_Project.Code.Runtime.MainMenu.Windows;
 using BH_Test_Project.Code.Runtime.Player.UI;
+using Mirror;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Infrastructure.Services
+namespace BH_Test_Project.Code.Infrastructure.Services.UI
 {
     public class UIFactory : IUIFactory
     {
@@ -28,12 +31,12 @@ namespace BH_Test_Project.Code.Infrastructure.Services
         public LobbyMenuWindow CreateLobbyMenuWindow()
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.Lobby);
-            LobbyMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab,_uiRoot)
+            LobbyMenuWindow window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<LobbyMenuWindow>();
             return window;
         }
 
-        public PlayerHUD CreatePlayerHUD()
+        public PlayerHUD CreatePlayerHUD(NetworkConnectionToClient conn)
         {
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.PlayerHUD);
             PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
@@ -43,7 +46,7 @@ namespace BH_Test_Project.Code.Infrastructure.Services
 
         public void CreateUiRoot()
         {
-            if (_uiRoot != null) 
+            if (_uiRoot != null)
                 Object.Destroy(_uiRoot.gameObject);
             WindowConfig config = _staticDataService.GetWindow(WindowID.UiRoot);
             GameObject uiRoot = Object.Instantiate(config.WindowPrefab.gameObject);

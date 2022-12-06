@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
-using BH_Test_Project.Code.Infrastructure.Network;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +10,9 @@ namespace BH_Test_Project.Code.Runtime.Lobby
 {
     public class LobbyMenuWindow : MonoBehaviour
     {
+        public event Action OnLeaveButtonPressed;
+        public event Action OnStartButtonPressed;
+
         [SerializeField] private Button _leaveButton;
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Transform _playerSlotsParent;
@@ -23,28 +26,39 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             _isServer = isServer;
             _roomPlayers = new List<RoomPlayer>();
             _minPlayersToStartGame = minPlayers;
-            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
-
-            if (_isServer)
-                EnableStartGameButton();
+            CheckStartGameButton();
+            Subscribe();
         }
 
-        private void EnableStartGameButton()
+        private void CheckStartGameButton()
         {
-            _startGameButton.gameObject.SetActive(true);
-            _startGameButton.onClick.AddListener(StartGame);
+            if (_isServer)
+                _startGameButton.gameObject.SetActive(true);
+        }
+
+        private void Subscribe()
+        {
+            _leaveButton.onClick.AddListener(LeaveLobbyButtonPressed);
+            if (_isServer)
+                _startGameButton.onClick.AddListener(StartGameButtonPressed);
+        } 
+        
+        private void Unsubscribe()
+        {
+            _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
+            if (_isServer)
+                _startGameButton.onClick.RemoveListener(StartGameButtonPressed);
         }
 
         private void LeaveLobbyButtonPressed()
         {
-            NetworkClient.Disconnect();
             UpdatePlayersList();
+            OnLeaveButtonPressed?.Invoke();
         }
 
-        private void StartGame()
+        private void StartGameButtonPressed()
         {
-            _startGameButton.onClick.RemoveListener(StartGame);
-            NetworkManager.singleton.ServerChangeScene(Constants.GAME_SCENE_NAME);
+            OnStartButtonPressed?.Invoke();
         }
 
         public void UpdatePlayersInLobby(List<NetworkRoomPlayer> roomSlots)
@@ -53,10 +67,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             {
                 RoomPlayer player = SetPlayerToSlotPosition(roomSlots, i);
                 if (!_roomPlayers.Contains(player))
-                {
                     _roomPlayers.Add(player);
-                    player.OnRoomPlayerStateChanged += CheckStartButtonAvailable;
-                }
             }
 
             CheckStartButtonAvailable();
@@ -72,7 +83,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             return player;
         }
 
-        private void CheckStartButtonAvailable()
+        public void CheckStartButtonAvailable()
         {
             _startGameButton.interactable = IsEveryoneReady();
         }
@@ -93,19 +104,13 @@ namespace BH_Test_Project.Code.Runtime.Lobby
             }
         }
 
-        private void OnDestroy()
+        public void CleanUp()
         {
-            CleanUp();
-        }
-
-        private void CleanUp()
-        {
-            _leaveButton.onClick.RemoveListener(LeaveLobbyButtonPressed);
+            Unsubscribe();
             foreach (var pl in _roomPlayers)
             {
                 if (pl == null)
                     return;
-                pl.OnRoomPlayerStateChanged -= CheckStartButtonAvailable;
                 pl.transform.SetParent(null);
                 DontDestroyOnLoad(pl);
             }

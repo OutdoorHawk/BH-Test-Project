@@ -14,21 +14,21 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerAnimator _playerAnimator;
         private readonly PlayerCollisionDetector _playerCollisionDetector;
+        private readonly PlayerGameStatus _playerGameStatus;
+        private readonly IPlayerInput _playerInput;
         private readonly MonoBehaviour _monoBehaviour;
-        private readonly PlayerInput _playerInput;
         private readonly float _dashRechargeTime;
         private GameObject _currentGameObject;
-        private readonly uint _netId;
-
         public DashState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
-            PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector, uint netId,
-            MonoBehaviour monoBehaviour, PlayerInput playerInput, float dashRechargeTime)
+            PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector,
+            PlayerGameStatus playerGameStatus,
+            MonoBehaviour monoBehaviour, IPlayerInput playerInput, float dashRechargeTime)
         {
             _playerMovement = playerMovement;
             _playerAnimator = playerAnimator;
             _playerCollisionDetector = playerCollisionDetector;
+            _playerGameStatus = playerGameStatus;
             _stateMachine = stateMachine;
-            _netId = netId;
             _monoBehaviour = monoBehaviour;
             _playerInput = playerInput;
             _dashRechargeTime = dashRechargeTime;
@@ -53,20 +53,8 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
             if (IsNotSameGameObject(hit) && hit.gameObject.TryGetComponent(out PlayerBehavior player))
             {
                 _currentGameObject = hit.gameObject;
-                CmdPlayerHit(player);
+                _playerGameStatus.NotifyPlayerHit(player.netIdentity);
             }
-        }
-
-        [Command]
-        private void CmdPlayerHit(PlayerBehavior playerBehavior)
-        {
-            PlayerAskHitMessage message = new PlayerAskHitMessage()
-            {
-                HitRecipientNetId = playerBehavior.netId,
-                HitSenderNetId = _netId
-            };
-
-            NetworkClient.Send(message);
         }
 
         private bool IsNotSameGameObject(ControllerColliderHit hit)

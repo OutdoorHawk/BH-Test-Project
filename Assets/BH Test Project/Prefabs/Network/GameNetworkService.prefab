@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3657566080650770621}
-  - component: {fileID: 3657566080650770623}
+  - component: {fileID: 4138934325655322816}
   - component: {fileID: 3657566080650770620}
   m_Layer: 0
-  m_Name: GameNetworkManager
+  m_Name: GameNetworkService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3657566080650770623
+--- !u!114 &4138934325655322816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3657566080650770619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1142bfab15fdb50459ea6a3fdb0c400b, type: 3}
+  m_Script: {fileID: 11500000, guid: f84a5e31f56f5374baf115bd5ed2fd98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
@@ -57,13 +57,12 @@ MonoBehaviour:
   maxConnections: 4
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 9096557284072044367, guid: a47cdd3023deab24b982fff74fb9481e, type: 3}
-  autoCreatePlayer: 1
+  autoCreatePlayer: 0
   playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 989263431012666124, guid: 4d13b08431acd9c48be43b17ae233f0a, type: 3}
+  spawnPrefabs: []
   timeInterpolationGui: 0
   showRoomGUI: 0
-  minPlayers: 2
+  minPlayers: 1
   roomPlayerPrefab: {fileID: 6598715985654083587, guid: 53ada960f170597419634fb2f499fc8c, type: 3}
   RoomScene: Assets/Scenes/Lobby.unity
   GameplayScene: Assets/Scenes/GameLevel.unity

@@ -13,7 +13,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine.States
         private readonly PlayerAnimator _playerAnimator;
 
         public BasicMovementState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
-            PlayerAnimator playerAnimator, PlayerInput playerInput)
+            PlayerAnimator playerAnimator, IPlayerInput playerInput)
         {
             _stateMachine = stateMachine;
             _playerMovement = playerMovement;

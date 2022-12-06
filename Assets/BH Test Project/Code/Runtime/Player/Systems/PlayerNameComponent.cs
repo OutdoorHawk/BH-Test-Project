@@ -13,8 +13,9 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
         {
             OnNameChanged?.Invoke(_playerName);
         }
-        
-        public void SetPlayerName(string playerName)
+
+        [Command]
+        public void CmdSetPlayerName(string playerName)
         {
             _playerName = playerName;
         }
@@ -24,9 +25,11 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
             return _playerName;
         }
 
+        [Command(requiresAuthority = false)]
         private void PlayerNameChanged(string oldValue, string newValue)
         {
             OnNameChanged?.Invoke(newValue);
+            gameObject.name = newValue;
         }
     }
 }
