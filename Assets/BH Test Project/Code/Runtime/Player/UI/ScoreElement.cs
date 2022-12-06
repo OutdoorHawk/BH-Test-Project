@@ -10,11 +10,11 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         public bool Active { get; private set; }
 
-        public void ActivateElement(string playerName)
+        public void ActivateElement(string playerName, int score)
         {
             Active = true;
             _nameText.text = playerName;
-            _scoreText.text = "0";
+            _scoreText.text = score.ToString();
             gameObject.SetActive(true);
         }
 
@@ -22,16 +22,6 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         {
             Active = false;
             gameObject.SetActive(false);
-        }
-
-        public void SetName(string playerName)
-        {
-            _nameText.text = playerName;
-        }
-
-        public void SetScore(int score)
-        {
-            _scoreText.text = score.ToString();
         }
     }
 }

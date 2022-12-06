@@ -22,7 +22,6 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
-    [RequireComponent(typeof(PlayerNameComponent))]
     public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private CameraFollow _cameraFollowPrefab;
@@ -35,7 +34,6 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-        private PlayerNameComponent _playerNameComponent;
         private PlayerHUD _playerHUD;
         private IUIFactory _uiFactory;
         private IGameNetworkService _networkService;
@@ -66,7 +64,6 @@ namespace BH_Test_Project.Code.Runtime.Player
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
-            _playerNameComponent = GetComponent<PlayerNameComponent>();
             _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
@@ -75,8 +72,8 @@ namespace BH_Test_Project.Code.Runtime.Player
                 new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId, this,
-                    _playerStaticData);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
+                    _playerGameStatus, this, _playerStaticData);
         }
 
         private void InitSystems()
@@ -87,6 +84,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerStateMachine.Enter<BasicMovementState>();
             _playerHUD.Init(5);
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+            _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
         }
 
         [Command]
@@ -100,7 +98,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (!isOwned)
                 return;
-       
+
             _playerHUD.UpdateScoreTable(profiles);
         }
 
@@ -110,24 +108,30 @@ namespace BH_Test_Project.Code.Runtime.Player
                 _playerStateMachine?.Tick();
         }
 
-        [TargetRpc]
-        public void TargetPlayerHit(uint hitSenderNetId)
+        [Command]
+        private void CmdAskForPlayerHit(NetworkIdentity target)
         {
+            int targetID = target.connectionToClient.connectionId;
+            int senderID = connectionToClient.connectionId;
+            _networkService.AskForPlayerHit(targetID, senderID);
+        }
+
+        [ClientRpc]
+        public void RpcPlayerHit(int senderID)
+        {
+            if (!isOwned)
+                return;
             if (_playerGameStatus.IsHitNow)
                 return;
             _playerStateMachine.Enter<BasicMovementState>();
-            _playerGameStatus.TargetPlayerHit();
-            CmdSuccessHit(hitSenderNetId);
+            _playerGameStatus.PlayerHit();
+            CmdSuccessHit(senderID);
         }
 
         [Command]
-        private void CmdSuccessHit(uint hitSenderNetId)
+        private void CmdSuccessHit(int senderID)
         {
-            PlayerHitSuccessMessage message = new PlayerHitSuccessMessage()
-            {
-                HitSenderNetId = hitSenderNetId
-            };
-            NetworkServer.SendToAll(message);
+           _networkService.SendHitSuccess(senderID);
         }
 
         [TargetRpc]
@@ -163,6 +167,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         private void DisposePlayer()
         {
             _playerHUD.OnDisconnectButtonPressed -= DisconnectFromGame;
+            _playerGameStatus.OnPlayerHit -= CmdAskForPlayerHit;
             _playerStateMachine.CleanUp();
             _playerInput.CleanUp();
         }

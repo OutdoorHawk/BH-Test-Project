@@ -25,5 +25,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
         void StopServer();
         void LoadGameLevel();
         void UpdateScoreTables();
+
+        void AskForPlayerHit(int targetID, int senderID);
+        void SendHitSuccess(int senderID);
     }
 }

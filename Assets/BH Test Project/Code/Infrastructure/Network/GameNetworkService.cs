@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
 using BH_Test_Project.Code.Infrastructure.Services.Network;
@@ -18,9 +19,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public event Action<string> OnRoomClientSceneChangedEvent;
 
         private IPlayerFactory _playerFactory;
-        private List<PlayerProfile> _profiles = new();
-
-        public static Dictionary<int, string> PlayerNames { get; } = new();
+        private readonly List<PlayerProfile> _profiles = new();
 
         public List<NetworkRoomPlayer> PlayersInRoom => roomSlots;
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
@@ -96,6 +95,24 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
+        [Server]
+        public void AskForPlayerHit(int targetID, int senderID)
+        {
+            if (NetworkServer.connections[targetID].identity.TryGetComponent(out PlayerBehavior player))
+                player.RpcPlayerHit(senderID);
+        }
+
+        [Server]
+        public void SendHitSuccess(int senderID)
+        {
+            foreach (var profile in _profiles.Where(profile => profile.ConnectionID == senderID))
+            {
+                profile.IncreasePlayerScore();
+                UpdateScoreTables();
+                return;
+            }
+        }
+
         [Client]
         public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
             bool customHandling)
@@ -133,11 +150,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
 
         private bool NullIdentity(NetworkIdentity identity) => identity == null;
 
-        public override void OnClientDisconnect()
-        {
-            base.OnClientDisconnect();
-            PlayerNames.Clear();
-        }
 
         /*public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
             GameObject roomPlayer)

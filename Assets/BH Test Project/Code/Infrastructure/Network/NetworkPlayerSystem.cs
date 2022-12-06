@@ -25,7 +25,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public void RegisterHandlers()
         {
             //NetworkClient.RegisterHandler<PlayerConnectedMessage>(OnPlayerConnected);
-            NetworkServer.RegisterHandler<PlayerAskHitMessage>(OnPlayerHit);
+         
             NetworkClient.RegisterHandler<PlayerHitSuccessMessage>(OnPlayerHitSucceed);
         }
 
@@ -80,19 +80,15 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             return _players.Any(pl => pl.Name == MSG.PlayerName && pl.NetID == MSG.NetId);
         }
 
-        private void OnPlayerHit(NetworkConnection connection, PlayerAskHitMessage message)
-        {
-            SendPlayerHit(message.HitRecipientNetId, message.HitSenderNetId);
-        }
 
-        private void SendPlayerHit(uint hitRecipientNetId, uint hitSenderNetId)
+        private void SendPlayerHit(uint hitRecipientConnId, int hitSenderConnId)
         {
             foreach (var conn in NetworkServer.connections.Values)
             {
-                if (conn.identity.netId == hitRecipientNetId)
+                if (conn.identity.netId == hitRecipientConnId)
                 {
                     conn.identity.TryGetComponent(out PlayerBehavior playerBehavior);
-                    playerBehavior.TargetPlayerHit(hitSenderNetId);
+                   // playerBehavior.TargetPlayerHit(hitSenderNetId);
                 }
             }
         }
@@ -127,7 +123,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
 
             _playerHUD.EnableEndGamePanel(player.Name);
-            CollectPlayerNames();
             if (isServer)
                 StartCoroutine(RestartGameRoutine());
         }
@@ -141,18 +136,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Command(requiresAuthority = false)]
         private void CmdRestartGame() =>
             NetworkServer.SendToAll(new GameRestartMessage());
-
-        private void CollectPlayerNames()
-        {
-            foreach (var conn in NetworkServer.connections.Values)
-            {
-                if (conn.identity.TryGetComponent(out PlayerNameComponent nameSender))
-                {
-                    if (!GameNetworkService.PlayerNames.ContainsKey(conn.connectionId) &&
-                        nameSender.GetPlayerName() != null)
-                        GameNetworkService.PlayerNames.Add(conn.connectionId, nameSender.GetPlayerName());
-                }
-            }
-        }
+        
     }
 }

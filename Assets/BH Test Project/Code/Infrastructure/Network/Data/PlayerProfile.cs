@@ -1,6 +1,6 @@
 namespace BH_Test_Project.Code.Infrastructure.Network.Data
 {
-    public struct PlayerProfile
+    public class PlayerProfile
     {
         public readonly string PlayerName;
         public readonly int ConnectionID;
@@ -11,6 +11,10 @@ namespace BH_Test_Project.Code.Infrastructure.Network.Data
             PlayerName = playerName;
             Score = 0;
             ConnectionID = connectionID;
+        }
+
+        public PlayerProfile()
+        {
         }
 
         public void IncreasePlayerScore()

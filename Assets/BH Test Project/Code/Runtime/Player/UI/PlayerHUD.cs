@@ -35,7 +35,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
         {
             ClearScoreTable();
             for (var i = 0; i < profiles.Count; i++) 
-                _scoreElements[i].ActivateElement(profiles[i].PlayerName);
+                _scoreElements[i].ActivateElement(profiles[i].PlayerName, profiles[i].Score);
         }
 
         private void ClearScoreTable()
