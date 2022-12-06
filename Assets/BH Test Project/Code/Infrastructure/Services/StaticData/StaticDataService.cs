@@ -47,9 +47,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services.StaticData
         public GameNetworkService GetLobbyNetworkManager() =>
             _gameNetworkService;
 
-        public NetworkPlayerSystem GetPlayerNetworkSystem() =>
-            _data.PlayerSystem;
-
         public PlayerStaticData GetPlayerStaticData() =>
             _playerStaticData;
 

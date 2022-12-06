@@ -10,7 +10,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services
     {
         void CollectSceneContext();
         List<Transform> GetSceneSpawnPoints();
-        NetworkPlayerSystem GetPlayerSystem();
         void SetLobbyMenu(LobbyMenuWindow lobby);
         LobbyMenuWindow GetLobbyMenuWindow();
     }

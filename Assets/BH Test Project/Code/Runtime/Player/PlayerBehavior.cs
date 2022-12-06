@@ -135,8 +135,9 @@ namespace BH_Test_Project.Code.Runtime.Player
         }
 
         [TargetRpc]
-        public void TargetGameEnd()
+        public void TargetGameEnd(string winnerName)
         {
+            _playerHUD.EnableEndGamePanel(winnerName);
             _playerStateMachine.Enter<EndGameState>();
         }
 

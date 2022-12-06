@@ -10,7 +10,6 @@ namespace BH_Test_Project.Code.Infrastructure.StaticData
     {
         [SerializeField] private WindowConfig[] _windows;
         [SerializeField] private GameNetworkService servicePrefab;
-        [SerializeField] private NetworkPlayerSystem _networkPlayerSystem;
         [SerializeField, Header("PlayerStaticData")] private PlayerStaticData _playerStaticData;
         [SerializeField, Header("WorldStaticData")] private WorldStaticData _worldStaticData;
 
@@ -18,6 +17,5 @@ namespace BH_Test_Project.Code.Infrastructure.StaticData
         public GameNetworkService ServicePrefab => servicePrefab;
         public PlayerStaticData PlayerStaticData => _playerStaticData;
         public WorldStaticData WorldStaticData => _worldStaticData;
-        public NetworkPlayerSystem PlayerSystem => _networkPlayerSystem;
     }
 }

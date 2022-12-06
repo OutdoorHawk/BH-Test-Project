@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BH_Test_Project.Code.Infrastructure.Data;
@@ -7,6 +8,7 @@ using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Runtime.Lobby;
 using BH_Test_Project.Code.Runtime.Player;
+using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
 
@@ -18,17 +20,21 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public event Action OnRoomClientEnterEvent;
         public event Action<string> OnRoomClientSceneChangedEvent;
 
-        private IPlayerFactory _playerFactory;
         private readonly List<PlayerProfile> _profiles = new();
+        private IPlayerFactory _playerFactory;
+        private float _gameRestartDelay;
+        private int _endGameScore;
 
         public List<NetworkRoomPlayer> PlayersInRoom => roomSlots;
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
         public GameObject GamePlayerPrefab => playerPrefab;
         public int MinPlayersToStart => minPlayers;
 
-        public void Init(IPlayerFactory playerFactory)
+        public void Init(IPlayerFactory playerFactory, WorldStaticData worldStaticData)
         {
             _playerFactory = playerFactory;
+            _endGameScore = worldStaticData.GameEndScore;
+            _gameRestartDelay = worldStaticData.GameRestartDelay;
         }
 
         public bool CreateLobbyAsHost()
@@ -109,8 +115,35 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             {
                 profile.IncreasePlayerScore();
                 UpdateScoreTables();
+                CheckEndGameConditions(profile);
                 return;
             }
+        }
+
+        [Server]
+        private void CheckEndGameConditions(PlayerProfile profile)
+        {
+            if (profile.Score >= _endGameScore)
+                GameEnd(profile.PlayerName);
+        }
+
+        [Server]
+        private void GameEnd(string winnerName)
+        {
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                    player.TargetGameEnd(winnerName);
+            }
+
+            StartCoroutine(RestartGameRoutine());
+        }
+
+        [Server]
+        private IEnumerator RestartGameRoutine()
+        {
+            yield return new WaitForSeconds(_gameRestartDelay);
+            ServerChangeScene(GameplayScene);
         }
 
         [Client]

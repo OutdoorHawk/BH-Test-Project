@@ -21,8 +21,6 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
         private readonly ISceneLoader _sceneLoader;
         private readonly IGameNetworkService _gameNetworkService;
         private readonly IPlayerFactory _playerFactory;
-        private NetworkPlayerSystem _playerSystem;
-
         public GameLoopState(IStaticDataService staticDataService,
             ISceneContextService sceneContextService, IUIFactory uiFactory, ISceneLoader sceneLoader,
             IGameNetworkService gameNetworkService, IPlayerFactory playerFactory)
@@ -65,18 +63,16 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         private void InitPlayerSystem()
         {
-            _playerSystem = _sceneContextService.GetPlayerSystem();
-            _playerSystem.RegisterHandlers();
             WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
             PlayerStaticData playerStaticData = _staticDataService.GetPlayerStaticData();
-            _playerSystem.Init(worldStaticData, playerStaticData);
+
         }
 
         public void Exit()
         {
             SceneManager.sceneLoaded -= OnLoaded;
             _uiFactory.ClearUIRoot();
-            _playerSystem.UnregisterHandlers();
+
         }
     }
 }
