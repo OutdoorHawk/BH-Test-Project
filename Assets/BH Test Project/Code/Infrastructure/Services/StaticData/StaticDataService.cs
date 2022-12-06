@@ -3,18 +3,16 @@ using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.StaticData;
-using Mirror;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Infrastructure.Services
+namespace BH_Test_Project.Code.Infrastructure.Services.StaticData
 {
     public class StaticDataService : IStaticDataService
     {
         private const string GAME_STATIC_DATA_PATH = "GameStaticData";
 
         private readonly Dictionary<WindowID, WindowConfig> _windows = new();
-        private GameNetworkManager _gameNetworkManager;
-        private NetworkManager _networkManager;
+        private GameNetworkService _gameNetworkService;
         private PlayerStaticData _playerStaticData;
         private WorldStaticData _worldStaticData;
         private GameStaticData _data;
@@ -34,27 +32,25 @@ namespace BH_Test_Project.Code.Infrastructure.Services
                 _windows.Add(window.ID, window);
         }
 
-        private void LoadNetworkManager() => 
-            _gameNetworkManager = _data.ManagerPrefab;
+        private void LoadNetworkManager() =>
+            _gameNetworkService = _data.ServicePrefab;
 
-        private void LoadPlayerStaticData() => 
+        private void LoadPlayerStaticData() =>
             _playerStaticData = _data.PlayerStaticData;
 
-        private void LoadWorldStaticData() => 
+        private void LoadWorldStaticData() =>
             _worldStaticData = _data.WorldStaticData;
 
-        public WindowConfig GetWindow(WindowID id) => 
+        public WindowConfig GetWindow(WindowID id) =>
             _windows.TryGetValue(id, out var windowConfig) ? windowConfig : null;
 
-        public GameNetworkManager GetLobbyNetworkManager() => 
-            _gameNetworkManager;   
-        public NetworkPlayerSystem GetPlayerNetworkSystem() => 
-            _data.PlayerSystem;
+        public GameNetworkService GetLobbyNetworkManager() =>
+            _gameNetworkService;
 
-        public PlayerStaticData GetPlayerStaticData() => 
+        public PlayerStaticData GetPlayerStaticData() =>
             _playerStaticData;
 
-        public WorldStaticData GetWorldStaticData() => 
+        public WorldStaticData GetWorldStaticData() =>
             _worldStaticData;
     }
 }

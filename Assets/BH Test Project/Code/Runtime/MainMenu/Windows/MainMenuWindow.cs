@@ -1,4 +1,6 @@
-using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.StateMachine;
+using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using UnityEngine;
 using UnityEngine.UI;
 using static BH_Test_Project.Code.Infrastructure.Data.Constants;
@@ -13,11 +15,13 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         [SerializeField] private Button _exitGameButton;
         [SerializeField] private EnterIpView _enterIpWindow;
 
-        private GameNetworkManager _gameManager;
+        private IGameNetworkService _networkService;
+        private IGameStateMachine _gameStateMachine;
 
-        public void Init(GameNetworkManager gameManager)
+        public void Init(IGameNetworkService game, IGameStateMachine gameStateMachine)
         {
-            _gameManager = gameManager;
+            _gameStateMachine = gameStateMachine;
+            _networkService = game;
             Subscribe();
         }
 
@@ -31,20 +35,24 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void HostGameClicked()
         {
-            _gameManager.CreateLobbyAsHost();
-            SavePlayerName();
+            if (!_networkService.CreateLobbyAsHost())
+                return;
+            SavePlayerName("Host");
+            _gameStateMachine.Enter<LobbyState>();
         }
 
         private void JoinGameClicked(string networkAddress)
         {
-            _gameManager.JoinLobbyAsClient(networkAddress);
-            SavePlayerName();
+            if (!_networkService.JoinLobbyAsClient(networkAddress))
+                return;
+            SavePlayerName("Client");
+            _gameStateMachine.Enter<LobbyState>();
         }
 
-        private void SavePlayerName()
+        private void SavePlayerName(string namePostfix)
         {
             PlayerPrefs.SetString(PLAYER_NAME,
-                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)}");
+                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)} {namePostfix}");
         }
 
         private void JoinGameClicked()
