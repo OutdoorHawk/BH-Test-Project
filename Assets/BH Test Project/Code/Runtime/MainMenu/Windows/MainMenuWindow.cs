@@ -35,7 +35,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void HostGameClicked()
         {
-            if (!_networkService.CreateLobbyAsHost())
+            if (_networkService.CreateLobbyAsHost())
                 return;
             SavePlayerName("Host");
             _gameStateMachine.Enter<LobbyState>();
@@ -43,7 +43,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
 
         private void JoinGameClicked(string networkAddress)
         {
-            if (!_networkService.JoinLobbyAsClient(networkAddress))
+            if (_networkService.JoinLobbyAsClient(networkAddress))
                 return;
             SavePlayerName("Client");
             _gameStateMachine.Enter<LobbyState>();

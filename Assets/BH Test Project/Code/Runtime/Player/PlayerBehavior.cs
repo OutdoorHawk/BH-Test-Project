@@ -100,7 +100,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (!isOwned)
                 return;
-            Debug.Log(profiles.Count);
+       
             _playerHUD.UpdateScoreTable(profiles);
         }
 

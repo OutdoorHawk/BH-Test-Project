@@ -81,7 +81,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         [Server]
         public void RemovePlayerProfile(int connID)
         {
-            Debug.Log(connID);
             for (int i = 0; i < _profiles.Count; i++)
                 if (_profiles[i].ConnectionID == connID)
                     _profiles.RemoveAt(i);
