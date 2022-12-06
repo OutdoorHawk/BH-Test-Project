@@ -33,8 +33,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
 
         public bool CreateLobbyAsHost()
         {
-            Debug.Log(NetworkServer.active);
-            Debug.Log(NetworkClient.active);
             if (NetworkServer.active)
                 return false;
             StartHost();

@@ -19,6 +19,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
         private IEnumerator _dashRoutine;
         private Vector3 _inputVector;
         private Vector3 _movementVector;
+        private Vector3 _velocity = Vector3.zero;
 
         public PlayerMovement(PlayerStaticData playerStaticData, CharacterController characterController,
             Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
@@ -78,7 +79,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
             _movementVector.y = 0;
 
             if (nextMovementVector != Vector3.zero)
-                _playerTransform.forward = _movementVector;
+                _playerTransform.forward = Vector3.Lerp(_playerTransform.forward, nextMovementVector, Time.deltaTime * 25);
         }
 
         private void LerpToNewMovementVector(Vector3 nextVector)

@@ -26,8 +26,8 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
         private Vector3 _focusPoint;
 
         private float _defaultCameraDistance;
-        private float xRotation;
-        private float yRotation;
+        private float _xRotation;
+        private float _yRotation;
 
         private const float COLLISION_RADIUS = 0.75f;
         private const float CAMERA_MIN_DISTANCE = 0.85f;
@@ -75,12 +75,12 @@ namespace BH_Test_Project.Code.Runtime.CameraLogic
             float mouseX = _mouseAxis.x * _playerStaticData.MouseSensitivity;
             float mouseY = _mouseAxis.y * _playerStaticData.MouseSensitivity;
 
-            yRotation += mouseX;
-            xRotation -= mouseY;
+            _yRotation += mouseX;
+            _xRotation -= mouseY;
 
-            xRotation = Mathf.Clamp(xRotation, _yClamp.x, _yClamp.y);
+            _xRotation = Mathf.Clamp(_xRotation, _yClamp.x, _yClamp.y);
 
-            Vector3 nextRotation = new Vector3(xRotation, yRotation);
+            Vector3 nextRotation = new Vector3(_xRotation, _yRotation);
             _currentRotation =
                 Vector3.SmoothDamp(_currentRotation, nextRotation, ref _smoothVelocity, _smoothTime);
         }
