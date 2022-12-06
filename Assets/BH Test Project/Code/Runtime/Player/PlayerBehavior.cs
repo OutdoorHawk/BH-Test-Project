@@ -90,11 +90,11 @@ namespace BH_Test_Project.Code.Runtime.Player
         [Command]
         private void CmdAskForScoreTableUpdate()
         {
-            _networkService.UpdateScoreTables();
+            _networkService.UpdatePlayersHUD();
         }
 
         [TargetRpc]
-        public void TargetUpdateScoreTable(List<PlayerProfile> profiles)
+        public void TargetUpdateHUD(List<PlayerProfile> profiles)
         {
             _playerHUD.UpdateScoreTable(profiles);
         }
@@ -115,7 +115,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             int targetID = target.connectionToClient.connectionId;
             int senderID = connectionToClient.connectionId;
-            _networkService.AskForPlayerHit(targetID, senderID);
+            _networkService.SendHitToPlayer(targetID, senderID);
         }
 
         [TargetRpc]
@@ -123,6 +123,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (_playerGameStatus.IsHitNow)
                 return;
+            
             _playerStateMachine.Enter<BasicMovementState>();
             _playerGameStatus.PlayerHit();
             CmdSuccessHit(senderID);

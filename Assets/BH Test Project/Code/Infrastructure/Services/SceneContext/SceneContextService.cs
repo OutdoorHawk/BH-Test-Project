@@ -1,20 +1,18 @@
 using System.Collections.Generic;
-using BH_Test_Project.Code.Infrastructure.Network;
 using BH_Test_Project.Code.Runtime.Lobby;
-using BH_Test_Project.Code.Runtime.Player.UI;
 using UnityEngine;
 
-namespace BH_Test_Project.Code.Infrastructure.Services
+namespace BH_Test_Project.Code.Infrastructure.Services.SceneContext
 {
     public class SceneContextService : ISceneContextService
     {
-        private SceneContext.SceneContext _sceneContext;
+        private Services.SceneContext.SceneContext _sceneContext;
         private List<Transform> _spawnPoints;
         private LobbyMenuWindow _lobbyMenuWindow;
 
         public void CollectSceneContext()
         {
-            _sceneContext = Object.FindObjectOfType<SceneContext.SceneContext>(true);
+            _sceneContext = Object.FindObjectOfType<Services.SceneContext.SceneContext>(true);
             CollectSceneSpawnPoints();
         }
 

@@ -21,8 +21,7 @@ MonoBehaviour:
     WindowPrefab: {fileID: 502568323371046962, guid: c13ff1b69c585324e837e57bfecf6807, type: 3}
   - ID: 2
     WindowPrefab: {fileID: 2763079019457763397, guid: 6000b0a6b216feb4081e43f499aa0b28, type: 3}
-  servicePrefab: {fileID: 3657566080650770623, guid: b9797bb3d3123384e83fde9ee6d1767d, type: 3}
-  _networkPlayerSystem: {fileID: 989263431012666123, guid: 4d13b08431acd9c48be43b17ae233f0a, type: 3}
+  servicePrefab: {fileID: 4138934325655322816, guid: b9797bb3d3123384e83fde9ee6d1767d, type: 3}
   _playerStaticData:
     MovementSpeed: 5
     MouseSensitivity: 0.35

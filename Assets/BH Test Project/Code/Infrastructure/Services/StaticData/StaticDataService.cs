@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Network;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
 using BH_Test_Project.Code.Infrastructure.StaticData;
 using BH_Test_Project.Code.StaticData;
 using UnityEngine;

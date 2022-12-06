@@ -23,9 +23,9 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
         void AddPlayerProfile(string playerName, int connID);
         void StopServer();
         void LoadGameLevel();
-        void UpdateScoreTables();
+        void UpdatePlayersHUD();
 
-        void AskForPlayerHit(int targetID, int senderID);
+        void SendHitToPlayer(int targetID, int senderID);
         void SendHitSuccess(int senderID);
     }
 }
