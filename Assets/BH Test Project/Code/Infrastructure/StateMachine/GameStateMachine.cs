@@ -24,10 +24,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine
                     diContainer.Resolve<IGameNetworkService>(), diContainer.Resolve<ISceneLoader>()),
                 [typeof(LobbyState)] = new LobbyState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IGameNetworkService>(), diContainer.Resolve<IPlayerFactory>()),
-                [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<IStaticDataService>(),
-                    diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>(),
-                    diContainer.Resolve<ISceneLoader>(), diContainer.Resolve<IGameNetworkService>(),
-                    diContainer.Resolve<IPlayerFactory>())
+                [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>())
             };
         }
 

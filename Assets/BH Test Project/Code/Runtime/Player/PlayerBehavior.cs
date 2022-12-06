@@ -106,6 +106,11 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (isClient && isLocalPlayer)
                 _playerStateMachine?.Tick();
+            if (isOwned && UnityEngine.Input.GetKeyUp(KeyCode.T) &&
+                _playerStateMachine?.ActiveState is not EndGameState)
+            {
+                CmdSuccessHit(0);
+            }
         }
 
         [Command]
@@ -131,7 +136,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         [Command]
         private void CmdSuccessHit(int senderID)
         {
-           _networkService.SendHitSuccess(senderID);
+            _networkService.SendHitSuccess(senderID);
         }
 
         [TargetRpc]
@@ -151,9 +156,9 @@ namespace BH_Test_Project.Code.Runtime.Player
             _gameStateMachine.Enter<MainMenuState>();
         }
 
-        public override void OnStopClient()
+        [ClientRpc]
+        public void RpcDisconnect()
         {
-            base.OnStopClient();
             if (!isOwned)
                 return;
             _gameStateMachine.Enter<MainMenuState>();

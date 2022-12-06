@@ -48,7 +48,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public bool JoinLobbyAsClient(string address)
         {
             networkAddress = address;
-            if (NetworkClient.active || NetworkServer.active)
+            if (NetworkClient.active)
                 return false;
             StartClient();
             return true;
@@ -59,19 +59,13 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             ServerChangeScene(Constants.GAME_SCENE_NAME);
         }
 
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            NetworkClient.RegisterHandler<GameRestartMessage>(OnGameRestarted);
-        }
-
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
             base.OnServerReady(conn);
             OnServerReadyEvent?.Invoke(conn);
         }
 
-        public override void OnRoomClientEnter() // new client spawned & added to room slot
+        public override void OnRoomClientEnter()
         {
             base.OnRoomClientEnter();
             OnRoomClientEnterEvent?.Invoke();
@@ -81,14 +75,6 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         public void AddPlayerProfile(string playerName, int connID)
         {
             _profiles.Add(new PlayerProfile(playerName, connID));
-        }
-
-        [Server]
-        public void RemovePlayerProfile(int connID)
-        {
-            for (int i = 0; i < _profiles.Count; i++)
-                if (_profiles[i].ConnectionID == connID)
-                    _profiles.RemoveAt(i);
         }
 
         [Server]
@@ -127,31 +113,12 @@ namespace BH_Test_Project.Code.Infrastructure.Network
                 GameEnd(profile.PlayerName);
         }
 
-        [Server]
-        private void GameEnd(string winnerName)
-        {
-            foreach (var conn in NetworkServer.connections.Values)
-            {
-                if (conn.identity.TryGetComponent(out PlayerBehavior player))
-                    player.TargetGameEnd(winnerName);
-            }
-
-            StartCoroutine(RestartGameRoutine());
-        }
-
-        [Server]
-        private IEnumerator RestartGameRoutine()
-        {
-            yield return new WaitForSeconds(_gameRestartDelay);
-            ServerChangeScene(GameplayScene);
-        }
-
         [Client]
         public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
             bool customHandling)
         {
-            base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
             OnRoomClientSceneChangedEvent?.Invoke(newSceneName);
+            base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
         }
 
         [Server]
@@ -169,38 +136,61 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         }
 
         [Server]
-        public override void OnServerDisconnect(NetworkConnectionToClient conn)
+        private void GameEnd(string winnerName)
         {
-            base.OnServerDisconnect(conn);
-            RemovePlayerProfile(conn.connectionId);
-            UpdateScoreTables();
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                    player.TargetGameEnd(winnerName);
+            }
+
+            StartCoroutine(RestartGameRoutine());
         }
 
-        private void OnGameRestarted(GameRestartMessage msg)
+        [Server]
+        private IEnumerator RestartGameRoutine()
         {
-            ServerChangeScene(GameplayScene);
+            yield return new WaitForSeconds(_gameRestartDelay);
+            ResetPlayersScore();
+            ReplaceGamePlayersToRoomPlayers();
+            LoadGameLevel();
+        }
+
+        private void ResetPlayersScore()
+        {
+            foreach (var pr in _profiles)
+                pr.ResetPlayerScore();
+        }
+
+        private void ReplaceGamePlayersToRoomPlayers()
+        {
+            int i = 0;
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                NetworkServer.DestroyPlayerForConnection(conn);
+                NetworkServer.AddPlayerForConnection(conn, roomSlots[i].gameObject);
+                i++;
+            }
         }
 
         private bool NullIdentity(NetworkIdentity identity) => identity == null;
 
-
-        /*public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
-            GameObject roomPlayer)
+        [Server]
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            GameObject player =
-                Instantiate(playerPrefab, GetStartPosition().position, GetStartPosition().rotation);
-            TransferNamesToGameScene(roomPlayer, player);
+            base.OnServerDisconnect(conn);
+            if (conn.identity.TryGetComponent(out PlayerBehavior player))
+                player.RpcDisconnect();
+            RemovePlayerProfile(conn.connectionId);
+            UpdateScoreTables();
+        }
 
-            NetworkServer.ReplacePlayerForConnection(conn, player);
-            return player;
-        }*/
-
-
-        /*private static void TransferNamesToGameScene(GameObject roomPlayer, GameObject player)
+        [Server]
+        private void RemovePlayerProfile(int connID)
         {
-            if (roomPlayer.TryGetComponent(out PlayerNameComponent nameSender) &&
-                player.TryGetComponent(out PlayerNameComponent nameReceiver))
-                nameReceiver.SetPlayerName(nameSender.GetPlayerName());
-        }*/
+            for (int i = 0; i < _profiles.Count; i++)
+                if (_profiles[i].ConnectionID == connID)
+                    _profiles.RemoveAt(i);
+        }
     }
 }
