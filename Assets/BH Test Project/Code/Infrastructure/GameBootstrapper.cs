@@ -15,6 +15,7 @@ namespace BH_Test_Project.Code.Infrastructure
             _gameStateMachine = new GameStateMachine(DIContainer.Container, this);
             _gameStateMachine.Enter<BootstrapState>();
             DontDestroyOnLoad(gameObject);
+            QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 60;
         }
     }

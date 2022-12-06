@@ -33,6 +33,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
 
         private const float MIN_MOVE_VALUE = 0.01f;
         private const float LERP_RATE = 35f;
+        private const float FORWARD_LERP_RATE = 0.4f;
 
         public void UpdateInput(Vector2 movementInput)
         {
@@ -79,12 +80,17 @@ namespace BH_Test_Project.Code.Runtime.Player.Systems
             _movementVector.y = 0;
 
             if (nextMovementVector != Vector3.zero)
-                _playerTransform.forward = Vector3.Lerp(_playerTransform.forward, nextMovementVector, Time.deltaTime * 25);
+                ApplyForwardRotation(nextMovementVector);
         }
 
         private void LerpToNewMovementVector(Vector3 nextVector)
         {
             _movementVector = Vector3.Lerp(_movementVector, nextVector, Time.deltaTime * LERP_RATE);
+        }
+
+        private void ApplyForwardRotation(Vector3 nextMovementVector)
+        {
+            _playerTransform.forward = Vector3.Lerp(_playerTransform.forward, nextMovementVector, FORWARD_LERP_RATE);
         }
 
         private void ApplyMovement()
