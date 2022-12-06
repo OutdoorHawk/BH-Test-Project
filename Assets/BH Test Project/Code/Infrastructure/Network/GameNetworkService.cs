@@ -32,19 +32,21 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             _playerFactory = playerFactory;
         }
 
-        public void CreateLobbyAsHost()
+        public bool CreateLobbyAsHost()
         {
             if (NetworkServer.active)
-                return;
+                return false;
             StartHost();
+            return true;
         }
 
-        public void JoinLobbyAsClient(string address)
+        public bool JoinLobbyAsClient(string address)
         {
             networkAddress = address;
             if (NetworkClient.active || NetworkServer.active)
-                return;
+                return false;
             StartClient();
+            return true;
         }
 
         public void LoadGameLevel()
@@ -71,9 +73,18 @@ namespace BH_Test_Project.Code.Infrastructure.Network
         }
 
         [Server]
-        public void AddPlayerProfile(string playerName)
+        public void AddPlayerProfile(string playerName, int connID)
         {
-            _profiles.Add( new PlayerProfile(playerName));
+            _profiles.Add(new PlayerProfile(playerName, connID));
+        }
+
+        [Server]
+        public void RemovePlayerProfile(int connID)
+        {
+            Debug.Log(connID);
+            for (int i = 0; i < _profiles.Count; i++)
+                if (_profiles[i].ConnectionID == connID)
+                    _profiles.RemoveAt(i);
         }
 
         [Server]
@@ -86,6 +97,7 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             }
         }
 
+        [Client]
         public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
             bool customHandling)
         {
@@ -93,16 +105,26 @@ namespace BH_Test_Project.Code.Infrastructure.Network
             OnRoomClientSceneChangedEvent?.Invoke(newSceneName);
         }
 
+        [Server]
         public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn,
             GameObject roomPlayer)
         {
             return _playerFactory.CreateGamePlayer(conn, playerPrefab).gameObject;
         }
 
+        [Client]
         public override void OnClientSceneChanged()
         {
             NetworkClient.connection.owned.RemoveWhere(NullIdentity);
             base.OnClientSceneChanged();
+        }
+
+        [Server]
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
+        {
+            base.OnServerDisconnect(conn);
+            RemovePlayerProfile(conn.connectionId);
+            UpdateScoreTables();
         }
 
         private void OnGameRestarted(GameRestartMessage msg)

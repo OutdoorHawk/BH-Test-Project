@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 {
     public class PlayerHUD : MonoBehaviour
     {
+        public event Action OnDisconnectButtonPressed;
+        
         [SerializeField] private Transform _layoutParent;
         [SerializeField] private GameObject _endGamePlate;
         [SerializeField] private Text _winPlayerText;
@@ -21,31 +24,33 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private float _restartDelay;
 
-        public void Init(float gameRestartDelay, List<PlayerProfile> profiles)
+        public void Init(float gameRestartDelay)
         {
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
             _disconnectButton.onClick.AddListener(Disconnect);
             _restartDelay = gameRestartDelay;
-            UpdateScoreTable(profiles);
         }
 
-        private void UpdateScoreTable(List<PlayerProfile> profiles)
+        public void UpdateScoreTable(List<PlayerProfile> profiles)
         {
-            for (var i = 0; i < profiles.Count; i++)
-            {
-                var profile = profiles[i];
-                _scoreElements[i].SetName(profile.PlayerName);
-                _scoreElements[i].ActivateElement();
-            }
+            ClearScoreTable();
+            for (var i = 0; i < profiles.Count; i++) 
+                _scoreElements[i].ActivateElement(profiles[i].PlayerName);
+        }
+
+        private void ClearScoreTable()
+        {
+            foreach (var element in _scoreElements)
+                element.DeactivateElement();
         }
 
         public void UpdatePlayerScore(uint netID, int newScore)
         {
             for (var i = 0; i < _scoreElements.Count; i++)
             {
-                var element = _scoreElements[i];
-                if (element.NetId == netID)
-                    element.SetScore(newScore);
+               // var element = _scoreElements[i];
+               // if (element.NetId == netID)
+                 //   element.SetScore(newScore);
             }
         }
 
@@ -69,7 +74,7 @@ namespace BH_Test_Project.Code.Runtime.Player.UI
 
         private void Disconnect()
         {
-            NetworkClient.Disconnect();
+            OnDisconnectButtonPressed?.Invoke();
         }
 
         private void OnDestroy()

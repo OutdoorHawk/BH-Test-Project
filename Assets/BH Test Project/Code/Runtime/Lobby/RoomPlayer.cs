@@ -46,7 +46,7 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         {
             if (!isOwned)
                 return;
-
+            
             InitPlayer();
             CreateLobbyUI();
             Subscribe();
@@ -54,11 +54,11 @@ namespace BH_Test_Project.Code.Runtime.Lobby
         }
 
         [Command]
-        private void CmdAddPlayerProfile( string playerName)
+        private void CmdAddPlayerProfile(string playerName)
         {
-            _gameNetworkService.AddPlayerProfile( playerName);
+            _gameNetworkService.AddPlayerProfile(playerName, connectionToClient.connectionId);
         }
-        
+
         public void RpcUpdatePlayerUI()
         {
             if (!isOwned)
