@@ -12,7 +12,7 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
         public InputAction MouseAxis { get; private set; }
 
         public event Action OnDashPressed;
-        private event Action OnEscapePressed;
+        public event Action OnEscapePressed;
 
         public void Init()
         {
@@ -35,7 +35,8 @@ namespace BH_Test_Project.Code.Runtime.Player.Input
 
         public void EnableDash()
         {
-            _playerInput.Player.Dash.Enable();
+            if (Cursor.lockState == CursorLockMode.Locked) 
+                _playerInput.Player.Dash.Enable();
         }
 
         public void DisableDash()

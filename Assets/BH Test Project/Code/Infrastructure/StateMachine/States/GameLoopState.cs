@@ -2,6 +2,7 @@ using BH_Test_Project.Code.Infrastructure.Services;
 using BH_Test_Project.Code.Infrastructure.Services.SceneContext;
 using BH_Test_Project.Code.Infrastructure.Services.UI;
 using Mirror;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
@@ -19,6 +20,7 @@ namespace BH_Test_Project.Code.Infrastructure.StateMachine.States
 
         public void Enter()
         {
+            Cursor.lockState = CursorLockMode.Locked;
             SceneManager.sceneLoaded += OnLoaded;
         }
 

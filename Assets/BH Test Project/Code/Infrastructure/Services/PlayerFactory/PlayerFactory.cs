@@ -66,7 +66,8 @@ namespace BH_Test_Project.Code.Infrastructure.Services.PlayerFactory
         private void InitSpawnedPlayer(PlayerBehavior spawnedPlayer, NetworkConnectionToClient conn)
         {
             PlayerStaticData staticData = _staticDataService.GetPlayerStaticData();
-            spawnedPlayer.RpcConstruct(staticData);
+            WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
+            spawnedPlayer.RpcConstruct(staticData, worldStaticData);
             spawnedPlayer.RpcInitializePlayer();
         }
     }

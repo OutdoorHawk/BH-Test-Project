@@ -37,7 +37,7 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         {
             if (!_networkService.CreateLobbyAsHost())
                 return;
-            SavePlayerName("Host");
+            SavePlayerName();
             _gameStateMachine.Enter<LobbyState>();
         }
 
@@ -45,14 +45,14 @@ namespace BH_Test_Project.Code.Runtime.MainMenu.Windows
         {
             if (!_networkService.JoinLobbyAsClient(networkAddress))
                 return;
-            SavePlayerName("Client");
+            SavePlayerName();
             _gameStateMachine.Enter<LobbyState>();
         }
 
-        private void SavePlayerName(string namePostfix)
+        private void SavePlayerName()
         {
             PlayerPrefs.SetString(PLAYER_NAME,
-                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)} {namePostfix}");
+                _inputField.text != "" ? _inputField.text : $"Player {Random.Range(0, 99)}");
         }
 
         private void JoinGameClicked()
