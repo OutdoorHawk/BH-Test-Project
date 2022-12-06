@@ -24,15 +24,9 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
             _colorChangeComponent = changeComponent;
         }
 
-        public void NotifyPlayerHit(NetworkIdentity identity)
-        {
-            OnPlayerHit?.Invoke(identity);
-        }
+        public void NotifyPlayerHit(NetworkIdentity identity) => OnPlayerHit?.Invoke(identity);
 
-        public void PlayerHit()
-        {
-            _mono.StartCoroutine(PlayerHitRoutine());
-        }
+        public void PlayerHit() => _mono.StartCoroutine(PlayerHitRoutine());
 
         private IEnumerator PlayerHitRoutine()
         {

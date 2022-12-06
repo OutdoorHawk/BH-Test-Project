@@ -17,14 +17,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Data
         {
         }
 
-        public void IncreasePlayerScore()
-        {
-            Score++;
-        }
+        public void IncreasePlayerScore() => Score++;
 
-        public void ResetPlayerScore()
-        {
-            Score = 0;
-        }
+        public void ResetPlayerScore() => Score = 0;
     }
 }

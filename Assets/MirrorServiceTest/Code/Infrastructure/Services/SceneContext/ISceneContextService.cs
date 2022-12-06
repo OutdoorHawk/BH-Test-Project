@@ -9,7 +9,5 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.SceneContext
     {
         void CollectSceneContext();
         List<Transform> GetSceneSpawnPoints();
-        void SetLobbyMenu(LobbyMenuWindow lobby);
-        LobbyMenuWindow GetLobbyMenuWindow();
     }
 }

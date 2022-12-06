@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 namespace MirrorServiceTest.Code.Runtime.Lobby
 {
-    [RequireComponent(typeof(PlayerNameComponent))]
     public class RoomPlayer : NetworkRoomPlayer
     {
         [SerializeField] private Text _playerNameText;
@@ -22,16 +21,9 @@ namespace MirrorServiceTest.Code.Runtime.Lobby
         private IGameStateMachine _gameStateMachine;
         private IGameNetworkService _gameNetworkService;
 
-        [field: SyncVar(hook = nameof(HandleNameChanged))] public string PlayerName { get; private set; }
+        [field: SyncVar(hook = nameof(HandleNameChanged))] private string PlayerName { get; set; }
         [field: SyncVar(hook = nameof(HandleToggleChanged))] public bool IsReady { get; private set; }
-
-        /*
-    At the moment, I have not found any way to transfer the dependency from the outside. 
-    Since client or target rpc does not allow to transfer complex data. Through custom writer, I also can't serialize complex services. 
-    There are two options left, to get the service from static or 
-    reinitialize all players each time, when a new player is connected. (bool check will be required).
-    https://mirror-networking.gitbook.io/docs/guides/data-types
-      */
+        
 
         [ClientRpc]
         public void RpcConstruct()

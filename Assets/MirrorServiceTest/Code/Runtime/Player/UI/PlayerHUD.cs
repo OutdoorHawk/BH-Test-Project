@@ -65,7 +65,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
             } while (countdown > 0);
         }
 
-        public void SwitchDisconnectButton()
+        private void SwitchDisconnectButton()
         {
             _disconnectButton.gameObject.SetActive(!_disconnectButton.IsActive());
         }

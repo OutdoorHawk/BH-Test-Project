@@ -6,13 +6,13 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.SceneContext
 {
     public class SceneContextService : ISceneContextService
     {
-        private Services.SceneContext.SceneContext _sceneContext;
+        private SceneContext _sceneContext;
         private List<Transform> _spawnPoints;
         private LobbyMenuWindow _lobbyMenuWindow;
 
         public void CollectSceneContext()
         {
-            _sceneContext = Object.FindObjectOfType<Services.SceneContext.SceneContext>(true);
+            _sceneContext = Object.FindObjectOfType<SceneContext>(true);
             CollectSceneSpawnPoints();
         }
 
@@ -26,13 +26,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.SceneContext
             }
         }
 
-        public void SetLobbyMenu(LobbyMenuWindow lobby) => 
-            _lobbyMenuWindow = lobby;
-
         public List<Transform> GetSceneSpawnPoints()
             => _spawnPoints;
-
-        public LobbyMenuWindow GetLobbyMenuWindow() => 
-            _lobbyMenuWindow;
+        
     }
 }

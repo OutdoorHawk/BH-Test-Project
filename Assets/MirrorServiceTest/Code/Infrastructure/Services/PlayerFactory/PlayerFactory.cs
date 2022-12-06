@@ -56,19 +56,19 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.PlayerFactory
         }
 
         [Server]
-        private void RecollectSpawnPoints()
-        {
-            if (_spawnPoints.Count == 0)
-                _spawnPoints = _sceneContextService.GetSceneSpawnPoints();
-        }
-
-        [Server]
         private void InitSpawnedPlayer(PlayerBehavior spawnedPlayer, NetworkConnectionToClient conn)
         {
             PlayerStaticData staticData = _staticDataService.GetPlayerStaticData();
             WorldStaticData worldStaticData = _staticDataService.GetWorldStaticData();
             spawnedPlayer.RpcConstruct(staticData, worldStaticData);
             spawnedPlayer.RpcInitializePlayer();
+        }
+
+        [Server]
+        private void RecollectSpawnPoints()
+        {
+            if (_spawnPoints.Count == 0)
+                _spawnPoints = _sceneContextService.GetSceneSpawnPoints();
         }
     }
 }

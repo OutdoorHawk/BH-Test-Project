@@ -19,7 +19,6 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         private IEnumerator _dashRoutine;
         private Vector3 _inputVector;
         private Vector3 _movementVector;
-        private Vector3 _velocity = Vector3.zero;
 
         public PlayerMovement(PlayerStaticData playerStaticData, CharacterController characterController,
             Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
