@@ -38,10 +38,12 @@ namespace BH_Test_Project.Code.Runtime.Player
         private IUIFactory _uiFactory;
         private IGameNetworkService _networkService;
         private IGameStateMachine _gameStateMachine;
+        private WorldStaticData _worldStaticData;
 
         [ClientRpc]
-        public void RpcConstruct(PlayerStaticData staticData)
+        public void RpcConstruct(PlayerStaticData staticData, WorldStaticData  worldStaticData)
         {
+            _worldStaticData = worldStaticData;
             _playerStaticData = staticData;
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
@@ -82,9 +84,23 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
-            _playerHUD.Init(5);
-            _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+            _playerHUD.Init(_worldStaticData.GameRestartDelay,_playerInput);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
+            _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+        }
+
+        [Command]
+        private void CmdAskForPlayerHit(NetworkIdentity target)
+        {
+            int targetID = target.connectionToClient.connectionId;
+            int senderID = connectionToClient.connectionId;
+            _networkService.SendHitToPlayer(targetID, senderID);
+        }
+
+        private void DisconnectFromGame()
+        {
+            _gameStateMachine.Enter<MainMenuState>();
+            NetworkClient.Disconnect();
         }
 
         [Command]
@@ -101,21 +117,10 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void Update()
         {
-            if (isClient && isLocalPlayer)
-                _playerStateMachine?.Tick();
-            if (isOwned && UnityEngine.Input.GetKeyUp(KeyCode.T) &&
-                _playerStateMachine?.ActiveState is not EndGameState)
-            {
-                CmdSuccessHit(0);
-            }
-        }
+            if (!isOwned)
+                return;
 
-        [Command]
-        private void CmdAskForPlayerHit(NetworkIdentity target)
-        {
-            int targetID = target.connectionToClient.connectionId;
-            int senderID = connectionToClient.connectionId;
-            _networkService.SendHitToPlayer(targetID, senderID);
+            _playerStateMachine?.Tick();
         }
 
         [TargetRpc]
@@ -123,7 +128,7 @@ namespace BH_Test_Project.Code.Runtime.Player
         {
             if (_playerGameStatus.IsHitNow)
                 return;
-            
+
             _playerStateMachine.Enter<BasicMovementState>();
             _playerGameStatus.PlayerHit();
             CmdSuccessHit(senderID);
@@ -142,21 +147,12 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerStateMachine.Enter<EndGameState>();
         }
 
-        private void DisconnectFromGame()
+        public override void OnStopClient()
         {
-            if (isServer)
-                NetworkServer.Shutdown();
-            else
-                NetworkClient.Disconnect();
-
-            _gameStateMachine.Enter<MainMenuState>();
-        }
-
-        [ClientRpc]
-        public void RpcDisconnect()
-        {
+            base.OnStopClient();
             if (!isOwned)
                 return;
+
             _gameStateMachine.Enter<MainMenuState>();
         }
 

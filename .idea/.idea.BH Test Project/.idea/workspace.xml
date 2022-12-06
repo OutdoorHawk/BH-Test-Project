@@ -5,40 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b79017c1-0247-4964-9ec8-4c2ba3351441" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/CustomData.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Data/CustomData.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/Data/PlayerProfile.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/Data/PlayerProfile.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/GameNetworkService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/GameNetworkService.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/Lobby.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Network/Lobby.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/CoroutineRunner.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/CoroutineRunner.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/CoroutineRunner/ICoroutineRunner.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/CoroutineRunner/ICoroutineRunner.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network/IGameNetworkService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network/IGameNetworkService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network/IGameNetworkService.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network/IGameNetworkService.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/IPlayerFactory.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/IPlayerFactory.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/PlayerFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/PlayerFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/PlayerFactory.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/PlayerFactory/PlayerFactory.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneContext.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneContext.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneContext/ISceneContextService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneContext/ISceneContextService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneContext/SceneContextService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneContext/SceneContextService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneLoaderService.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneLoaderService.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneLoaderService/ISceneLoader.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneLoaderService/ISceneLoader.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneLoaderService/SceneLoader.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/SceneLoaderService/SceneLoader.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticData.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticData.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticData/IStaticDataService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticData/IStaticDataService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticData/StaticDataService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/StaticData/StaticDataService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/UI.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/UI.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/UI/UIFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/UI/UIFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/GameStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/BootstrapState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/GameLoopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/GameLoopState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/NetworkDataPayload.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StateMachine/States/NetworkDataPayload.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StaticData/GameStaticData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/StaticData/GameStaticData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/PlayerData.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Lobby/PlayerData.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Network/GameNetworkService.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Prefabs/Network/GameNetworkService.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BH Test Project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network/GameNetworkService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Infrastructure/Services/Network/GameNetworkService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/CameraLogic/CameraFollow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/CameraLogic/CameraFollow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Systems/PlayerMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BH Test Project/Code/Runtime/Player/Systems/PlayerMovement.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +136,7 @@
       <workItem from="1670263133957" duration="8902000" />
       <workItem from="1670311617485" duration="5456000" />
       <workItem from="1670338166501" duration="433000" />
+      <workItem from="1670339743575" duration="5186000" />
     </task>
     <servers />
   </component>

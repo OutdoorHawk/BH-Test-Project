@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using BH_Test_Project.Code.Infrastructure.Data;
 using BH_Test_Project.Code.Infrastructure.Services.PlayerFactory;
 using BH_Test_Project.Code.Runtime.Lobby;
-using BH_Test_Project.Code.Runtime.Player;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
@@ -23,7 +22,6 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
 
         public List<NetworkRoomPlayer> PlayersInRoom => roomSlots;
         public RoomPlayer RoomPlayerPrefab => roomPlayerPrefab as RoomPlayer;
-        public GameObject GamePlayerPrefab => playerPrefab;
         public int MinPlayersToStart => minPlayers;
 
         public void Init(IPlayerFactory playerFactory, WorldStaticData worldStaticData)
@@ -94,15 +92,15 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
         private bool NullIdentity(NetworkIdentity identity) => identity == null;
 
         [Server]
-        public void AddPlayerProfile(string playerName, int connID) => 
+        public void AddPlayerProfile(string playerName, int connID) =>
             _serverScoreSystem.AddProfileToServer(playerName, connID);
 
         [Server]
-        public void UpdatePlayersHUD() => 
+        public void UpdatePlayersHUD() =>
             _serverScoreSystem.SendUpdateHUDRpc();
 
         [Server]
-        public void SendHitToPlayer(int targetID, int senderID) => 
+        public void SendHitToPlayer(int targetID, int senderID) =>
             _serverScoreSystem.SendHitPlayerRpc(targetID, senderID);
 
         [Server]
@@ -144,16 +142,9 @@ namespace BH_Test_Project.Code.Infrastructure.Services.Network
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             base.OnServerDisconnect(conn);
-            SendDisconnectRpcToPlayer(conn);
             _serverScoreSystem.RemovePlayerProfile(conn.connectionId);
             UpdatePlayersHUD();
         }
-
-        [Server]
-        private void SendDisconnectRpcToPlayer(NetworkConnectionToClient conn)
-        {
-            if (conn.identity != null && conn.identity.TryGetComponent(out PlayerBehavior player))
-                player.RpcDisconnect();
-        }
+        
     }
 }

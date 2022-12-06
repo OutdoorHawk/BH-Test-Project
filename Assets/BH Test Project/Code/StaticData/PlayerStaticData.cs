@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BH_Test_Project.Code.StaticData
 {
     [Serializable]
-    public struct PlayerStaticData
+    public class PlayerStaticData
     {
         [Range(0.1f, 30),SyncVar] public float MovementSpeed;
         [Range(0.1f, 10),SyncVar] public float MouseSensitivity;

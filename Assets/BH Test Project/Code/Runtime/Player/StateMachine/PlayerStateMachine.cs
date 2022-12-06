@@ -16,8 +16,7 @@ namespace BH_Test_Project.Code.Runtime.Player.StateMachine
 
         public PlayerStateMachine(PlayerMovement playerMovement, IPlayerInput playerInput,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector,
-            PlayerGameStatus playerGameStatus,
-            MonoBehaviour mono, PlayerStaticData playerStaticData)
+            PlayerGameStatus playerGameStatus, MonoBehaviour mono, PlayerStaticData playerStaticData)
         {
             _states = new Dictionary<Type, ITickableState>
             {
