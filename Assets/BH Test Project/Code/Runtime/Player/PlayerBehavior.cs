@@ -1,11 +1,17 @@
-using BH_Test_Project.Code.Infrastructure.Network;
+using System.Collections.Generic;
+using BH_Test_Project.Code.Infrastructure.DI;
 using BH_Test_Project.Code.Infrastructure.Network.Data;
+using BH_Test_Project.Code.Infrastructure.Services.Network;
+using BH_Test_Project.Code.Infrastructure.Services.UI;
+using BH_Test_Project.Code.Infrastructure.StateMachine;
+using BH_Test_Project.Code.Infrastructure.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Animation;
 using BH_Test_Project.Code.Runtime.CameraLogic;
 using BH_Test_Project.Code.Runtime.Player.Input;
 using BH_Test_Project.Code.Runtime.Player.StateMachine;
 using BH_Test_Project.Code.Runtime.Player.StateMachine.States;
 using BH_Test_Project.Code.Runtime.Player.Systems;
+using BH_Test_Project.Code.Runtime.Player.UI;
 using BH_Test_Project.Code.StaticData;
 using Mirror;
 using UnityEngine;
@@ -16,10 +22,10 @@ namespace BH_Test_Project.Code.Runtime.Player
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
-    [RequireComponent(typeof(PlayerNameComponent))]
     public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private CameraFollow _cameraFollowPrefab;
+        [SerializeField, SyncVar] private PlayerStaticData _playerStaticData;
 
         private CameraFollow _cameraFollow;
         private PlayerInput _playerInput;
@@ -28,20 +34,28 @@ namespace BH_Test_Project.Code.Runtime.Player
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
         private IPlayerStateMachine _playerStateMachine;
-        private PlayerNameComponent _playerNameComponent;
-        private PlayerStaticData _playerStaticData;
+        private PlayerHUD _playerHUD;
+        private IUIFactory _uiFactory;
+        private IGameNetworkService _networkService;
+        private IGameStateMachine _gameStateMachine;
 
-        [TargetRpc]
-        public void TargetInitPlayer(PlayerStaticData staticData)
+        [ClientRpc]
+        public void RpcConstruct(PlayerStaticData staticData)
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            _playerStaticData = staticData;
+            _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
+            _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
+            _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
+        }
+
+        [ClientRpc]
+        public void RpcInitializePlayer()
+        {
             if (!isOwned)
                 return;
-            _playerStaticData = staticData;
             CreateSystems();
             InitSystems();
-            CheckIsPlayerNameValid();
-            CmdAddNewPlayerToScoreTable(netId, _playerNameComponent.GetPlayerName());
+            CmdAskForScoreTableUpdate();
         }
 
         private void CreateSystems()
@@ -50,7 +64,7 @@ namespace BH_Test_Project.Code.Runtime.Player
             CharacterController characterController = GetComponent<CharacterController>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
-            _playerNameComponent = GetComponent<PlayerNameComponent>();
+            _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
@@ -58,8 +72,8 @@ namespace BH_Test_Project.Code.Runtime.Player
                 new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector, netId, this,
-                    _playerStaticData);
+                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
+                    _playerGameStatus, this, _playerStaticData);
         }
 
         private void InitSystems()
@@ -68,63 +82,82 @@ namespace BH_Test_Project.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
-        }
-
-        private void CheckIsPlayerNameValid()
-        {
-            string playerName = _playerNameComponent.GetPlayerName();
-            if (!string.IsNullOrEmpty(playerName))
-            {
-                if (!GameNetworkManager.PlayerNames.ContainsKey(connectionToServer.connectionId))
-                    GameNetworkManager.PlayerNames.Add(connectionToServer.connectionId, playerName);
-            }
-            else
-                playerName = GameNetworkManager.PlayerNames[connectionToServer.connectionId];
-
-            _playerNameComponent.SetPlayerName(playerName);
+            _playerHUD.Init(5);
+            _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+            _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
         }
 
         [Command]
-        private void CmdAddNewPlayerToScoreTable(uint netID, string playerName)
+        private void CmdAskForScoreTableUpdate()
         {
-            PlayerConnectedMessage playerConnectedMessage = new PlayerConnectedMessage()
-            {
-                NetId = netID,
-                PlayerName = $"{playerName}"
-            };
-            NetworkServer.SendToAll(playerConnectedMessage);
+            _networkService.UpdatePlayersHUD();
+        }
+
+        [TargetRpc]
+        public void TargetUpdateHUD(List<PlayerProfile> profiles)
+        {
+            _playerHUD.UpdateScoreTable(profiles);
         }
 
         private void Update()
         {
             if (isClient && isLocalPlayer)
                 _playerStateMachine?.Tick();
-        }
-
-        [TargetRpc]
-        public void TargetPlayerHit(uint hitSenderNetId)
-        {
-            if (_playerGameStatus.IsHitNow)
-                return;
-            _playerStateMachine.Enter<BasicMovementState>();
-            _playerGameStatus.TargetPlayerHit();
-            CmdSuccessHit(hitSenderNetId);
+            if (isOwned && UnityEngine.Input.GetKeyUp(KeyCode.T) &&
+                _playerStateMachine?.ActiveState is not EndGameState)
+            {
+                CmdSuccessHit(0);
+            }
         }
 
         [Command]
-        private void CmdSuccessHit(uint hitSenderNetId)
+        private void CmdAskForPlayerHit(NetworkIdentity target)
         {
-            PlayerHitSuccessMessage message = new PlayerHitSuccessMessage()
-            {
-                HitSenderNetId = hitSenderNetId
-            };
-            NetworkServer.SendToAll(message);
+            int targetID = target.connectionToClient.connectionId;
+            int senderID = connectionToClient.connectionId;
+            _networkService.SendHitToPlayer(targetID, senderID);
         }
 
         [TargetRpc]
-        public void TargetGameEnd()
+        public void TargetPlayerHit(int senderID)
         {
+            if (_playerGameStatus.IsHitNow)
+                return;
+            
+            _playerStateMachine.Enter<BasicMovementState>();
+            _playerGameStatus.PlayerHit();
+            CmdSuccessHit(senderID);
+        }
+
+        [Command]
+        private void CmdSuccessHit(int senderID)
+        {
+            _networkService.SendHitSuccess(senderID);
+        }
+
+        [TargetRpc]
+        public void TargetGameEnd(string winnerName)
+        {
+            _playerHUD.EnableEndGamePanel(winnerName);
             _playerStateMachine.Enter<EndGameState>();
+        }
+
+        private void DisconnectFromGame()
+        {
+            if (isServer)
+                NetworkServer.Shutdown();
+            else
+                NetworkClient.Disconnect();
+
+            _gameStateMachine.Enter<MainMenuState>();
+        }
+
+        [ClientRpc]
+        public void RpcDisconnect()
+        {
+            if (!isOwned)
+                return;
+            _gameStateMachine.Enter<MainMenuState>();
         }
 
         public override void OnStopLocalPlayer()
@@ -135,6 +168,8 @@ namespace BH_Test_Project.Code.Runtime.Player
 
         private void DisposePlayer()
         {
+            _playerHUD.OnDisconnectButtonPressed -= DisconnectFromGame;
+            _playerGameStatus.OnPlayerHit -= CmdAskForPlayerHit;
             _playerStateMachine.CleanUp();
             _playerInput.CleanUp();
         }
