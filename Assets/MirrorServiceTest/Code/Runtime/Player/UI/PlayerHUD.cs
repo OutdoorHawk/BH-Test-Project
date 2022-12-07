@@ -17,7 +17,8 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         [SerializeField] private GameObject _endGamePlate;
         [SerializeField] private Text _winPlayerText;
         [SerializeField] private Text _countDownText;
-        [SerializeField] private Button _disconnectButton;
+        [SerializeField] private GameObject _disconnectPanel;
+        private Button _disconnectButton;
 
         private List<ScoreElement> _scoreElements = new();
         private PlayerInput _playerInput;
@@ -29,9 +30,15 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
             _playerInput = playerInput;
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
             _restartDelay = gameRestartDelay;
-            _disconnectButton.gameObject.SetActive(false);
-            _disconnectButton.onClick.AddListener(Disconnect);
+            InitDisconnectPanel();
             _playerInput.OnEscapePressed += SwitchDisconnectButton;
+        }
+
+        private void InitDisconnectPanel()
+        {
+            _disconnectButton = _disconnectPanel.GetComponentInChildren<Button>(true);
+            _disconnectPanel.gameObject.SetActive(false);
+            _disconnectButton.onClick.AddListener(Disconnect);
         }
 
         public void UpdateScoreTable(List<PlayerProfile> profiles)
@@ -67,7 +74,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
 
         private void SwitchDisconnectButton()
         {
-            _disconnectButton.gameObject.SetActive(!_disconnectButton.IsActive());
+            _disconnectPanel.gameObject.SetActive(!_disconnectPanel.activeInHierarchy);
         }
 
         private void Disconnect()

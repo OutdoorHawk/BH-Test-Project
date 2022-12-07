@@ -24,7 +24,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine
                     new BasicMovementState(this, playerMovement, playerAnimator, playerInput),
                 [typeof(DashState)] = new DashState(this, playerMovement, playerAnimator, playerCollisionDetector,playerGameStatus,
                     mono, playerInput, playerStaticData.DashRechargeTime),
-                [typeof(EndGameState)] = new EndGameState(this, playerInput, playerMovement, playerAnimator)
+                [typeof(EndGameState)] = new EndGameState(playerInput, playerMovement, playerAnimator)
             };
         }
 

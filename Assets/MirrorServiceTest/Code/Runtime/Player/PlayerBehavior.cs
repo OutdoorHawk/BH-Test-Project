@@ -25,7 +25,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
     public class PlayerBehavior : NetworkBehaviour
     {
         [SerializeField] private CameraFollow _cameraFollowPrefab;
-        [SerializeField, SyncVar] private PlayerStaticData _playerStaticData;
+        [SyncVar] private PlayerStaticData _playerStaticData;
 
         private CameraFollow _cameraFollow;
         private PlayerInput _playerInput;
@@ -90,20 +90,6 @@ namespace MirrorServiceTest.Code.Runtime.Player
         }
 
         [Command]
-        private void CmdAskForPlayerHit(NetworkIdentity target)
-        {
-            int targetID = target.connectionToClient.connectionId;
-            int senderID = connectionToClient.connectionId;
-            _networkService.SendHitToPlayer(targetID, senderID);
-        }
-
-        private void DisconnectFromGame()
-        {
-            _gameStateMachine.Enter<MainMenuState>();
-            NetworkClient.Disconnect();
-        }
-
-        [Command]
         private void CmdAskForScoreTableUpdate()
         {
             _networkService.UpdatePlayersHUD();
@@ -121,6 +107,14 @@ namespace MirrorServiceTest.Code.Runtime.Player
                 return;
 
             _playerStateMachine?.Tick();
+        }
+
+        [Command]
+        private void CmdAskForPlayerHit(NetworkIdentity target)
+        {
+            int targetID = target.connectionToClient.connectionId;
+            int senderID = connectionToClient.connectionId;
+            _networkService.SendHitToPlayer(targetID, senderID);
         }
 
         [TargetRpc]
@@ -145,6 +139,12 @@ namespace MirrorServiceTest.Code.Runtime.Player
         {
             _playerHUD.EnableEndGamePanel(winnerName);
             _playerStateMachine.Enter<EndGameState>();
+        }
+
+        private void DisconnectFromGame()
+        {
+            _gameStateMachine.Enter<MainMenuState>();
+            NetworkClient.Disconnect();
         }
 
         public override void OnStopClient()
