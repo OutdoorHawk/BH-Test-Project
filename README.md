@@ -8,5 +8,5 @@ The first player who scored 3 points wins, then, after 5 seconds match is restar
 
 The use of assets containing C# code other than Mirror Networking is not allowed.
 
-The following free assets were used:
+Used assets:
 https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/free-low-poly-human-rpg-character-219979
