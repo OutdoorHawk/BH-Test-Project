@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MirrorServiceTest.Code.StaticData
 {
     [Serializable]
-    public class PlayerStaticData
+    public struct PlayerStaticData
     {
         [Range(0.1f, 30),SyncVar] public float MovementSpeed;
         [Range(0.1f, 10),SyncVar] public float MouseSensitivity;

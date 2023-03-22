@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c61d8894-59cb-4550-86cb-1295f4ee45bf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/Players/RoomPlayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/Players/RoomPlayer.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/StaticData/PlayerStaticData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/StaticData/PlayerStaticData.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,6 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/Constants.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/PlayerProfile.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -89,6 +91,11 @@
       <workItem from="1670396347689" duration="198000" />
       <workItem from="1670396576557" duration="8000" />
       <workItem from="1670396698251" duration="317000" />
+      <workItem from="1670451069447" duration="88000" />
+      <workItem from="1670547090535" duration="50000" />
+      <workItem from="1670700295999" duration="4000" />
+      <workItem from="1670700327851" duration="594000" />
+      <workItem from="1670942142762" duration="152000" />
     </task>
     <servers />
   </component>
