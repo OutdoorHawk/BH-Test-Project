@@ -3,6 +3,7 @@ using Mirror;
 using MirrorServiceTest.Code.Infrastructure.Data;
 using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.Network;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
 using MirrorServiceTest.Code.Infrastructure.StateMachine;
 using MirrorServiceTest.Code.Infrastructure.StateMachine.States;
@@ -38,6 +39,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private IUIFactory _uiFactory;
         private IGameNetworkService _networkService;
         private IGameStateMachine _gameStateMachine;
+        private IRecordingService _recordingService;
         private WorldStaticData _worldStaticData;
 
         [ClientRpc]
@@ -48,6 +50,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
+            _recordingService = DIContainer.Container.Resolve<IRecordingService>();
         }
 
         [ClientRpc]
@@ -87,6 +90,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerHUD.Init(_worldStaticData.GameRestartDelay,_playerInput);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+            _recordingService.SetPlayerRecording(transform);
         }
 
         [Command]

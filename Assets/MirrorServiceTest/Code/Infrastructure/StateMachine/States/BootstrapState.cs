@@ -2,6 +2,7 @@ using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.CoroutineRunner;
 using MirrorServiceTest.Code.Infrastructure.Services.Network;
 using MirrorServiceTest.Code.Infrastructure.Services.PlayerFactory;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneContext;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneLoaderService;
 using MirrorServiceTest.Code.Infrastructure.Services.StaticData;
@@ -15,13 +16,15 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         private readonly IGameStateMachine _gameStateMachine;
         private readonly DIContainer _diContainer;
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly RecordingService _recordingService;
         private IUIFactory _uiFactory;
 
         private GameNetworkService _gameNetworkService;
 
         public BootstrapState(IGameStateMachine gameStateMachine, DIContainer diContainer,
-            ICoroutineRunner coroutineRunner)
+            ICoroutineRunner coroutineRunner, RecordingService recordingService)
         {
+            _recordingService = recordingService;
             _coroutineRunner = coroutineRunner;
             _gameStateMachine = gameStateMachine;
             _diContainer = diContainer;
@@ -37,12 +40,14 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
             BindNetworkManagerService();
             _diContainer.BindSingle(_coroutineRunner);
             _diContainer.BindSingle<ISceneLoader>(new SceneLoader(_coroutineRunner));
+            _diContainer.BindSingle<IRecordingService>(_recordingService);
         }
 
         private void BindFactories()
         {
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
-            _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(_diContainer.Resolve<IStaticDataService>(),_diContainer.Resolve<ISceneContextService>()));
+            _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(_diContainer.Resolve<IStaticDataService>(),
+                _diContainer.Resolve<ISceneContextService>()));
         }
 
         private void BindStaticDataService()

@@ -4,6 +4,7 @@ using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.CoroutineRunner;
 using MirrorServiceTest.Code.Infrastructure.Services.Network;
 using MirrorServiceTest.Code.Infrastructure.Services.PlayerFactory;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneContext;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneLoaderService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
@@ -15,16 +16,17 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine
     {
         private readonly Dictionary<Type, IExitableState> _states;
 
-        public GameStateMachine(DIContainer diContainer, ICoroutineRunner coroutineRunner)
+        public GameStateMachine(DIContainer diContainer, ICoroutineRunner coroutineRunner, RecordingService recordingService)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, diContainer, coroutineRunner),
+                [typeof(BootstrapState)] = new BootstrapState(this, diContainer, coroutineRunner, recordingService),
                 [typeof(MainMenuState)] = new MainMenuState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IGameNetworkService>(), diContainer.Resolve<ISceneLoader>()),
                 [typeof(LobbyState)] = new LobbyState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IGameNetworkService>(), diContainer.Resolve<IPlayerFactory>()),
-                [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<ISceneContextService>(), diContainer.Resolve<IUIFactory>())
+                [typeof(GameLoopState)] = new GameLoopState(diContainer.Resolve<ISceneContextService>(),
+                    diContainer.Resolve<IUIFactory>(), diContainer.Resolve<IRecordingService>())
             };
         }
 
