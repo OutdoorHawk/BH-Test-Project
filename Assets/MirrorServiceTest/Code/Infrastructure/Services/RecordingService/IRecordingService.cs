@@ -1,6 +1,7 @@
 ﻿
 using MirrorServiceTest.Code.Infrastructure.DI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 {
@@ -8,7 +9,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
     {
         void Initialize();
         void SetPlayerRecording(Transform transform);
-        void LoadFrameData(long frame);
+        void SetSlider(Slider timelineSlider);
         void CleanUp();
     }
 }

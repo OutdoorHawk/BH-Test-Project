@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c61d8894-59cb-4550-86cb-1295f4ee45bf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/GameBootstrapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/GameBootstrapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/GameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/GameStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/BootstrapState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/BootstrapState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/GameLoopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/GameLoopState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/PlayerHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/PlayerHUD.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/PlayerHUD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/PlayerHUD.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

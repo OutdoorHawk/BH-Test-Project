@@ -87,7 +87,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
-            _playerHUD.Init(_worldStaticData.GameRestartDelay,_playerInput);
+            _playerHUD.Init(_worldStaticData.GameRestartDelay,_playerInput, _recordingService);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
             _recordingService.SetPlayerRecording(transform);

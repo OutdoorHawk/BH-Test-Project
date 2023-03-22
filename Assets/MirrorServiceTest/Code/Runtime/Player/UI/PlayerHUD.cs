@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MirrorServiceTest.Code.Infrastructure.Data;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Runtime.Player.Input;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         [SerializeField] private Text _winPlayerText;
         [SerializeField] private Text _countDownText;
         [SerializeField] private GameObject _disconnectPanel;
+        [SerializeField] private Slider _timelineSlider;
         private Button _disconnectButton;
 
         private List<ScoreElement> _scoreElements = new();
@@ -25,8 +27,9 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
 
         private float _restartDelay;
 
-        public void Init(float gameRestartDelay, PlayerInput playerInput)
+        public void Init(float gameRestartDelay, PlayerInput playerInput, IRecordingService recordingService)
         {
+            recordingService.SetSlider(_timelineSlider);
             _playerInput = playerInput;
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
             _restartDelay = gameRestartDelay;

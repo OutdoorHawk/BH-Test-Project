@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 {
@@ -9,6 +10,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
         private readonly Dictionary<long, FrameData> _history = new();
 
         private Transform _playerTransform;
+        private Slider _timelineSlider;
         private long _currentFrame;
 
 
@@ -22,12 +24,11 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             _playerTransform = playerTransform;
         }
 
-        public void LoadFrameData(long frame)
+        public void SetSlider(Slider timelineSlider)
         {
-            if (_history.TryGetValue(frame, out FrameData frameData))
-            {
-                _playerTransform.position = frameData.Position;
-            }
+            _timelineSlider = timelineSlider;
+            _timelineSlider.onValueChanged.AddListener(HandleSlider);
+            _timelineSlider.minValue = 1;
         }
 
         private void FixedUpdate()
@@ -35,6 +36,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             if (_currentFrame == 0)
                 return;
             SaveCurrentFrame();
+            _timelineSlider.maxValue = _currentFrame;
             _currentFrame++;
         }
 
@@ -47,6 +49,17 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             _history.Add(_currentFrame, frameData);
         }
 
+        private void HandleSlider(float sliderValue)
+        {
+            LoadFrameData((long)sliderValue);
+        }
+
+        private void LoadFrameData(long frame)
+        {
+            if (_history.TryGetValue(frame, out FrameData frameData))
+                _playerTransform.position = frameData.Position;
+        }
+
         private void WriteAnimation()
         {
         }
@@ -54,6 +67,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
         public void CleanUp()
         {
             _history.Clear();
+            _timelineSlider.onValueChanged.RemoveListener(HandleSlider);
         }
     }
 }
