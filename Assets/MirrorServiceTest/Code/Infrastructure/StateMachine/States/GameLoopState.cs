@@ -25,7 +25,6 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         {
             Cursor.lockState = CursorLockMode.Locked;
             SceneManager.sceneLoaded += OnLoaded;
-            _recordingService.Initialize();
         }
 
         private void OnLoaded(Scene arg0, LoadSceneMode loadSceneMode)
@@ -38,6 +37,7 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
             _uiFactory.ClearUIRoot();
             _sceneContextService.CollectSceneContext();
             NetworkManager.startPositions = _sceneContextService.GetSceneSpawnPoints();
+            _recordingService.Initialize();
         }
 
         public void Exit()

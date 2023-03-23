@@ -20,6 +20,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         [SerializeField] private Text _countDownText;
         [SerializeField] private GameObject _disconnectPanel;
         [SerializeField] private Slider _timelineSlider;
+        [SerializeField] private Button _stopTimeButton;
         private Button _disconnectButton;
 
         private List<ScoreElement> _scoreElements = new();
@@ -35,7 +36,9 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
             _restartDelay = gameRestartDelay;
             InitDisconnectPanel();
             _playerInput.OnEscapePressed += SwitchDisconnectButton;
+            _stopTimeButton.onClick.AddListener(ChangeTimeScale);
         }
+
 
         private void InitDisconnectPanel()
         {
@@ -49,6 +52,11 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
             ClearScoreTable();
             for (var i = 0; i < profiles.Count; i++) 
                 _scoreElements[i].ActivateElement(profiles[i].PlayerName, profiles[i].Score);
+        }
+
+        private void ChangeTimeScale()
+        {
+            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         }
 
         private void ClearScoreTable()
@@ -89,6 +97,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         {
             _playerInput.OnEscapePressed -= SwitchDisconnectButton;
             _disconnectButton.onClick.RemoveListener(Disconnect);
+            _stopTimeButton.onClick.RemoveListener(ChangeTimeScale);
         }
     }
 }

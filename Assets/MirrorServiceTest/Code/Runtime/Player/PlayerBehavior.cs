@@ -43,7 +43,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private WorldStaticData _worldStaticData;
 
         [ClientRpc]
-        public void RpcConstruct(PlayerStaticData staticData, WorldStaticData  worldStaticData)
+        public void RpcConstruct(PlayerStaticData staticData, WorldStaticData worldStaticData)
         {
             _worldStaticData = worldStaticData;
             _playerStaticData = staticData;
@@ -87,10 +87,10 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
-            _playerHUD.Init(_worldStaticData.GameRestartDelay,_playerInput, _recordingService);
+            _playerHUD.Init(_worldStaticData.GameRestartDelay, _playerInput, _recordingService);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
-            _recordingService.SetPlayerRecording(transform);
+            _recordingService.SetPlayerRecording(this);
         }
 
         [Command]
@@ -112,6 +112,12 @@ namespace MirrorServiceTest.Code.Runtime.Player
 
             _playerStateMachine?.Tick();
         }
+
+        public void CmdSetPlayerPosition(FrameData frameData)
+        {
+            GetComponent<NetworkTransform>().CmdTeleport(frameData.Position);
+        }
+
 
         [Command]
         private void CmdAskForPlayerHit(NetworkIdentity target)

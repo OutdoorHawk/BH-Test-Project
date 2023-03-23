@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/GameLoopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/GameLoopState.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/PlayerHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/PlayerHUD.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/PlayerHUD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/PlayerHUD.prefab" afterDir="false" />
@@ -25,6 +26,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/Constants.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/PlayerProfile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Slider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -37,25 +39,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;rider.run.widget.enabled.cache&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Discover.Launch.Via.Unity": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\olegm\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\olegm\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\olegm\\AppData\\Local\\Symbols\\src"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$PROJECT_DIR$/../Builds/BH Test Build/BH Test Project.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="L:\GitHub\Builds\BH Test Build" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="D:\Programs\2021.3.13f1\Editor\Unity.exe" />
+      <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;L:\MyGitHub\Mirror Service Test&quot; -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="L:\MyGitHub\Mirror Service Test" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
@@ -78,10 +94,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="89880">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="89880" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -107,6 +123,7 @@
       <workItem from="1670700295999" duration="4000" />
       <workItem from="1670700327851" duration="594000" />
       <workItem from="1670942142762" duration="152000" />
+      <workItem from="1679594141176" duration="4213000" />
     </task>
     <servers />
   </component>

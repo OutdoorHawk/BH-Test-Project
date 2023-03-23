@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Mirror;
+using MirrorServiceTest.Code.Runtime.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,42 +11,50 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
         //private readonly List<KeyValuePair<long, FrameData>> _history = new();
         private readonly Dictionary<long, FrameData> _history = new();
 
-        private Transform _playerTransform;
+        private PlayerBehavior _playerBehavior;
         private Slider _timelineSlider;
         private long _currentFrame;
-
 
         public void Initialize()
         {
             _currentFrame = 1;
         }
 
-        public void SetPlayerRecording(Transform playerTransform)
+        public void SetPlayerRecording(PlayerBehavior playerTransform)
         {
-            _playerTransform = playerTransform;
+            _playerBehavior = playerTransform;
         }
 
         public void SetSlider(Slider timelineSlider)
         {
             _timelineSlider = timelineSlider;
-            _timelineSlider.onValueChanged.AddListener(HandleSlider);
             _timelineSlider.minValue = 1;
+            _timelineSlider.onValueChanged.AddListener(HandleSlider);
         }
 
         private void FixedUpdate()
         {
-            if (_currentFrame == 0)
+            if (Time.timeScale == 0)
                 return;
+            if (!AllDataInitialized())
+                return;
+
             SaveCurrentFrame();
             _timelineSlider.maxValue = _currentFrame;
+            _timelineSlider.SetValueWithoutNotify(_currentFrame);
             _currentFrame++;
+        }
+        
+        private bool AllDataInitialized()
+        {
+            return _currentFrame != 0 && _playerBehavior != null && _timelineSlider != null;
         }
 
         private void SaveCurrentFrame()
         {
             FrameData frameData = new FrameData
             {
-                Position = _playerTransform.position
+                Position = _playerBehavior.transform.position
             };
             _history.Add(_currentFrame, frameData);
         }
@@ -57,7 +67,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
         private void LoadFrameData(long frame)
         {
             if (_history.TryGetValue(frame, out FrameData frameData))
-                _playerTransform.position = frameData.Position;
+                _playerBehavior.CmdSetPlayerPosition(frameData);
         }
 
         private void WriteAnimation()
