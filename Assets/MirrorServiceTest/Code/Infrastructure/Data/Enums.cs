@@ -5,6 +5,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Data
         MainMenu,
         Lobby,
         PlayerHUD,
-        UiRoot
+        UiRoot,
+        TimeControl
     }
 }

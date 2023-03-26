@@ -9,6 +9,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Input
         InputAction MouseAxis { get; }
         event Action OnDashPressed;
         event Action OnEscapePressed;
+        event Action OnTabPressed;
         void EnableAllInput();
         void EnableDash();
         void DisableDash();

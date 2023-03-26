@@ -26,5 +26,11 @@ namespace MirrorServiceTest.Code.Runtime.Animation
         {
             _animationControlComponent.SetBool(PlayerAnimationParameter.Dash, false);
         }
+
+        public void CleanUp()
+        {
+            _animationControlComponent.CleanUp();
+        }
+        
     }
 }

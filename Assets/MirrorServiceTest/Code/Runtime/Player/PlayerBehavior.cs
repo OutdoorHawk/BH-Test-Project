@@ -14,6 +14,7 @@ using MirrorServiceTest.Code.Runtime.Player.StateMachine;
 using MirrorServiceTest.Code.Runtime.Player.StateMachine.States;
 using MirrorServiceTest.Code.Runtime.Player.Systems;
 using MirrorServiceTest.Code.Runtime.Player.UI;
+using MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu;
 using MirrorServiceTest.Code.StaticData;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private IGameStateMachine _gameStateMachine;
         private WorldStaticData _worldStaticData;
         private IUpdateBehaviourService _updateBehavior;
+        private TimeControlHUD _timeControl;
         public PlayerMovement Movement { get; private set; }
         public IPlayerStateMachine StateMachine { get; private set; }
 
@@ -70,6 +72,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
+            _timeControl = _uiFactory.CreateTimeControl(connectionToClient);
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
@@ -88,6 +91,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _cameraFollow.Init(_playerInput, _playerStaticData, transform, _updateBehavior);
             StateMachine.Enter<BasicMovementState>();
             _playerHUD.Init(_worldStaticData.GameRestartDelay, _playerInput);
+            _timeControl.Init(_playerInput);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
             _updateBehavior.UpdateEvent += Tick;
@@ -182,6 +186,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerGameStatus.OnPlayerHit -= CmdAskForPlayerHit;
             StateMachine.CleanUp();
             _playerInput.CleanUp();
+            _animator.CleanUp();
         }
     }
 }

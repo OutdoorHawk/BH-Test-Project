@@ -13,6 +13,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Input
 
         public event Action OnDashPressed;
         public event Action OnEscapePressed;
+        public event Action OnTabPressed;
 
         public void Init()
         {
@@ -22,6 +23,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Input
 
             _playerInput.Player.Dash.started += (c) => OnDashPressed?.Invoke();
             _playerInput.Player.Escape.started += (c) => OnEscapePressed?.Invoke();
+            _playerInput.Player.Tab.started += (c) => OnTabPressed?.Invoke();
             OnEscapePressed += ChangeCursorLock;
         }
 

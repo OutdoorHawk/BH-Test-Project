@@ -5,20 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c61d8894-59cb-4550-86cb-1295f4ee45bf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UpdateBehavior.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UpdateBehavior/IUpdateBehaviourService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UpdateBehavior/IUpdateBehaviourService.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UpdateBehavior/UpdateBehaviourService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UpdateBehavior/UpdateBehaviourService.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/GameBootstrapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/GameBootstrapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/TimeControlService/ITimeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/TimeControlService/ITimeService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/TimeControlService/TimeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/TimeControlService/TimeService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/GameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/GameStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/BootstrapState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/BootstrapState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/CameraLogic/CameraFollow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/CameraLogic/CameraFollow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/IUIFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/IUIFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/UIFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/UIFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/AnimationControlComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/AnimationControlComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/PlayerAnimator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/PlayerAnimator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/IPlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/IPlayerInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/PlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/PlayerInput.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/BootstrapScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BootstrapScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/TimeControlMenu/TimeControlHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/TimeControlMenu/TimeControlHUD.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.inputactions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/TimeControlMenu.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/TimeControlMenu.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +140,7 @@
       <workItem from="1679594141176" duration="4213000" />
       <workItem from="1679820978576" duration="3692000" />
       <workItem from="1679846233529" duration="570000" />
-      <workItem from="1679851387821" duration="4583000" />
+      <workItem from="1679851387821" duration="5531000" />
     </task>
     <servers />
   </component>

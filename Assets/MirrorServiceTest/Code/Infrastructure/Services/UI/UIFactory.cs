@@ -5,6 +5,7 @@ using MirrorServiceTest.Code.Infrastructure.StaticData;
 using MirrorServiceTest.Code.Runtime.Lobby;
 using MirrorServiceTest.Code.Runtime.MainMenu.Windows;
 using MirrorServiceTest.Code.Runtime.Player.UI;
+using MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu;
 using UnityEngine;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.UI
@@ -40,6 +41,14 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.UI
             WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.PlayerHUD);
             PlayerHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
                 .GetComponent<PlayerHUD>();
+            return window;
+        }
+
+        public TimeControlHUD CreateTimeControl(NetworkConnectionToClient conn)
+        {
+            WindowConfig windowPrefab = _staticDataService.GetWindow(WindowID.TimeControl);
+            TimeControlHUD window = Object.Instantiate(windowPrefab.WindowPrefab, _uiRoot)
+                .GetComponent<TimeControlHUD>();
             return window;
         }
 
