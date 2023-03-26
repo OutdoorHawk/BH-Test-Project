@@ -67,7 +67,8 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
             if (InputMoreThanMinValue())
                 TransformAndUpdateCurrentVector();
             else
-                LerpToNewMovementVector(Vector3.zero);
+                //LerpToNewMovementVector(Vector3.zero);
+                _movementVector = Vector3.zero;
         }
 
         private bool InputMoreThanMinValue() =>
@@ -98,15 +99,17 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         private IEnumerator Dashing()
         {
             Vector3 dashVector = _playerTransform.forward * _playerStaticData.DashDistance;
+            _rigidbody.useGravity = false;
             float distance = dashVector.magnitude;
 
             while (distance > 0)
             {
                 distance -= _playerStaticData.MovementSpeed * Time.fixedDeltaTime;
-                _movementVector = dashVector;
-                yield return new WaitForSeconds(Time.fixedDeltaTime);
+                _movementVector = dashVector.normalized;
+                yield return new WaitForFixedUpdate();
             }
 
+            _rigidbody.useGravity = true;
             _dashRoutine = null;
             OnDashEnded?.Invoke();
         }
@@ -115,6 +118,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         {
             if (_dashRoutine != null)
                 _mono.StopCoroutine(_dashRoutine);
+            _rigidbody.useGravity = true;
         }
     }
 }
