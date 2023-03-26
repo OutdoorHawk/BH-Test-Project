@@ -76,7 +76,6 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
             {
                 if (animationLayers[i].CurrentAnimationClip == null)
                     continue;
-                Debug.Log(animationLayers[i].CurrentAnimationClip.name);
                 string animationName = animationLayers[i].CurrentAnimationClip.name;
                 float animationTimePlayed = animationLayers[i].AnimationTimePlayed;
                 animator.Play(animationName, i, animationTimePlayed);
