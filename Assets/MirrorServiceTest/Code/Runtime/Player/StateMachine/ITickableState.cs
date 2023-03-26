@@ -5,5 +5,6 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine
     public interface ITickableState : IState
     {
         void Tick();
+        void FixedTick();
     }
 }

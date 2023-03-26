@@ -43,7 +43,12 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
 
         public void Tick()
         {
-            _playerMovement.Tick();
+           
+        }
+
+        public void FixedTick()
+        {
+            _playerMovement.ApplyMovement();
         }
 
         private void OnObjectHit(ControllerColliderHit hit)

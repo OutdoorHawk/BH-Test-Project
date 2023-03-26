@@ -10,7 +10,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
     {
         public event Action OnDashEnded;
 
-        private readonly CharacterController _characterController;
+        private readonly Rigidbody _rigidbody;
         private readonly Transform _cameraTransform;
         private readonly Transform _playerTransform;
         private readonly MonoBehaviour _mono;
@@ -20,12 +20,12 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
-        public PlayerMovement(PlayerStaticData playerStaticData, CharacterController characterController,
+        public PlayerMovement(PlayerStaticData playerStaticData, Rigidbody rigidbody,
             Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
         {
             _mono = mono;
             _playerTransform = playerTransform;
-            _characterController = characterController;
+            _rigidbody = rigidbody;
             _playerStaticData = playerStaticData;
             _cameraTransform = cameraFollow.transform;
         }
@@ -37,64 +37,17 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         public void UpdateInput(Vector2 movementInput)
         {
             ReadCurrentInput(movementInput);
-            CalculateMovementVector();
-        }
-
-        public void Tick()
-        {
-            ApplyMovement();
         }
 
         public float GetNormalizedPlayerSpeed()
         {
-            Vector3 velocity = _characterController.velocity;
+            Vector3 velocity = _rigidbody.velocity;
             return new Vector3(velocity.x, 0, velocity.z).normalized.magnitude;
         }
 
-        private void ReadCurrentInput(Vector2 input)
+        public void ApplyMovement()
         {
-            _inputVector.Set(input.x, 0, input.y);
-        }
-
-        private void CalculateMovementVector()
-        {
-            if (InputMoreThanMinValue())
-                ApplyToCurrentMovementVector();
-            else
-                LerpToNewMovementVector(Vector3.zero);
-
-            _movementVector += Physics.gravity;
-        }
-
-        private bool InputMoreThanMinValue() =>
-            _inputVector.sqrMagnitude > MIN_MOVE_VALUE;
-
-        private void ApplyToCurrentMovementVector()
-        {
-            Vector3 transformedVector = _cameraTransform.TransformDirection(_inputVector);
-            Vector3 nextMovementVector = new Vector3(transformedVector.x, 0, transformedVector.z);
-            nextMovementVector.Normalize();
-
-            LerpToNewMovementVector(nextMovementVector);
-            _movementVector.y = 0;
-
-            if (nextMovementVector != Vector3.zero)
-                ApplyForwardRotation(nextMovementVector);
-        }
-
-        private void LerpToNewMovementVector(Vector3 nextVector)
-        {
-            _movementVector = Vector3.Lerp(_movementVector, nextVector, Time.deltaTime * LERP_RATE);
-        }
-
-        private void ApplyForwardRotation(Vector3 nextMovementVector)
-        {
-            _playerTransform.forward = Vector3.Lerp(_playerTransform.forward, nextMovementVector, FORWARD_LERP_RATE);
-        }
-
-        private void ApplyMovement()
-        {
-            _characterController.Move(_movementVector * (Time.deltaTime * _playerStaticData.MovementSpeed));
+            _rigidbody.velocity = _movementVector * _playerStaticData.MovementSpeed;
         }
 
         public void PerformDash()
@@ -104,6 +57,44 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
             _mono.StartCoroutine(_dashRoutine);
         }
 
+        private void ReadCurrentInput(Vector2 input)
+        {
+            _inputVector.Set(input.x, 0, input.y);
+        }
+
+        public void CalculateMovementVector()
+        {
+            if (InputMoreThanMinValue())
+                TransformAndUpdateCurrentVector();
+            else
+                LerpToNewMovementVector(Vector3.zero);
+        }
+
+        private bool InputMoreThanMinValue() =>
+            _inputVector.sqrMagnitude > MIN_MOVE_VALUE;
+
+        private void TransformAndUpdateCurrentVector()
+        {
+            Vector3 transformedVector = _cameraTransform.TransformDirection(_inputVector);
+            Vector3 nextMovementVector = new Vector3(transformedVector.x, 0, transformedVector.z);
+            nextMovementVector.Normalize();
+
+            _movementVector = nextMovementVector;
+
+            if (nextMovementVector != Vector3.zero)
+                ApplyForwardRotation(nextMovementVector);
+        }
+
+        private void LerpToNewMovementVector(Vector3 nextVector)
+        {
+            _movementVector = Vector3.Lerp(_movementVector, nextVector, LERP_RATE);
+        }
+
+        private void ApplyForwardRotation(Vector3 nextMovementVector)
+        {
+            _playerTransform.forward = Vector3.Lerp(_playerTransform.forward, nextMovementVector, FORWARD_LERP_RATE);
+        }
+
         private IEnumerator Dashing()
         {
             Vector3 dashVector = _playerTransform.forward * _playerStaticData.DashDistance;
@@ -111,9 +102,9 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
 
             while (distance > 0)
             {
-                distance -= _playerStaticData.MovementSpeed * Time.deltaTime;
-                LerpToNewMovementVector(dashVector);
-                yield return new WaitForSeconds(Time.deltaTime);
+                distance -= _playerStaticData.MovementSpeed * Time.fixedDeltaTime;
+                _movementVector = dashVector;
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
             _dashRoutine = null;
@@ -122,7 +113,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
 
         public void StopDash()
         {
-            if (_dashRoutine != null) 
+            if (_dashRoutine != null)
                 _mono.StopCoroutine(_dashRoutine);
         }
     }

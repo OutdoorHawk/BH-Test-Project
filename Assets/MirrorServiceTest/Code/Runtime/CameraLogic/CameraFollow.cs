@@ -46,7 +46,7 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
             _cachedTransform = transform;
         }
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
             if (_followTarget == null)
             {
@@ -56,6 +56,16 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
 
             CalculateCameraPosition();
             CalculateCameraRotation();
+        }
+
+        private void LateUpdate()
+        {
+            if (_followTarget == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             ApplyCameraTransformValues();
             CheckCameraCollision();
         }

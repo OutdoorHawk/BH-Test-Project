@@ -66,8 +66,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 
         private void LoadFrameData(long frame)
         {
-            if (_history.TryGetValue(frame, out FrameData frameData))
-                _playerBehavior.CmdSetPlayerPosition(frameData);
+           // if (_history.TryGetValue(frame, out FrameData frameData))
+              //  _playerBehavior.CmdSetPlayerPosition(frameData);
         }
 
         private void WriteAnimation()

@@ -23,16 +23,21 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
             _playerInput.DisableDash();
         }
 
-        public void Exit()
-        {
-        }
-
         public void Tick()
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
             _playerMovement.UpdateInput(currentInput);
-            _playerMovement.Tick();
             _playerAnimator.SetPlayerSpeed(_playerMovement.GetNormalizedPlayerSpeed());
+        }
+
+        public void FixedTick()
+        {
+            _playerMovement.CalculateMovementVector();
+            _playerMovement.ApplyMovement();
+        }
+
+        public void Exit()
+        {
         }
     }
 }

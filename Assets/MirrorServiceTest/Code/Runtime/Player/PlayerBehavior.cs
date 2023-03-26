@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace MirrorServiceTest.Code.Runtime.Player
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
@@ -66,7 +66,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private void CreateSystems()
         {
             Animator animator = GetComponent<Animator>();
-            CharacterController characterController = GetComponent<CharacterController>();
+            Rigidbody rigidbody = GetComponent<Rigidbody>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
@@ -74,7 +74,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement =
-                new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
+                new PlayerMovement(_playerStaticData, rigidbody, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
                 new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
@@ -111,6 +111,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
                 return;
 
             _playerStateMachine?.Tick();
+            _playerStateMachine?.FixedTick();
         }
 
         public void CmdSetPlayerPosition(FrameData frameData)

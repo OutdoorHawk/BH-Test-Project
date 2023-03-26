@@ -30,8 +30,13 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
         {
             Vector2 currentInput = _playerInput.Movement.ReadValue<Vector2>();
             _playerMovement.UpdateInput(currentInput);
-            _playerMovement.Tick();
             _playerAnimator.SetPlayerSpeed(_playerMovement.GetNormalizedPlayerSpeed());
+        }
+
+        public void FixedTick()
+        {
+            _playerMovement.CalculateMovementVector();
+            _playerMovement.ApplyMovement();
         }
 
         private void ActivateDash()
