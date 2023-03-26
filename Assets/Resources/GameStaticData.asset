@@ -25,7 +25,7 @@ MonoBehaviour:
   _playerStaticData:
     MovementSpeed: 5
     MouseSensitivity: 0.35
-    DashDistance: 2.5
+    DashDistance: 5
     DashRechargeTime: 0.75
     HitTime: 3
   _worldStaticData:

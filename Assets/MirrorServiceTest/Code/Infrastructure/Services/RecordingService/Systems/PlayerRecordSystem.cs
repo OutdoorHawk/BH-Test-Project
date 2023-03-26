@@ -33,7 +33,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
             foreach (PlayerRecordedElements player in _players)
                 LoadPlayer(frameData, player);
         }
-
+        
         private void RecordPlayer(FrameRecord frameRecord, PlayerRecordedElements player)
         {
             frameRecord.PlayerFrameRecord.Position = player.PlayerRigidbody.position;
@@ -76,7 +76,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
             {
                 if (animationLayers[i].CurrentAnimationClip == null)
                     continue;
-                string animationName = animationLayers[0].CurrentAnimationClip.name;
+                Debug.Log(animationLayers[i].CurrentAnimationClip.name);
+                string animationName = animationLayers[i].CurrentAnimationClip.name;
                 float animationTimePlayed = animationLayers[i].AnimationTimePlayed;
                 animator.Play(animationName, i, animationTimePlayed);
             }

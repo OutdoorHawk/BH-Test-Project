@@ -1,4 +1,5 @@
-﻿using MirrorServiceTest.Code.Runtime.Player.StateMachine;
+﻿using MirrorServiceTest.Code.Infrastructure.DI;
+using MirrorServiceTest.Code.Runtime.Player.StateMachine;
 using UnityEngine;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
@@ -18,4 +19,5 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
         public AnimationClip CurrentAnimationClip;
         public float AnimationTimePlayed;
     }
+
 }

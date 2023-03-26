@@ -6,12 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c61d8894-59cb-4550-86cb-1295f4ee45bf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/Network/ServerScoreSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/Network/ServerScoreSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/FrameRecord/PlayerFrameRecord.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/FrameRecord/PlayerFrameRecord.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/IRecordingService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/Systems/PlayerRecordSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/Systems/PlayerRecordSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/BootstrapState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/BootstrapState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/GameLoopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/StateMachine/States/GameLoopState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Systems/PlayerMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Systems/PlayerMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,10 +98,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="110204">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="110204" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -130,6 +129,8 @@
       <workItem from="1670942142762" duration="152000" />
       <workItem from="1679594141176" duration="4213000" />
       <workItem from="1679820978576" duration="3692000" />
+      <workItem from="1679846233529" duration="570000" />
+      <workItem from="1679851387821" duration="1234000" />
     </task>
     <servers />
   </component>
@@ -152,63 +153,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs</url>
-          <line>57</line>
-          <properties documentPath="L:\MyGitHub\Mirror Service Test\Assets\MirrorServiceTest\Code\Infrastructure\Services\RecordingService\RecordingService.cs" initialLine="57" containingFunctionPresentation="method 'SaveCurrentFrame'">
-            <startOffsets>
-              <option value="1770" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1814" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs</url>
-          <line>58</line>
-          <properties documentPath="L:\MyGitHub\Mirror Service Test\Assets\MirrorServiceTest\Code\Infrastructure\Services\RecordingService\RecordingService.cs" initialLine="58" containingFunctionPresentation="method 'SaveCurrentFrame'">
-            <startOffsets>
-              <option value="1827" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1878" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs</url>
-          <line>59</line>
-          <properties documentPath="L:\MyGitHub\Mirror Service Test\Assets\MirrorServiceTest\Code\Infrastructure\Services\RecordingService\RecordingService.cs" initialLine="59" containingFunctionPresentation="method 'SaveCurrentFrame'">
-            <startOffsets>
-              <option value="1891" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1932" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/Systems/PlayerRecordSystem.cs</url>
-          <line>48</line>
-          <properties documentPath="L:\MyGitHub\Mirror Service Test\Assets\MirrorServiceTest\Code\Infrastructure\Services\RecordingService\Systems\PlayerRecordSystem.cs" initialLine="47" containingFunctionPresentation="method 'RecordAnimation'">
-            <startOffsets>
-              <option value="2071" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2160" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
