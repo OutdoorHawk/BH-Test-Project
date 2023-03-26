@@ -55,6 +55,11 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine
         {
             ActiveState?.Tick();
         }
+        
+        public void FixedTick()
+        {
+            ActiveState?.FixedTick();
+        }
 
         public void CleanUp()
         {

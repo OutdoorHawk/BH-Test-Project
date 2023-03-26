@@ -1,4 +1,5 @@
 using Mirror;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneContext;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
 using UnityEngine;
@@ -9,10 +10,13 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
     public class GameLoopState : IState
     {
         private readonly ISceneContextService _sceneContextService;
+        private readonly IRecordingService _recordingService;
         private readonly IUIFactory _uiFactory;
 
-        public GameLoopState(ISceneContextService sceneContextService, IUIFactory uiFactory)
+        public GameLoopState(ISceneContextService sceneContextService, IUIFactory uiFactory,
+            IRecordingService recordingService)
         {
+            _recordingService = recordingService;
             _sceneContextService = sceneContextService;
             _uiFactory = uiFactory;
         }
@@ -33,12 +37,14 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
             _uiFactory.ClearUIRoot();
             _sceneContextService.CollectSceneContext();
             NetworkManager.startPositions = _sceneContextService.GetSceneSpawnPoints();
+            _recordingService.Initialize();
         }
 
         public void Exit()
         {
             SceneManager.sceneLoaded -= OnLoaded;
             _uiFactory.ClearUIRoot();
+            _recordingService.CleanUp();
         }
     }
 }

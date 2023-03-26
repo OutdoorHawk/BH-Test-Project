@@ -3,6 +3,7 @@ using Mirror;
 using MirrorServiceTest.Code.Infrastructure.Data;
 using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.Network;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
 using MirrorServiceTest.Code.Infrastructure.StateMachine;
 using MirrorServiceTest.Code.Infrastructure.StateMachine.States;
@@ -18,7 +19,7 @@ using UnityEngine;
 
 namespace MirrorServiceTest.Code.Runtime.Player
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
@@ -38,16 +39,18 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private IUIFactory _uiFactory;
         private IGameNetworkService _networkService;
         private IGameStateMachine _gameStateMachine;
+        private IRecordingService _recordingService;
         private WorldStaticData _worldStaticData;
 
         [ClientRpc]
-        public void RpcConstruct(PlayerStaticData staticData, WorldStaticData  worldStaticData)
+        public void RpcConstruct(PlayerStaticData staticData, WorldStaticData worldStaticData)
         {
             _worldStaticData = worldStaticData;
             _playerStaticData = staticData;
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
+            _recordingService = DIContainer.Container.Resolve<IRecordingService>();
         }
 
         [ClientRpc]
@@ -63,7 +66,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private void CreateSystems()
         {
             Animator animator = GetComponent<Animator>();
-            CharacterController characterController = GetComponent<CharacterController>();
+            Rigidbody rigidbody = GetComponent<Rigidbody>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
@@ -71,7 +74,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             _playerMovement =
-                new PlayerMovement(_playerStaticData, characterController, transform, _cameraFollow, this);
+                new PlayerMovement(_playerStaticData, rigidbody, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             _playerStateMachine =
                 new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
@@ -84,9 +87,10 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
             _playerStateMachine.Enter<BasicMovementState>();
-            _playerHUD.Init(_worldStaticData.GameRestartDelay,_playerInput);
+            _playerHUD.Init(_worldStaticData.GameRestartDelay, _playerInput, _recordingService);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+            _recordingService.SetPlayerRecording(this);
         }
 
         [Command]
@@ -107,7 +111,14 @@ namespace MirrorServiceTest.Code.Runtime.Player
                 return;
 
             _playerStateMachine?.Tick();
+            _playerStateMachine?.FixedTick();
         }
+
+        public void CmdSetPlayerPosition(FrameData frameData)
+        {
+            GetComponent<NetworkTransform>().CmdTeleport(frameData.Position);
+        }
+
 
         [Command]
         private void CmdAskForPlayerHit(NetworkIdentity target)
