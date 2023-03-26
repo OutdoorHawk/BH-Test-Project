@@ -6,6 +6,7 @@ using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneContext;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneLoaderService;
 using MirrorServiceTest.Code.Infrastructure.Services.StaticData;
+using MirrorServiceTest.Code.Infrastructure.Services.TimeControlService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
 using UnityEngine;
 
@@ -35,6 +36,7 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         {
             _diContainer.BindSingle(_gameStateMachine);
             _diContainer.BindSingle<IRecordingService>(_recordingService);
+            _diContainer.BindSingle(new TimeService());
             _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
             BindStaticDataService();
             BindFactories();
