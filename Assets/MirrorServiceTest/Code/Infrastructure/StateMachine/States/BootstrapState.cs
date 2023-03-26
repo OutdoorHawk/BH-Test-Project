@@ -34,13 +34,13 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         private void BindServices()
         {
             _diContainer.BindSingle(_gameStateMachine);
+            _diContainer.BindSingle<IRecordingService>(_recordingService);
             _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
             BindStaticDataService();
             BindFactories();
             BindNetworkManagerService();
             _diContainer.BindSingle(_coroutineRunner);
             _diContainer.BindSingle<ISceneLoader>(new SceneLoader(_coroutineRunner));
-            _diContainer.BindSingle<IRecordingService>(_recordingService);
         }
 
         private void BindFactories()

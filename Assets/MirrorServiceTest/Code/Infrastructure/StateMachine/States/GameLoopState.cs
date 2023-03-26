@@ -37,7 +37,6 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
             _uiFactory.ClearUIRoot();
             _sceneContextService.CollectSceneContext();
             NetworkManager.startPositions = _sceneContextService.GetSceneSpawnPoints();
-            _recordingService.Initialize();
         }
 
         public void Exit()

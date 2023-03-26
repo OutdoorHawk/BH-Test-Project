@@ -9,19 +9,23 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
     public class RecordingService : MonoBehaviour, IRecordingService
     {
         private readonly Dictionary<long, FrameRecord> _history = new();
-
-        private PlayerRecordSystem _playerRecordSystem;
+        private readonly List<PlayerBehavior> _players = new();
+        
+        private readonly PlayerRecordSystem _playerRecordSystem = new();
+        
         private Slider _timelineSlider;
         private long _currentFrame;
 
         public void Initialize()
         {
             _currentFrame = 1;
+            foreach (PlayerBehavior player in _players) 
+                _playerRecordSystem.AddPlayer(player);
         }
 
         public void AddPlayerToRecord(PlayerBehavior playerBehavior)
         {
-            _playerRecordSystem.AddPlayer(playerBehavior);
+            _players.Add(playerBehavior);
         }
 
         public void SetSlider(Slider timelineSlider)

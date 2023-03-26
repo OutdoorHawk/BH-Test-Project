@@ -38,21 +38,25 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
         {
             frameRecord.PlayerFrameRecord.Position = player.PlayerRigidbody.position;
             frameRecord.PlayerFrameRecord.Velocity = player.PlayerRigidbody.velocity;
+            frameRecord.PlayerFrameRecord.Rotation = player.PlayerRigidbody.rotation;
             frameRecord.PlayerFrameRecord.DashRemainingDistance = player.PlayerMovement.DashRemainingDistance;
             frameRecord.PlayerFrameRecord.StateMachineState = player.PlayerStateMachine.ActiveState;
-            RecordAnimation(frameRecord.PlayerFrameRecord.AnimationLayers, player.PlayerAnimator);
+            RecordAnimation(frameRecord, player.PlayerAnimator);
         }
 
-        private void RecordAnimation(AnimationLayers[] animationLayers, Animator animator)
+        private void RecordAnimation(FrameRecord frameRecord, Animator animator)
         {
+            frameRecord.PlayerFrameRecord.AnimationLayers = new AnimationLayers[animator.layerCount];
             for (int i = 0; i < animator.layerCount; i++)
             {
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
                 AnimatorClipInfo[] clipInfos = animator.GetCurrentAnimatorClipInfo(i);
+                if (clipInfos.Length == 0)
+                    continue;
                 AnimationClip clip = clipInfos[0].clip;
                 float time = stateInfo.normalizedTime % 1;
-                animationLayers[i].CurrentAnimationClip = clip;
-                animationLayers[i].AnimationTimePlayed = time;
+                frameRecord.PlayerFrameRecord.AnimationLayers[i].CurrentAnimationClip = clip;
+                frameRecord.PlayerFrameRecord.AnimationLayers[i].AnimationTimePlayed = time;
             }
         }
 
@@ -62,6 +66,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
             LoadAnimation(frameData.PlayerFrameRecord.AnimationLayers, player.PlayerAnimator);
             player.PlayerRigidbody.position = frameData.PlayerFrameRecord.Position;
             player.PlayerRigidbody.velocity = frameData.PlayerFrameRecord.Velocity;
+            player.PlayerRigidbody.rotation = frameData.PlayerFrameRecord.Rotation;
             player.PlayerMovement.DashRemainingDistance = frameData.PlayerFrameRecord.DashRemainingDistance;
         }
 
@@ -69,7 +74,9 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
         {
             for (int i = 0; i < animationLayers.Length; i++)
             {
-                string animationName = animationLayers[i].CurrentAnimationClip.name;
+                if (animationLayers[i].CurrentAnimationClip == null)
+                    continue;
+                string animationName = animationLayers[0].CurrentAnimationClip.name;
                 float animationTimePlayed = animationLayers[i].AnimationTimePlayed;
                 animator.Play(animationName, i, animationTimePlayed);
             }

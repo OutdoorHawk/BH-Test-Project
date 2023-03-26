@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using MirrorServiceTest.Code.Infrastructure.Data;
+using MirrorServiceTest.Code.Infrastructure.DI;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Runtime.Player;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.Network
@@ -26,6 +28,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.Network
         [Server]
         public void SendUpdateHUDRpc()
         {
+            DIContainer.Container.Resolve<IRecordingService>().Initialize();//todo replace in players ready point
             foreach (var conn in NetworkServer.connections.Values)
             {
                 if (conn.identity != null && conn.identity.TryGetComponent(out PlayerBehavior player))
