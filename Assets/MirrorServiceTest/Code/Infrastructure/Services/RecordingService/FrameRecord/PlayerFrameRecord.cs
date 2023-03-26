@@ -9,5 +9,12 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
         public Vector3 Velocity;
         public float DashRemainingDistance;
         public ITickableState StateMachineState;
+        public AnimationLayers[] AnimationLayers;
+    }
+
+    public struct AnimationLayers
+    {
+        public AnimationClip CurrentAnimationClip;
+        public float AnimationTimePlayed;
     }
 }
