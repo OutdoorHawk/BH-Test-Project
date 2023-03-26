@@ -20,6 +20,12 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         private Vector3 _inputVector;
         private Vector3 _movementVector;
 
+        public float DashRemainingDistance { get; set; }
+
+        private const float MIN_MOVE_VALUE = 0.01f;
+        private const float LERP_RATE = 35f;
+        private const float FORWARD_LERP_RATE = 0.4f;
+
         public PlayerMovement(PlayerStaticData playerStaticData, Rigidbody rigidbody,
             Transform playerTransform, CameraFollow cameraFollow, MonoBehaviour mono)
         {
@@ -29,10 +35,6 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
             _playerStaticData = playerStaticData;
             _cameraTransform = cameraFollow.transform;
         }
-
-        private const float MIN_MOVE_VALUE = 0.01f;
-        private const float LERP_RATE = 35f;
-        private const float FORWARD_LERP_RATE = 0.4f;
 
         public void UpdateInput(Vector2 movementInput)
         {
@@ -67,7 +69,6 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
             if (InputMoreThanMinValue())
                 TransformAndUpdateCurrentVector();
             else
-                //LerpToNewMovementVector(Vector3.zero);
                 _movementVector = Vector3.zero;
         }
 
@@ -100,11 +101,11 @@ namespace MirrorServiceTest.Code.Runtime.Player.Systems
         {
             Vector3 dashVector = _playerTransform.forward * _playerStaticData.DashDistance;
             _rigidbody.useGravity = false;
-            float distance = dashVector.magnitude;
+            DashRemainingDistance = dashVector.magnitude;
 
-            while (distance > 0)
+            while (DashRemainingDistance > 0)
             {
-                distance -= _playerStaticData.MovementSpeed * Time.fixedDeltaTime;
+                DashRemainingDistance -= _playerStaticData.MovementSpeed * Time.fixedDeltaTime;
                 _movementVector = dashVector.normalized;
                 yield return new WaitForFixedUpdate();
             }

@@ -9,7 +9,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
     public interface IRecordingService : IService
     {
         void Initialize();
-        void SetPlayerRecording(PlayerBehavior playerBehavior);
+        void AddPlayerToRecord(PlayerBehavior playerBehavior);
         void SetSlider(Slider timelineSlider);
         void CleanUp();
     }

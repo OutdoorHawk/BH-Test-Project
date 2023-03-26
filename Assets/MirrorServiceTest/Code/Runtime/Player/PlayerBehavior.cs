@@ -30,17 +30,16 @@ namespace MirrorServiceTest.Code.Runtime.Player
 
         private CameraFollow _cameraFollow;
         private PlayerInput _playerInput;
-        private PlayerMovement _playerMovement;
         private PlayerAnimator _animator;
         private PlayerCollisionDetector _collisionDetector;
         private PlayerGameStatus _playerGameStatus;
-        private IPlayerStateMachine _playerStateMachine;
         private PlayerHUD _playerHUD;
         private IUIFactory _uiFactory;
         private IGameNetworkService _networkService;
         private IGameStateMachine _gameStateMachine;
-        private IRecordingService _recordingService;
         private WorldStaticData _worldStaticData;
+        public PlayerMovement Movement { get; private set; }
+        public IPlayerStateMachine StateMachine { get; private set; }
 
         [ClientRpc]
         public void RpcConstruct(PlayerStaticData staticData, WorldStaticData worldStaticData)
@@ -50,7 +49,6 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
-            _recordingService = DIContainer.Container.Resolve<IRecordingService>();
         }
 
         [ClientRpc]
@@ -73,11 +71,11 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerInput = new PlayerInput();
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
-            _playerMovement =
+            Movement =
                 new PlayerMovement(_playerStaticData, rigidbody, transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
-            _playerStateMachine =
-                new PlayerStateMachine(_playerMovement, _playerInput, _animator, _collisionDetector,
+            StateMachine =
+                new PlayerStateMachine(Movement, _playerInput, _animator, _collisionDetector,
                     _playerGameStatus, this, _playerStaticData);
         }
 
@@ -86,11 +84,10 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerInput.Init();
             _playerInput.EnableAllInput();
             _cameraFollow.Init(_playerInput, _playerStaticData, transform);
-            _playerStateMachine.Enter<BasicMovementState>();
-            _playerHUD.Init(_worldStaticData.GameRestartDelay, _playerInput, _recordingService);
+            StateMachine.Enter<BasicMovementState>();
+            _playerHUD.Init(_worldStaticData.GameRestartDelay, _playerInput);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
-            _recordingService.SetPlayerRecording(this);
         }
 
         [Command]
@@ -110,15 +107,9 @@ namespace MirrorServiceTest.Code.Runtime.Player
             if (!isOwned)
                 return;
 
-            _playerStateMachine?.Tick();
-            _playerStateMachine?.FixedTick();
+            StateMachine?.Tick();
+            StateMachine?.FixedTick();
         }
-
-        public void CmdSetPlayerPosition(FrameData frameData)
-        {
-            GetComponent<NetworkTransform>().CmdTeleport(frameData.Position);
-        }
-
 
         [Command]
         private void CmdAskForPlayerHit(NetworkIdentity target)
@@ -134,7 +125,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             if (_playerGameStatus.IsHitNow)
                 return;
 
-            _playerStateMachine.Enter<BasicMovementState>();
+            StateMachine.Enter<BasicMovementState>();
             _playerGameStatus.PlayerHit();
             CmdSuccessHit(senderID);
         }
@@ -149,7 +140,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         public void TargetGameEnd(string winnerName)
         {
             _playerHUD.EnableEndGamePanel(winnerName);
-            _playerStateMachine.Enter<EndGameState>();
+            StateMachine.Enter<EndGameState>();
         }
 
         private void DisconnectFromGame()
@@ -177,7 +168,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         {
             _playerHUD.OnDisconnectButtonPressed -= DisconnectFromGame;
             _playerGameStatus.OnPlayerHit -= CmdAskForPlayerHit;
-            _playerStateMachine.CleanUp();
+            StateMachine.CleanUp();
             _playerInput.CleanUp();
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace MirrorServiceTest.Code.Runtime.Player.StateMachine
+﻿using System;
+
+namespace MirrorServiceTest.Code.Runtime.Player.StateMachine
 {
     public interface IPlayerStateMachine
     {

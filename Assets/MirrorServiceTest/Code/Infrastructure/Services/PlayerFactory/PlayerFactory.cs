@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Mirror;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneContext;
 using MirrorServiceTest.Code.Infrastructure.Services.StaticData;
 using MirrorServiceTest.Code.Runtime.Lobby;
@@ -13,10 +14,13 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.PlayerFactory
     {
         private readonly IStaticDataService _staticDataService;
         private readonly ISceneContextService _sceneContextService;
+        private readonly IRecordingService _recordingService;
         private List<Transform> _spawnPoints;
 
-        public PlayerFactory(IStaticDataService staticDataService, ISceneContextService sceneContextService)
+        public PlayerFactory(IStaticDataService staticDataService, ISceneContextService sceneContextService,
+            IRecordingService recordingService)
         {
+            _recordingService = recordingService;
             _staticDataService = staticDataService;
             _sceneContextService = sceneContextService;
         }
@@ -38,6 +42,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.PlayerFactory
             _spawnPoints = _sceneContextService.GetSceneSpawnPoints();
             PlayerBehavior spawnedPlayer = SpawnGamePlayerOnServer(conn, gamePlayer);
             InitSpawnedPlayer(spawnedPlayer, conn);
+            _recordingService.AddPlayerToRecord(spawnedPlayer);
             return spawnedPlayer;
         }
 

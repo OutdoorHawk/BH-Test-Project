@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MirrorServiceTest.Code.Infrastructure.Data;
+using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Runtime.Player.Input;
 using UnityEngine;
@@ -28,9 +29,9 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
 
         private float _restartDelay;
 
-        public void Init(float gameRestartDelay, PlayerInput playerInput, IRecordingService recordingService)
+        public void Init(float gameRestartDelay, PlayerInput playerInput)
         {
-            recordingService.SetSlider(_timelineSlider);
+            DIContainer.Container.Resolve<IRecordingService>().SetSlider(_timelineSlider);
             _playerInput = playerInput;
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
             _restartDelay = gameRestartDelay;

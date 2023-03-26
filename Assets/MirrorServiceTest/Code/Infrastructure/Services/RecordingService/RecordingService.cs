@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Mirror;
+using MirrorServiceTest.Code.Infrastructure.Services.RecordingService.Systems;
 using MirrorServiceTest.Code.Runtime.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,10 +8,9 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 {
     public class RecordingService : MonoBehaviour, IRecordingService
     {
-        //private readonly List<KeyValuePair<long, FrameData>> _history = new();
-        private readonly Dictionary<long, FrameData> _history = new();
+        private readonly Dictionary<long, FrameRecord> _history = new();
 
-        private PlayerBehavior _playerBehavior;
+        private PlayerRecordSystem _playerRecordSystem;
         private Slider _timelineSlider;
         private long _currentFrame;
 
@@ -20,9 +19,9 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             _currentFrame = 1;
         }
 
-        public void SetPlayerRecording(PlayerBehavior playerTransform)
+        public void AddPlayerToRecord(PlayerBehavior playerBehavior)
         {
-            _playerBehavior = playerTransform;
+            _playerRecordSystem.AddPlayer(playerBehavior);
         }
 
         public void SetSlider(Slider timelineSlider)
@@ -44,19 +43,17 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             _timelineSlider.SetValueWithoutNotify(_currentFrame);
             _currentFrame++;
         }
-        
+
         private bool AllDataInitialized()
         {
-            return _currentFrame != 0 && _playerBehavior != null && _timelineSlider != null;
+            return _currentFrame != 0 && _timelineSlider != null;
         }
 
         private void SaveCurrentFrame()
         {
-            FrameData frameData = new FrameData
-            {
-                Position = _playerBehavior.transform.position
-            };
-            _history.Add(_currentFrame, frameData);
+            FrameRecord frameRecord = new FrameRecord();
+            _playerRecordSystem.RecordPlayersData(frameRecord);
+            _history.Add(_currentFrame, frameRecord);
         }
 
         private void HandleSlider(float sliderValue)
@@ -66,12 +63,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 
         private void LoadFrameData(long frame)
         {
-           // if (_history.TryGetValue(frame, out FrameData frameData))
-              //  _playerBehavior.CmdSetPlayerPosition(frameData);
-        }
-
-        private void WriteAnimation()
-        {
+            if (_history.TryGetValue(frame, out FrameRecord frameData))
+                _playerRecordSystem.LoadPlayersData(frameData);
         }
 
         public void CleanUp()

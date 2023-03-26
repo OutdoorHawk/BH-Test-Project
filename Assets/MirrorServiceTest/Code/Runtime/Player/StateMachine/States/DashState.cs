@@ -17,6 +17,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
         private readonly MonoBehaviour _monoBehaviour;
         private readonly float _dashRechargeTime;
         private GameObject _currentGameObject;
+        
         public DashState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector,
             PlayerGameStatus playerGameStatus,

@@ -47,7 +47,7 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         {
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
             _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(_diContainer.Resolve<IStaticDataService>(),
-                _diContainer.Resolve<ISceneContextService>()));
+                _diContainer.Resolve<ISceneContextService>(),_diContainer.Resolve<IRecordingService>()));
         }
 
         private void BindStaticDataService()
