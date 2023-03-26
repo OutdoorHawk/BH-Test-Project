@@ -2,6 +2,7 @@
 {
     public interface IPauseHandler
     {
-        void SetPause();
+        void EnablePause();
+        void DisablePause();
     }
 }

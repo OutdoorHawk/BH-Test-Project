@@ -3,8 +3,8 @@ using Mirror;
 using MirrorServiceTest.Code.Infrastructure.Data;
 using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.Network;
-using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
+using MirrorServiceTest.Code.Infrastructure.Services.UpdateBehavior;
 using MirrorServiceTest.Code.Infrastructure.StateMachine;
 using MirrorServiceTest.Code.Infrastructure.StateMachine.States;
 using MirrorServiceTest.Code.Runtime.Animation;
@@ -38,6 +38,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private IGameNetworkService _networkService;
         private IGameStateMachine _gameStateMachine;
         private WorldStaticData _worldStaticData;
+        private IUpdateBehaviourService _updateBehavior;
         public PlayerMovement Movement { get; private set; }
         public IPlayerStateMachine StateMachine { get; private set; }
 
@@ -49,6 +50,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
+            _updateBehavior = DIContainer.Container.Resolve<IUpdateBehaviourService>();
         }
 
         [ClientRpc]
@@ -83,11 +85,13 @@ namespace MirrorServiceTest.Code.Runtime.Player
         {
             _playerInput.Init();
             _playerInput.EnableAllInput();
-            _cameraFollow.Init(_playerInput, _playerStaticData, transform);
+            _cameraFollow.Init(_playerInput, _playerStaticData, transform, _updateBehavior);
             StateMachine.Enter<BasicMovementState>();
             _playerHUD.Init(_worldStaticData.GameRestartDelay, _playerInput);
             _playerGameStatus.OnPlayerHit += CmdAskForPlayerHit;
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
+            _updateBehavior.UpdateEvent += Tick;
+            _updateBehavior.FixedUpdateEvent += FixedTick;
         }
 
         [Command]
@@ -102,12 +106,18 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerHUD.UpdateScoreTable(profiles);
         }
 
-        private void Update()
+        private void Tick()
         {
             if (!isOwned)
                 return;
 
             StateMachine?.Tick();
+        }
+
+        private void FixedTick()
+        {
+            if (!isOwned)
+                return;
             StateMachine?.FixedTick();
         }
 
@@ -166,6 +176,8 @@ namespace MirrorServiceTest.Code.Runtime.Player
 
         private void DisposePlayer()
         {
+            _updateBehavior.FixedUpdateEvent -= FixedTick;
+            _updateBehavior.UpdateEvent -= Tick;
             _playerHUD.OnDisconnectButtonPressed -= DisconnectFromGame;
             _playerGameStatus.OnPlayerHit -= CmdAskForPlayerHit;
             StateMachine.CleanUp();

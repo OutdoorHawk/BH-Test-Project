@@ -8,6 +8,7 @@ using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneContext;
 using MirrorServiceTest.Code.Infrastructure.Services.SceneLoaderService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
+using MirrorServiceTest.Code.Infrastructure.Services.UpdateBehavior;
 using MirrorServiceTest.Code.Infrastructure.StateMachine.States;
 
 namespace MirrorServiceTest.Code.Infrastructure.StateMachine
@@ -16,11 +17,12 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine
     {
         private readonly Dictionary<Type, IExitableState> _states;
 
-        public GameStateMachine(DIContainer diContainer, ICoroutineRunner coroutineRunner, RecordingService recordingService)
+        public GameStateMachine(DIContainer diContainer, ICoroutineRunner coroutineRunner, RecordingService recordingService,
+            UpdateBehaviourService updateBehavior)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, diContainer, coroutineRunner, recordingService),
+                [typeof(BootstrapState)] = new BootstrapState(this, diContainer, coroutineRunner, recordingService,updateBehavior),
                 [typeof(MainMenuState)] = new MainMenuState(this, diContainer.Resolve<IUIFactory>(),
                     diContainer.Resolve<IGameNetworkService>(), diContainer.Resolve<ISceneLoader>()),
                 [typeof(LobbyState)] = new LobbyState(this, diContainer.Resolve<IUIFactory>(),

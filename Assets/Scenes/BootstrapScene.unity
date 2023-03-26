@@ -423,6 +423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1664646707}
   - component: {fileID: 1664646706}
+  - component: {fileID: 1664646708}
   m_Layer: 0
   m_Name: GameBootstrapper
   m_TagString: Untagged
@@ -443,6 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _recordingService: {fileID: 1279999207}
+  _updateBehaviourService: {fileID: 1664646708}
 --- !u!4 &1664646707
 Transform:
   m_ObjectHideFlags: 0
@@ -458,3 +460,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1664646708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664646705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94d5e2643693b92438bfc55eb97d4aff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

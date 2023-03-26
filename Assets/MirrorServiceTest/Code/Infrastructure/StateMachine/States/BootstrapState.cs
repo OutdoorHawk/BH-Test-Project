@@ -8,6 +8,7 @@ using MirrorServiceTest.Code.Infrastructure.Services.SceneLoaderService;
 using MirrorServiceTest.Code.Infrastructure.Services.StaticData;
 using MirrorServiceTest.Code.Infrastructure.Services.TimeControlService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
+using MirrorServiceTest.Code.Infrastructure.Services.UpdateBehavior;
 using UnityEngine;
 
 namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
@@ -18,13 +19,15 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         private readonly DIContainer _diContainer;
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly RecordingService _recordingService;
+        private readonly UpdateBehaviourService _updateBehaviour;
         private IUIFactory _uiFactory;
 
         private GameNetworkService _gameNetworkService;
 
         public BootstrapState(IGameStateMachine gameStateMachine, DIContainer diContainer,
-            ICoroutineRunner coroutineRunner, RecordingService recordingService)
+            ICoroutineRunner coroutineRunner, RecordingService recordingService, UpdateBehaviourService updateBehaviour)
         {
+            _updateBehaviour = updateBehaviour;
             _recordingService = recordingService;
             _coroutineRunner = coroutineRunner;
             _gameStateMachine = gameStateMachine;
@@ -37,6 +40,8 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
             _diContainer.BindSingle(_gameStateMachine);
             _diContainer.BindSingle<IRecordingService>(_recordingService);
             _diContainer.BindSingle(new TimeService());
+            _diContainer.BindSingle<IUpdateBehaviourService>(_updateBehaviour);
+            _updateBehaviour.Construct(_diContainer.Resolve<TimeService>());
             _diContainer.BindSingle<ISceneContextService>(new SceneContextService());
             BindStaticDataService();
             BindFactories();
@@ -49,7 +54,7 @@ namespace MirrorServiceTest.Code.Infrastructure.StateMachine.States
         {
             _diContainer.BindSingle<IUIFactory>(new UIFactory(_diContainer.Resolve<IStaticDataService>()));
             _diContainer.BindSingle<IPlayerFactory>(new PlayerFactory(_diContainer.Resolve<IStaticDataService>(),
-                _diContainer.Resolve<ISceneContextService>(),_diContainer.Resolve<IRecordingService>()));
+                _diContainer.Resolve<ISceneContextService>(), _diContainer.Resolve<IRecordingService>()));
         }
 
         private void BindStaticDataService()

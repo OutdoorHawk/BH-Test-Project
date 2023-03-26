@@ -1,3 +1,5 @@
+using System;
+using MirrorServiceTest.Code.Infrastructure.Services.UpdateBehavior;
 using MirrorServiceTest.Code.Runtime.Player.Input;
 using MirrorServiceTest.Code.StaticData;
 using UnityEngine;
@@ -28,6 +30,7 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
         private float _defaultCameraDistance;
         private float _xRotation;
         private float _yRotation;
+        private IUpdateBehaviourService _updateBehaviour;
 
         private const float COLLISION_RADIUS = 0.75f;
         private const float CAMERA_MIN_DISTANCE = 0.85f;
@@ -38,27 +41,19 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
             _defaultCameraDistance = _cameraDistance;
         }
 
-        public void Init(IPlayerInput playerInput, PlayerStaticData playerStaticData, Transform target)
+        public void Init(IPlayerInput playerInput, PlayerStaticData playerStaticData, Transform target,
+            IUpdateBehaviourService updateBehaviourService)
         {
+            _updateBehaviour = updateBehaviourService;
             _playerStaticData = playerStaticData;
             _playerInput = playerInput;
             _followTarget = target;
             _cachedTransform = transform;
+            _updateBehaviour.LateUpdateEvent += LateTick;
+            _updateBehaviour.FixedUpdateEvent += FixedTick;
         }
 
-        private void FixedUpdate()
-        {
-            if (_followTarget == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            CalculateCameraPosition();
-            CalculateCameraRotation();
-        }
-
-        private void LateUpdate()
+        private void LateTick()
         {
             if (_followTarget == null)
             {
@@ -68,6 +63,18 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
 
             ApplyCameraTransformValues();
             CheckCameraCollision();
+        }
+
+        private void FixedTick()
+        {
+            if (_followTarget == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            CalculateCameraPosition();
+            CalculateCameraRotation();
         }
 
         private void CalculateCameraPosition()
@@ -113,6 +120,12 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
             }
             else
                 _cameraDistance = _defaultCameraDistance;
+        }
+
+        private void OnDestroy()
+        {
+            _updateBehaviour.LateUpdateEvent -= LateTick;
+            _updateBehaviour.FixedUpdateEvent -= FixedTick;
         }
     }
 }
