@@ -23,18 +23,15 @@ namespace MirrorServiceTest.Code.Runtime.Lobby
 
         [field: SyncVar(hook = nameof(HandleNameChanged))] private string PlayerName { get; set; }
         [field: SyncVar(hook = nameof(HandleToggleChanged))] public bool IsReady { get; private set; }
-        
 
-        [ClientRpc]
-        public void RpcConstruct()
+        public void Construct()
         {
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
             _uiFactory = DIContainer.Container.Resolve<IUIFactory>();
             _gameNetworkService = DIContainer.Container.Resolve<IGameNetworkService>();
         }
-
-        [ClientRpc]
-        public void RpcInitializePlayer()
+        
+        public void InitializePlayer()
         {
             if (!isOwned)
                 return;

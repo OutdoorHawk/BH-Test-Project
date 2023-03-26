@@ -27,8 +27,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.PlayerFactory
             RoomPlayer spawnedPlayer = Object.Instantiate(roomPlayer);
             NetworkServer.AddPlayerForConnection(conn, spawnedPlayer.gameObject);
             spawnedPlayer.netIdentity.AssignClientAuthority(conn);
-            spawnedPlayer.RpcConstruct();
-            spawnedPlayer.RpcInitializePlayer();
+            spawnedPlayer.Construct();
+            spawnedPlayer.InitializePlayer();
             return spawnedPlayer;
         }
 
