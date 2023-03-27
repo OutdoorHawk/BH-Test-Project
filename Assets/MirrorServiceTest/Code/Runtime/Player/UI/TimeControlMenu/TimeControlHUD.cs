@@ -26,6 +26,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
             _timeService = DIContainer.Container.Resolve<TimeService>();
             _pauseButton.onClick.AddListener(EnablePause);
             _playButton.onClick.AddListener(DisablePause);
+            _playButton.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
 
@@ -50,7 +51,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
 
         private void DisablePause()
         {
-            if (!_timeService.IsPaused) 
+            if (_timeService.IsPaused) 
                 _timeService.DisablePause();
             _playButton.gameObject.SetActive(false);
             _pauseButton.gameObject.SetActive(true);

@@ -37,7 +37,6 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
         private void RecordPlayer(FrameRecord frameRecord, PlayerRecordedElements player)
         {
             frameRecord.PlayerFrameRecord.Position = player.PlayerRigidbody.position;
-            frameRecord.PlayerFrameRecord.Velocity = player.PlayerRigidbody.velocity;
             frameRecord.PlayerFrameRecord.Rotation = player.PlayerRigidbody.rotation;
             frameRecord.PlayerFrameRecord.DashRemainingDistance = player.PlayerMovement.DashRemainingDistance;
             frameRecord.PlayerFrameRecord.StateMachineState = player.PlayerStateMachine.ActiveState;
@@ -65,7 +64,6 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.System
             LoadStateMachineState(frameData, player.PlayerStateMachine);
             LoadAnimation(frameData.PlayerFrameRecord.AnimationLayers, player.PlayerAnimator);
             player.PlayerRigidbody.position = frameData.PlayerFrameRecord.Position;
-            player.PlayerRigidbody.velocity = frameData.PlayerFrameRecord.Velocity;
             player.PlayerRigidbody.rotation = frameData.PlayerFrameRecord.Rotation;
             player.PlayerMovement.DashRemainingDistance = frameData.PlayerFrameRecord.DashRemainingDistance;
         }

@@ -7,7 +7,6 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
     public struct PlayerFrameRecord
     {
         public Vector3 Position;
-        public Vector3 Velocity;
         public Quaternion Rotation;
         public float DashRemainingDistance;
         public ITickableState StateMachineState;

@@ -3,6 +3,7 @@ using Mirror;
 using MirrorServiceTest.Code.Infrastructure.Data;
 using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.Network;
+using MirrorServiceTest.Code.Infrastructure.Services.TimeControlService;
 using MirrorServiceTest.Code.Infrastructure.Services.UI;
 using MirrorServiceTest.Code.Infrastructure.Services.UpdateBehavior;
 using MirrorServiceTest.Code.Infrastructure.StateMachine;
@@ -24,7 +25,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerCollisionDetector))]
     [RequireComponent(typeof(ColorChangeComponent))]
-    public class PlayerBehavior : NetworkBehaviour
+    public class PlayerBehavior : NetworkBehaviour, IPauseHandler
     {
         [SerializeField] private CameraFollow _cameraFollowPrefab;
         [SyncVar] private PlayerStaticData _playerStaticData;
@@ -40,7 +41,9 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private IGameStateMachine _gameStateMachine;
         private WorldStaticData _worldStaticData;
         private IUpdateBehaviourService _updateBehavior;
-        
+        private Rigidbody _rigidBody;
+        private TimeService _timeService;
+
         public TimeControlHUD TimeControl { get; private set; }
         public PlayerMovement Movement { get; private set; }
         public IPlayerStateMachine StateMachine { get; private set; }
@@ -54,6 +57,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _networkService = DIContainer.Container.Resolve<IGameNetworkService>();
             _gameStateMachine = DIContainer.Container.Resolve<IGameStateMachine>();
             _updateBehavior = DIContainer.Container.Resolve<IUpdateBehaviourService>();
+            _timeService = DIContainer.Container.Resolve<TimeService>();
         }
 
         [ClientRpc]
@@ -69,8 +73,8 @@ namespace MirrorServiceTest.Code.Runtime.Player
         private void CreateSystems()
         {
             Animator animator = GetComponent<Animator>();
-            Rigidbody rigidbody = GetComponent<Rigidbody>();
             ColorChangeComponent changeComponent = GetComponent<ColorChangeComponent>();
+            _rigidBody = GetComponent<Rigidbody>();
             _collisionDetector = GetComponent<PlayerCollisionDetector>();
             _playerHUD = _uiFactory.CreatePlayerHUD(connectionToClient);
             TimeControl = _uiFactory.CreateTimeControl(connectionToClient);
@@ -78,7 +82,7 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _animator = new PlayerAnimator(animator);
             _cameraFollow = Instantiate(_cameraFollowPrefab);
             Movement =
-                new PlayerMovement(_playerStaticData, rigidbody, transform, _cameraFollow, this);
+                new PlayerMovement(_playerStaticData, GetComponent<Rigidbody>(), transform, _cameraFollow, this);
             _playerGameStatus = new PlayerGameStatus(_playerStaticData, this, changeComponent);
             StateMachine =
                 new PlayerStateMachine(Movement, _playerInput, _animator, _collisionDetector,
@@ -97,6 +101,16 @@ namespace MirrorServiceTest.Code.Runtime.Player
             _playerHUD.OnDisconnectButtonPressed += DisconnectFromGame;
             _updateBehavior.UpdateEvent += Tick;
             _updateBehavior.FixedUpdateEvent += FixedTick;
+        }
+
+        public void EnablePause()
+        {
+            _rigidBody.velocity = Vector3.zero;
+        }
+
+        public void DisablePause()
+        {
+           
         }
 
         [Command]

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateMachine
 {
-    public class RecordState : ITickableState
+    public class SaveRecordState : ITickableState
     {
         private readonly Dictionary<long, FrameRecord> _history;
         private readonly RecordingStateMachine _recordingStateMachine;
@@ -16,7 +16,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
 
         private long _lastRecordedFrame;
 
-        public RecordState(RecordingStateMachine recordingStateMachine, PlayerRecordSystem playerRecordSystem,
+        public SaveRecordState(RecordingStateMachine recordingStateMachine, PlayerRecordSystem playerRecordSystem,
             Dictionary<long, FrameRecord> history,
             TimeControlHUD timeControlHUD)
         {
@@ -30,12 +30,13 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
 
         public void Enter()
         {
-            _timeLineSlider.onValueChanged.AddListener(HandleSlider);
+            _timeControlHUD.OnPausePressed += StopRecord;
+            _timeLineSlider.interactable = false;
         }
 
-        private void HandleSlider(float newValue)
+        private void StopRecord()
         {
-            
+            _recordingStateMachine.Enter<LoadRecordState>();
         }
 
         public void FixedTick()
@@ -59,7 +60,8 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
 
         public void Exit()
         {
-            _timeLineSlider.onValueChanged.RemoveListener(HandleSlider);
+            _timeLineSlider.interactable = true;
+            _timeControlHUD.OnPausePressed -= StopRecord;
         }
     }
 }

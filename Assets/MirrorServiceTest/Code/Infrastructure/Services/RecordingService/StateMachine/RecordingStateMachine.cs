@@ -16,9 +16,9 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
         {
             _states = new Dictionary<Type, ITickableState>
             {
-                [typeof(RecordState)] = new RecordState(this, playerRecordSystem, frameRecords, timeControlHUD),
+                [typeof(SaveRecordState)] = new SaveRecordState(this, playerRecordSystem, frameRecords, timeControlHUD),
                 [typeof(LoadRecordState)] = new LoadRecordState(this, playerRecordSystem, frameRecords, timeControlHUD),
-                [typeof(NoRecordState)] = new NoRecordState(this),
+                [typeof(NoRecordState)] = new NoRecordState(this, timeControlHUD),
             };
         }
 

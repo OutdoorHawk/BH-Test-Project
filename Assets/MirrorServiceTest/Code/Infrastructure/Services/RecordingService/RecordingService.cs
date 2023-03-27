@@ -28,7 +28,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             foreach (PlayerBehavior player in _players)
                 _playerRecordSystem.AddPlayer(player);
             _recordingStateMachine = new RecordingStateMachine(_playerRecordSystem, _history, _players[0].TimeControl);
-            _recordingStateMachine.Enter<RecordState>();
+            _recordingStateMachine.Enter<SaveRecordState>();
         }
 
         public void AddPlayerToRecord(PlayerBehavior playerBehavior)
@@ -38,27 +38,16 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 
         private void FixedUpdate()
         {
-            if (_timeService.IsPaused)
-                return;
             if (!AllDataInitialized())
+                return;
+            if (_timeService.IsPaused)
                 return;
             _recordingStateMachine?.FixedTick();
         }
 
         private bool AllDataInitialized()
         {
-            return _lastRecordedFrame != 0;
-        }
-        
-        private void HandleSlider(float sliderValue)
-        {
-            LoadFrameData((long)sliderValue);
-        }
-
-        private void LoadFrameData(long frame)
-        {
-            if (_history.TryGetValue(frame, out FrameRecord frameData))
-                _playerRecordSystem.LoadPlayersData(frameData);
+            return _lastRecordedFrame != 0 && _timeService != null;
         }
 
         public void CleanUp()
