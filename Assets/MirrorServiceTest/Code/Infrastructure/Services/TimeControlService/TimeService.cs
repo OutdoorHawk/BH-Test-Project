@@ -21,12 +21,14 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.TimeControlService
 
         public void EnablePause()
         {
+            IsPaused = true;
             foreach (IPauseHandler handler in _handlers) 
                 handler.EnablePause();
         }
 
         public void DisablePause()
         {
+            IsPaused = false;
             foreach (IPauseHandler handler in _handlers) 
                 handler.DisablePause();
         }

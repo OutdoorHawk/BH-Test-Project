@@ -1,3 +1,4 @@
+using System;
 using MirrorServiceTest.Code.Infrastructure.DI;
 using MirrorServiceTest.Code.Infrastructure.Services.RecordingService;
 using MirrorServiceTest.Code.Infrastructure.Services.TimeControlService;
@@ -9,24 +10,28 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
 {
     public class TimeControlHUD : MonoBehaviour
     {
+        public event Action OnPausePressed;
+        public event Action OnPlayPressed;
+        
         [SerializeField] private Button _pauseButton;
+        [SerializeField] private Button _playButton;
         [SerializeField] private Slider _slider;
 
         private TimeService _timeService;
-        private IRecordingService _recordService;
+
+        public Slider Slider => _slider;
 
         private void Awake()
         {
             _timeService = DIContainer.Container.Resolve<TimeService>();
-            _recordService = DIContainer.Container.Resolve<IRecordingService>();
-            _pauseButton.onClick.AddListener(ChangePauseSettings);
+            _pauseButton.onClick.AddListener(EnablePause);
+            _playButton.onClick.AddListener(DisablePause);
             gameObject.SetActive(false);
         }
 
         public void Init(PlayerInput playerInput)
         {
             playerInput.OnTabPressed += SwitchWindow;
-            _recordService.SetSlider(_slider);
         }
 
         private void SwitchWindow()
@@ -34,17 +39,28 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
             gameObject.SetActive(!gameObject.activeSelf);
         }
 
-        private void ChangePauseSettings()
+        private void EnablePause()
         {
             if (!_timeService.IsPaused)
                 _timeService.EnablePause();
-            else
+            _pauseButton.gameObject.SetActive(false);
+            _playButton.gameObject.SetActive(true);
+            OnPausePressed?.Invoke();
+        }
+
+        private void DisablePause()
+        {
+            if (!_timeService.IsPaused) 
                 _timeService.DisablePause();
+            _playButton.gameObject.SetActive(false);
+            _pauseButton.gameObject.SetActive(true);
+            OnPlayPressed?.Invoke();
         }
 
         private void OnDestroy()
         {
-            _pauseButton.onClick.RemoveListener(ChangePauseSettings);
+            _pauseButton.onClick.RemoveListener(EnablePause);
+            _playButton.onClick.RemoveListener(EnablePause);
         }
     }
 }

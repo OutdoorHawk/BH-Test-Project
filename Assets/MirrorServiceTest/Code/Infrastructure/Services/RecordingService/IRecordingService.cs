@@ -8,7 +8,6 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
     {
         void Initialize();
         void AddPlayerToRecord(PlayerBehavior playerBehavior);
-        void SetSlider(Slider timelineSlider);
         void CleanUp();
     }
 }
