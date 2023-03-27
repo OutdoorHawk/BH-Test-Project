@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace MirrorServiceTest.Code.Runtime.Player.Input
 {
-    public class PlayerInput : IPlayerInput
+    public class PlayerInput 
     {
         private PlayerControls _playerInput;
 
@@ -21,23 +21,22 @@ namespace MirrorServiceTest.Code.Runtime.Player.Input
             Movement = _playerInput.Player.Movement;
             MouseAxis = _playerInput.Player.MouseAxis;
 
-            _playerInput.Player.Dash.started += (c) => OnDashPressed?.Invoke();
-            _playerInput.Player.Escape.started += (c) => OnEscapePressed?.Invoke();
-            _playerInput.Player.Tab.started += (c) => OnTabPressed?.Invoke();
+            _playerInput.Player.Dash.started += _ => OnDashPressed?.Invoke();
+            _playerInput.Player.Escape.started += _ => OnEscapePressed?.Invoke();
+            _playerInput.Player.Tab.started += _ => OnTabPressed?.Invoke();
             OnEscapePressed += ChangeCursorLock;
+            OnTabPressed += ChangeCursorLock;
         }
 
         public void EnableAllInput()
         {
-            _playerInput.Player.Escape.Enable();
-            _playerInput.Player.Movement.Enable();
-            _playerInput.Player.Dash.Enable();
+            _playerInput.Player.Enable();
             MouseAxis.Enable();
         }
 
         public void EnableDash()
         {
-            if (Cursor.lockState == CursorLockMode.Locked) 
+            if (Cursor.lockState == CursorLockMode.Locked)
                 _playerInput.Player.Dash.Enable();
         }
 
@@ -51,6 +50,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.Input
             _playerInput.Player.Movement.Disable();
             _playerInput.Player.Dash.Disable();
             _playerInput.Player.Escape.Disable();
+            _playerInput.Player.Tab.Disable();
             MouseAxis.Disable();
         }
 
@@ -59,14 +59,14 @@ namespace MirrorServiceTest.Code.Runtime.Player.Input
             _playerInput.Player.Movement.Disable();
             _playerInput.Player.Dash.Disable();
         }
-        
+
         public void DisableMovementAndMouseInput()
         {
             _playerInput.Player.Movement.Disable();
             _playerInput.Player.Dash.Disable();
             MouseAxis.Disable();
         }
-        
+
         private void ChangeCursorLock()
         {
             if (Cursor.lockState != CursorLockMode.Locked)

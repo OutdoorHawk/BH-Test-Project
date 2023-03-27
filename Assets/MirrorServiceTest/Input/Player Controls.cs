@@ -71,6 +71,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Caps"",
+                    ""type"": ""Button"",
+                    ""id"": ""99f9e91b-e644-4c67-8453-03f1bd54944c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -183,11 +192,34 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Tab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3169a62-03df-46d5-85f8-dcfa3edb56f6"",
+                    ""path"": ""<Keyboard>/capsLock"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Caps"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Keyboard"",
+            ""bindingGroup"": ""Keyboard"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
@@ -196,6 +228,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_Tab = m_Player.FindAction("Tab", throwIfNotFound: true);
+        m_Player_Caps = m_Player.FindAction("Caps", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -260,6 +293,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_Tab;
+    private readonly InputAction m_Player_Caps;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -269,6 +303,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @Tab => m_Wrapper.m_Player_Tab;
+        public InputAction @Caps => m_Wrapper.m_Player_Caps;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -293,6 +328,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Tab.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
                 @Tab.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
                 @Tab.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
+                @Caps.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCaps;
+                @Caps.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCaps;
+                @Caps.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCaps;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -312,10 +350,22 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Tab.started += instance.OnTab;
                 @Tab.performed += instance.OnTab;
                 @Tab.canceled += instance.OnTab;
+                @Caps.started += instance.OnCaps;
+                @Caps.performed += instance.OnCaps;
+                @Caps.canceled += instance.OnCaps;
             }
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+    private int m_KeyboardSchemeIndex = -1;
+    public InputControlScheme KeyboardScheme
+    {
+        get
+        {
+            if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
+            return asset.controlSchemes[m_KeyboardSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -323,5 +373,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnTab(InputAction.CallbackContext context);
+        void OnCaps(InputAction.CallbackContext context);
     }
 }

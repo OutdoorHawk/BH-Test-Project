@@ -6,19 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="c61d8894-59cb-4550-86cb-1295f4ee45bf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Mirror Service Test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Data/Enums.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/IUIFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/IUIFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/UIFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UI/UIFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/AnimationControlComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/AnimationControlComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/PlayerAnimator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Animation/PlayerAnimator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/IPlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/IPlayerInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/CameraLogic/CameraFollow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/CameraLogic/CameraFollow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/IPlayerInput.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/IPlayerInput.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/PlayerInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/Input/PlayerInput.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/PlayerBehavior.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/PlayerStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/States/BasicMovementState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/States/DashState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/States/DashState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/States/EndGameState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/StateMachine/States/EndGameState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/PlayerHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/PlayerHUD.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/TimeControlMenu/TimeControlHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Runtime/Player/UI/TimeControlMenu/TimeControlHUD.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Input/Player Controls.inputactions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/Players/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/Players/Player.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/PlayerHUD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/PlayerHUD.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/TimeControlMenu.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MirrorServiceTest/Prefabs/UI/GameLoop/TimeControlMenu.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/GameStaticData.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +42,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/RecordingService/RecordingService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/TimeControlService/TimeService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MirrorServiceTest/Code/Infrastructure/Services/UpdateBehavior/UpdateBehaviourService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputAction.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Utilities/DelegateHelpers.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Slider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -108,10 +112,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="121248">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="21440">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="121248" />
+      <option name="pid" value="21440" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -141,6 +145,7 @@
       <workItem from="1679820978576" duration="3692000" />
       <workItem from="1679846233529" duration="570000" />
       <workItem from="1679851387821" duration="5531000" />
+      <workItem from="1679931203142" duration="2296000" />
     </task>
     <servers />
   </component>

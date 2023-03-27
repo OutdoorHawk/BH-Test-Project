@@ -650,6 +650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pauseButton: {fileID: 8773268199534026196}
+  _slider: {fileID: 4971161445788515829}
 --- !u!1 &5177022878573823738
 GameObject:
   m_ObjectHideFlags: 0

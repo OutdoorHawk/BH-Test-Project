@@ -5548,6 +5548,7 @@ GameObject:
   - component: {fileID: -2222397536249395030}
   - component: {fileID: 6990234997934500352}
   - component: {fileID: 3170997069457131314}
+  - component: {fileID: 7380634225722419315}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -5690,17 +5691,17 @@ MonoBehaviour:
   syncInterval: 0
   target: {fileID: 9096557284072044366}
   clientAuthority: 0
-  onlySyncOnChange: 1
-  bufferResetMultiplier: 5
-  positionSensitivity: 0.01
-  rotationSensitivity: 0.01
-  scaleSensitivity: 0.01
   syncPosition: 1
   syncRotation: 1
   syncScale: 0
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChange: 1
+  bufferResetMultiplier: 5
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
 --- !u!114 &-2222397536249395030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5755,3 +5756,57 @@ CapsuleCollider:
   m_Height: 1.9884928
   m_Direction: 1
   m_Center: {x: 0, y: 0.93964726, z: 0}
+--- !u!114 &7380634225722419315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9096557284072044367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: a3704f9c9a012df458f2764fe1d6a1e7, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ab214758-1121-41b2-acbb-572edea0ed62
+    m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/DualSenseGamepadHID/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4307c95b-a40a-4d8d-836c-0e14a1ecbd1e
+    m_ActionName: Player/MouseAxis[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 32725486-24b5-4f42-9bcd-431f0016170b
+    m_ActionName: Player/Dash[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7774ef62-3b43-438e-b831-210c7eedc7eb
+    m_ActionName: Player/Escape[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4b95e016-f1a3-46ef-b47d-30937b7029e7
+    m_ActionName: Player/Tab[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 99f9e91b-e644-4c67-8453-03f1bd54944c
+    m_ActionName: Player/Caps[/Keyboard/capsLock]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

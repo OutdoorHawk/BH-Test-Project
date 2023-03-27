@@ -14,7 +14,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine
     {
         private readonly Dictionary<Type, ITickableState> _states;
 
-        public PlayerStateMachine(PlayerMovement playerMovement, IPlayerInput playerInput,
+        public PlayerStateMachine(PlayerMovement playerMovement, PlayerInput playerInput,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector,
             PlayerGameStatus playerGameStatus, MonoBehaviour mono, PlayerStaticData playerStaticData)
         {

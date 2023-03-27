@@ -20,8 +20,6 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         [SerializeField] private Text _winPlayerText;
         [SerializeField] private Text _countDownText;
         [SerializeField] private GameObject _disconnectPanel;
-        [SerializeField] private Slider _timelineSlider;
-        [SerializeField] private Button _stopTimeButton;
         private Button _disconnectButton;
 
         private List<ScoreElement> _scoreElements = new();
@@ -31,15 +29,12 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
 
         public void Init(float gameRestartDelay, PlayerInput playerInput)
         {
-            DIContainer.Container.Resolve<IRecordingService>().SetSlider(_timelineSlider);
             _playerInput = playerInput;
             _scoreElements = _layoutParent.GetComponentsInChildren<ScoreElement>(true).ToList();
             _restartDelay = gameRestartDelay;
             InitDisconnectPanel();
             _playerInput.OnEscapePressed += SwitchDisconnectButton;
-            _stopTimeButton.onClick.AddListener(ChangeTimeScale);
         }
-
 
         private void InitDisconnectPanel()
         {
@@ -51,15 +46,10 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         public void UpdateScoreTable(List<PlayerProfile> profiles)
         {
             ClearScoreTable();
-            for (var i = 0; i < profiles.Count; i++) 
+            for (int i = 0; i < profiles.Count; i++) 
                 _scoreElements[i].ActivateElement(profiles[i].PlayerName, profiles[i].Score);
         }
-
-        private void ChangeTimeScale()
-        {
-            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-        }
-
+        
         private void ClearScoreTable()
         {
             foreach (var element in _scoreElements)
@@ -98,7 +88,6 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI
         {
             _playerInput.OnEscapePressed -= SwitchDisconnectButton;
             _disconnectButton.onClick.RemoveListener(Disconnect);
-            _stopTimeButton.onClick.RemoveListener(ChangeTimeScale);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
         private readonly PlayerAnimator _playerAnimator;
         private readonly PlayerCollisionDetector _playerCollisionDetector;
         private readonly PlayerGameStatus _playerGameStatus;
-        private readonly IPlayerInput _playerInput;
+        private readonly PlayerInput _playerInput;
         private readonly MonoBehaviour _monoBehaviour;
         private readonly float _dashRechargeTime;
         private GameObject _currentGameObject;
@@ -21,7 +21,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
         public DashState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
             PlayerAnimator playerAnimator, PlayerCollisionDetector playerCollisionDetector,
             PlayerGameStatus playerGameStatus,
-            MonoBehaviour monoBehaviour, IPlayerInput playerInput, float dashRechargeTime)
+            MonoBehaviour monoBehaviour, PlayerInput playerInput, float dashRechargeTime)
         {
             _playerMovement = playerMovement;
             _playerAnimator = playerAnimator;

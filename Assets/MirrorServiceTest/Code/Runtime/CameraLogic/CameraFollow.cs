@@ -19,7 +19,7 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
 
         private Collider[] _colliders;
         private Transform _cachedTransform;
-        private IPlayerInput _playerInput;
+        private PlayerInput _playerInput;
         private Vector3 _currentPosition;
         private Vector3 _currentRotation;
         private PlayerStaticData _playerStaticData;
@@ -41,7 +41,7 @@ namespace MirrorServiceTest.Code.Runtime.CameraLogic
             _defaultCameraDistance = _cameraDistance;
         }
 
-        public void Init(IPlayerInput playerInput, PlayerStaticData playerStaticData, Transform target,
+        public void Init(PlayerInput playerInput, PlayerStaticData playerStaticData, Transform target,
             IUpdateBehaviourService updateBehaviourService)
         {
             _updateBehaviour = updateBehaviourService;

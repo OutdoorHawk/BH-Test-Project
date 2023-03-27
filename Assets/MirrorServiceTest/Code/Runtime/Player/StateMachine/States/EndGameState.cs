@@ -7,11 +7,11 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
 {
     public class EndGameState : ITickableState
     {
-        private readonly IPlayerInput _playerInput;
+        private readonly PlayerInput _playerInput;
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerAnimator _playerAnimator;
 
-        public EndGameState(IPlayerInput playerInput, PlayerMovement playerMovement, PlayerAnimator playerAnimator)
+        public EndGameState(PlayerInput playerInput, PlayerMovement playerMovement, PlayerAnimator playerAnimator)
         {
             _playerInput = playerInput;
             _playerMovement = playerMovement;

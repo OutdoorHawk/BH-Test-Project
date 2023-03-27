@@ -7,13 +7,13 @@ namespace MirrorServiceTest.Code.Runtime.Player.StateMachine.States
 {
     public class BasicMovementState : ITickableState
     {
-        private readonly IPlayerInput _playerInput;
+        private readonly PlayerInput _playerInput;
         private readonly IPlayerStateMachine _stateMachine;
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerAnimator _playerAnimator;
 
         public BasicMovementState(IPlayerStateMachine stateMachine, PlayerMovement playerMovement,
-            PlayerAnimator playerAnimator, IPlayerInput playerInput)
+            PlayerAnimator playerAnimator, PlayerInput playerInput)
         {
             _stateMachine = stateMachine;
             _playerMovement = playerMovement;
