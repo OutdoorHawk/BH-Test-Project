@@ -12,9 +12,11 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
     {
         public event Action OnPausePressed;
         public event Action OnPlayPressed;
+        public event Action OnBackwardPressed;
         
         [SerializeField] private Button _pauseButton;
         [SerializeField] private Button _playButton;
+        [SerializeField] private Button _backwardButton;
         [SerializeField] private Slider _slider;
 
         private TimeService _timeService;
@@ -26,6 +28,7 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
             _timeService = DIContainer.Container.Resolve<TimeService>();
             _pauseButton.onClick.AddListener(EnablePause);
             _playButton.onClick.AddListener(DisablePause);
+            _backwardButton.onClick.AddListener(NotifyBackwardsPressed);
             _playButton.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
@@ -56,6 +59,11 @@ namespace MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu
             _playButton.gameObject.SetActive(false);
             _pauseButton.gameObject.SetActive(true);
             OnPlayPressed?.Invoke();
+        }
+
+        private void NotifyBackwardsPressed()
+        {
+            OnBackwardPressed?.Invoke();
         }
 
         private void OnDestroy()

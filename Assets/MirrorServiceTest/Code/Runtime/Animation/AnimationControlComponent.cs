@@ -39,12 +39,12 @@ namespace MirrorServiceTest.Code.Runtime.Animation
 
         public void EnablePause()
         {
-            _animator.enabled = false;
+            _animator.speed = 0;
         }
 
         public void DisablePause()
         {
-            _animator.enabled = true;
+            _animator.speed = 1;
         }
 
         public void CleanUp()

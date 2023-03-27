@@ -11,7 +11,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
 {
     public class RecordingService : MonoBehaviour, IRecordingService
     {
-        private readonly Dictionary<long, FrameRecord> _history = new();
+        private readonly List<KeyValuePair<long, FrameRecord>> _history = new();
         private readonly List<PlayerBehavior> _players = new();
 
         private readonly PlayerRecordSystem _playerRecordSystem = new();
@@ -27,7 +27,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService
             _lastRecordedFrame = 1;
             foreach (PlayerBehavior player in _players)
                 _playerRecordSystem.AddPlayer(player);
-            _recordingStateMachine = new RecordingStateMachine(_playerRecordSystem, _history, _players[0].TimeControl);
+            _recordingStateMachine = new RecordingStateMachine(_playerRecordSystem, _history, _players[0].TimeControl, this);
             _recordingStateMachine.Enter<SaveRecordState>();
         }
 

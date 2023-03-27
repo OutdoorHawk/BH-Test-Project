@@ -8,7 +8,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
 {
     public class SaveRecordState : ITickableState
     {
-        private readonly Dictionary<long, FrameRecord> _history;
+        private readonly List<KeyValuePair<long, FrameRecord>> _history;
         private readonly RecordingStateMachine _recordingStateMachine;
         private readonly PlayerRecordSystem _playerRecordSystem;
         private readonly TimeControlHUD _timeControlHUD;
@@ -17,7 +17,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
         private long _lastRecordedFrame;
 
         public SaveRecordState(RecordingStateMachine recordingStateMachine, PlayerRecordSystem playerRecordSystem,
-            Dictionary<long, FrameRecord> history,
+            List<KeyValuePair<long, FrameRecord>> history,
             TimeControlHUD timeControlHUD)
         {
             _recordingStateMachine = recordingStateMachine;
@@ -55,7 +55,7 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
         {
             FrameRecord frameRecord = new FrameRecord();
             _playerRecordSystem.RecordPlayersData(frameRecord);
-            _history.Add(_lastRecordedFrame, frameRecord);
+            _history.Add(new KeyValuePair<long, FrameRecord>(_lastRecordedFrame, frameRecord));
         }
 
         public void Exit()

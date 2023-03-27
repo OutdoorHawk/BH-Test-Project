@@ -4,6 +4,7 @@ using MirrorServiceTest.Code.Infrastructure.Services.RecordingService.Systems;
 using MirrorServiceTest.Code.Infrastructure.StateMachine;
 using MirrorServiceTest.Code.Runtime.Player.StateMachine;
 using MirrorServiceTest.Code.Runtime.Player.UI.TimeControlMenu;
+using UnityEngine;
 
 namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateMachine
 {
@@ -11,13 +12,14 @@ namespace MirrorServiceTest.Code.Infrastructure.Services.RecordingService.StateM
     {
         private readonly Dictionary<Type, ITickableState> _states;
 
-        public RecordingStateMachine(PlayerRecordSystem playerRecordSystem, Dictionary<long, FrameRecord> frameRecords,
-            TimeControlHUD timeControlHUD)
+        public RecordingStateMachine(PlayerRecordSystem playerRecordSystem, List<KeyValuePair<long, FrameRecord>> frameRecords,
+            TimeControlHUD timeControlHUD, MonoBehaviour monoBehaviour)
         {
             _states = new Dictionary<Type, ITickableState>
             {
                 [typeof(SaveRecordState)] = new SaveRecordState(this, playerRecordSystem, frameRecords, timeControlHUD),
-                [typeof(LoadRecordState)] = new LoadRecordState(this, playerRecordSystem, frameRecords, timeControlHUD),
+                [typeof(LoadRecordState)] =
+                    new LoadRecordState(this, playerRecordSystem, frameRecords, timeControlHUD, monoBehaviour),
                 [typeof(NoRecordState)] = new NoRecordState(this, timeControlHUD),
             };
         }
